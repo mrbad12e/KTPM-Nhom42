@@ -1,9 +1,7 @@
-const express = require('express');
-const router = express.Router();
 const { Pool } = require('pg');
 const dotenv = require('dotenv');
+const Bcrypt = require('bcrypt');
 dotenv.config();
-const app = express();
 
 const pool = new Pool({
     'user': process.env.DB_USER,
@@ -13,16 +11,51 @@ const pool = new Pool({
     'port': process.env.DB_PORT
 });
 
-router.get('/api', (req, res) => {
-    pool.query('SELECT * FROM student', (err, result) => {
-        if (err) {
-            console.log(err);
-        }
-        res.send(result.rows);
-    });
+// Create new table admin
+pool.query(`
+    DROP TABLE IF EXISTS public.admin;
+    CREATE TABLE admin (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(255) NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL
+    );`, (err, res) => {
+        console.log(err, res);
+        pool.end();
 });
 
-app.use('/', router);
-app.listen(3001, () => {
-    console.log('Server is running on port 3001');
+function hashPassword(password) {
+    const saltRounds = 10;
+    return Bcrypt.hashSync(password, saltRounds);
+}
+
+// Add new admin
+const plainTextPassword = 'admin';
+const saltRounds = 10;
+const hashedPassword = Bcrypt.hashSync(plainTextPassword, saltRounds);
+pool.query(`
+    INSERT INTO public.admin (id, username, password, email) VALUES (1, 'admin', '${hashedPassword}', 'admin1@gmail.com');
+`, (err, res) => {
+    console.log(err, res);
+    pool.end();
 });
+
+// Create new password column for student and lecturer
+pool.query(`
+    ALTER TABLE public.student ADD COLUMN password VARCHAR(255);
+    ALTER TABLE public.lecturer ADD COLUMN password VARCHAR(255);
+`, (err, res) => {
+    console.log(err, res);
+    pool.end();
+});
+
+// Add new password for student and lecturer
+pool.query(`
+    UPDATE public.student SET password = '${hashPassword('student')}';
+    UPDATE public.lecturer SET password = '${hashPassword('lecturer')}';
+`, (err, res) => {
+    console.log(err, res);
+    pool.end();
+});
+
+pool.end();
