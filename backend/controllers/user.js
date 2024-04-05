@@ -7,9 +7,7 @@ export const loginUser = async (req, res, next) => {
         if (!isPasswordCorrect) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
-        const token = await User.getJsonWebToken(req, res, next);
-        res.status(200)
-            .cookie('token', token, { httpOnly: true })
+        await User.getJsonWebToken(req, res, next);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

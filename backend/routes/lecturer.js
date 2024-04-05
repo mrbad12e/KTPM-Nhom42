@@ -4,12 +4,10 @@ import { isAuthUser } from '../middleware/auth.js';
 const router = express.Router();
 
 router.route('/student')
-    .get(isAuthUser, getUserInfomation)
-    .delete(isAuthUser, deleteUser)
-    .patch(isAuthUser, updateUser);
+    .get(isAuthUser, getUserInfomation); // tam thoi
+
 router.route('/lecturer')
     .get(getUserInfomation)
-    .delete(deleteUser)
     .patch(updateUser);
 
 router.route('/login')
