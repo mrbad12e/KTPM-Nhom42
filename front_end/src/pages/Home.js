@@ -1,59 +1,43 @@
-import {} from 'react-bootstrap';
-
+import React from 'react';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import 'boxicons/css/boxicons.min.css';
+import './Home.css'
 export const Home = () => {
     return (
-        <div className="content">
-            <div className="vertical-menu">
-                <a href="#" className="active">
-                    <i className="bx bx-home-alt"></i>Trang chủ
-                </a>
-                <a href="#">
-                    <i className="bx bx-user"></i>Hồ sơ sinh viên
-                </a>
-                <a href="#">
-                    <i className="bx bx-calendar"></i>Thời khóa biểu
-                </a>
-                <a href="#">
-                    <i className="bx bx-customize"></i>Đăng kí học tập
-                </a>
-                <a href="#">
-                    <i className="bx bx-credit-card"></i>Học phí
-                </a>
-            </div>
-
-            <div className="main">
-                <h2>Tin tức</h2>
-                <hr className="solid" />
-
-                <div className="slideshow-container">
+    <div className="homepage-background px-1">
+        
+        <div class="content "> 
+                <div class="left-content ">
+                <img src="https://media.thuvienthaythonglac.net/wp-content/uploads/2021/07/14142451/70g-user-avatar.svg" alt="Anh" class="anh_the"/>
+                        <h3 class="text-name">Nguyen Van A</h3>
+                        <ul class="sitemap">
+                            <li>
+                                <a href="">Thông tin sinh viên</a>
+                            </li>
+                            <li>
+                                <a href="">Đăng kí học tập</a>
+                            </li>
+                            <li>
+                                <a href="">Thời khóa biểu</a>
+                            </li>
+                            <li>
+                                <a href="">Thành tích học tập</a>
+                            </li>
+                            <li>
+                                <a href="">Thông tin giảng viên</a>
+                            </li>
+                            <li>
+                                <a href="">Đăng xuất</a>
+                            </li>
+                        </ul>
+                  
                     
                 </div>
-                <br />
+                <div class="right-content">
 
-                <div style={{ textAlign: 'center'}}>
-                    <span className="dot"></span>
-                    <span className="dot"></span>
-                    <span className="dot"></span>
                 </div>
-                <p>Some text..</p>
-                <p>
-                    Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                    exercitation ullamco.
-                </p>
-                <br />
-                <h2>Kế hoạch</h2>
-                <hr className="solid" />
-                <div className="fakeimg" style={{height:'200px'}}>
-                    Image
-                </div>
-                <p>Some text..</p>
-                <p>
-                    Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                    exercitation ullamco.
-                </p>
-            </div>
         </div>
+
+    </div>
     );
 };
