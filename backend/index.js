@@ -10,13 +10,6 @@ app.use(cookieParser());
 app.use(express.json());
 
 // Routes declaration
-<<<<<<< HEAD
-import adminRoute from './routes/admin.js';
-
-
-// Use routes
-app.use('/admin', adminRoute);
-=======
 import adminRoute from './routes/User/admin.js';
 import lectuerRoute from './routes/User/lecturer.js';
 import studentRoute from './routes/User/student.js';
@@ -33,7 +26,6 @@ app.use('/class', classRoute);
 app.use('/faculty', facultyRoute);
 app.use('/program', programRoute);
 app.use('/subject', subjectRoute);
->>>>>>> b04113d587dc18bb02ee98c4acf785bacebf2d93
 
 
 const server = http.createServer(app);

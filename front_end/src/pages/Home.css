@@ -81,8 +81,38 @@
     
 }
 .right-content{
-    /* border: 1px solid #191717; */
+    margin-left:20%;
+    padding:1px 16px;
+    h2{
+        margin-top: 46px;
+        margin-left: 410px ;
+    }
 }
+
+.right-content .main_content{
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    margin-top: 90px;
+    
+}
+.image_student{
+    margin-left: 30px;
+    height: auto;
+    width: 30%;
+
+    img{
+        height: auto;
+        width: 80%;
+        border: 1px solid rgb(223, 133, 133);
+    }
+    
+}
+
+.info_student{
+
+}
+
 
 /* .sitemap{
     li {

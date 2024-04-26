@@ -61,6 +61,9 @@ export const Login = () => {
                     ></input>
                     <i class="fas fa-eye-slash"></i>
                 </div>
+                <div className='col-12 ' style={{color:'red'}}> 
+                    {error && <p>{error}</p>}
+                </div>
                 <div class="col-12">
                     <button class="btn-login" onClick={handleLogin} >Log in</button>
                 </div>
