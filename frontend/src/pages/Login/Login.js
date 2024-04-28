@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import loginCSS from './Login.css';
-import axios from 'axios';
+import './Login.css'; // Đảm bảo import CSS đúng cách
+import axios from 'axios'; // Thêm import axios
 
 export const Login = () => {
     const navigate = useNavigate();
@@ -13,14 +13,19 @@ export const Login = () => {
     const handleLogin = async () => {
         try {
             const config = { headers: { 'Content-Type': 'application/json' } };
-            const { data } = await axios.post('/admin/login', { email, password }, config);
-            localStorage.setItem('auth', data.success);
-            navigate('/home');
+            const response = await axios.post('/student/login', { email, password }, config);
+            if (response && response.data) {
+                const { data } = response;
+                localStorage.setItem('auth', data.success);
+                navigate('/home');
+            } else {
+                setError('Unexpected response from server');
+            }
         } catch (error) {
-            // Nếu có lỗi, hiển thị thông báo lỗi
             setError(error.response.data.message);
         }
     };
+
     useEffect(() => {
         if (error) {
             console.log(error);
@@ -33,44 +38,43 @@ export const Login = () => {
 
     return (
         <div className="login-background">
-            <div className="login-container">
-                <div className="login-content row">
-                    <div className="col-12 text-login">Login</div>
-                    <div className="col-12 form-group login-input">
-                        <label for="">Email:</label>
-                        <input
-                            type="text"
-                            placeholder="Enter your email"
-                            className="form-control"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        ></input>
-                    </div>
-                    <div className="col-12 form-group login-input">
-                        <label for="">Password:</label>
-                        <input
-                            type="password"
-                            placeholder="Enter your password"
-                            className="form-control"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        ></input>
-                        <i className="fas fa-eye-slash"></i>
-                    </div>
-                    <div className="col-12 " style={{ color: 'red' }}>
-                        {error && <p>{error}</p>}
-                    </div>
-                    <div className="col-12">
-                        <button className="btn-login" onClick={handleLogin}>
-                            Log in
-                        </button>
-                    </div>
+            <Container>
+                <Row className="justify-content-md-center">
+                    <Col xs={12} md={6}>
+                        <div className="login-container">
+                            <div className="login-content">
+                                <h2 className="text-login">Login</h2>
+                                <Form>
+                                    <Form.Group controlId="formBasicEmail">
+                                        <Form.Label>Email:</Form.Label>
+                                        <Form.Control
+                                            type="email"
+                                            placeholder="Enter your email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                        />
+                                    </Form.Group>
 
-                    <div className="col-12">
-                        <span className="forgot-password">Fogot your password</span>
-                    </div>
-                </div>
-            </div>
+                                    <Form.Group controlId="formBasicPassword">
+                                        <Form.Label>Password:</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            placeholder="Enter your password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                        />
+                                    </Form.Group>
+                                    <div style={{ color: 'red' }}>{error && <p>{error}</p>}</div>
+                                    <Button variant="primary" className="btn-login" onClick={handleLogin}>
+                                        Log in
+                                    </Button>
+                                    <div className="forgot-password">Forgot your password</div>
+                                </Form>
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
+            </Container>
         </div>
     );
 };
