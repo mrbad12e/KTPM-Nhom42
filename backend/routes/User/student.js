@@ -5,8 +5,13 @@ const router = express.Router();
 
 router.route('/')
     //.get(isAuthUser, StudentController.readStudent)
-    .patch(isAuthUser, StudentController.updateStudent)
-    .post(StudentController.getUserInfo);                        // test
+    .patch(isAuthUser, StudentController.updateStudent);
+
+router.route('/profile')
+    .post(StudentController.getUserInfo);       
+    
+router.route('/registration')
+    .post(isAuthUser,StudentController.getSubject); 
     
 // Bo qua doc thong tin giang vien vi thong tin giang vien public
 

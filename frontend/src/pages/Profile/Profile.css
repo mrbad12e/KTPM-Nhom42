@@ -1,8 +1,3 @@
-.container-background {
-    width: 100%;
-    background-color: #00FFFF; /* Thay #your_color bằng mã màu mong muốn */
-}
-
 .right-content {
     display: flex;
     flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
@@ -15,18 +10,31 @@
     margin-bottom: 20px; /* Tạo khoảng cách dưới tiêu đề */
 }
 
-.profile-bounder {
-    background-color: #ffffff; 
-    padding: 20px; /* Khoảng cách padding */
-    border-radius: 10px; /* Bo tròn các góc */
-    margin-top: 100px; /* Khoảng cách từ trên xuống */
-    margin-left: 17%; /* Lùi về bên trái 17% */
-    max-width: 80%; /* Đặt chiều rộng tối đa là 80% */
+.image_student{
+    margin-left: 30px;
+    height: auto;
+    width: 30%;
+
+    img{
+        height: auto;
+        width: 80%;
+        border: 1px solid rgb(223, 133, 133);
+    }
+    
 }
 
-.gray-background {
-    background-color: #d7d7d7; /* Màu xám */
-    height: 100vh;
+.image_student {
+    position: absolute;
+    left: 350px; /* Di chuyển ảnh sang phải 20 pixel */
+    top: 250px;
 }
+
+.anh-the {
+    max-width: 280px; /* Đặt chiều rộng tối đa của ảnh là 150 pixel */
+    max-height: 280px; /* Đặt chiều cao tối đa của ảnh là 150 pixel */
+    width: auto; /* Chiều rộng tự động tính theo tỷ lệ */
+    height: auto; /* Chiều cao tự động tính theo tỷ lệ */
+}
+
 
 

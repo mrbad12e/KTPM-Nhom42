@@ -12,7 +12,7 @@ export const Header = () => {
         try {
             axios.get('/admin/logout');
             console.log('Logged out successfully');
-            localStorage.removeItem('auth');
+            localStorage.clear();
             navigate('/');
         } catch (error) {
             console.log(error);
@@ -25,6 +25,11 @@ export const Header = () => {
 
     const handleCloseChangePassword = () => {
         setShowChangePassword(false);
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        // Xử lý logic đổi mật khẩu ở đây
     };
 
     return (
@@ -61,7 +66,8 @@ export const Header = () => {
                             <label htmlFor="confirmPassword">Nhập lại mật khẩu mới:</label>
                             <input type="password" id="confirmPassword" name="confirmPassword" required />
 
-                            <button type="submit" className="confirm-button">Xác nhận</button>
+                            <button type="button" className="confirm-button" onClick={handleSubmit}>Xác nhận</button>
+
                         </form>
                     </div>
                 </div>
