@@ -1,16 +1,42 @@
-import React from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import homeCSS from './Home.css'; // Đảm bảo import CSS đúng cách
+import React, { useState, useEffect } from 'react'; 
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { NavLink, useNavigate } from 'react-router-dom';
+import homeCSS from './Home.css'; 
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import avatar from '../../../assets/img/avatar.jpg';
 
 export const Home = () => {
     const navigate = useNavigate();
+    const [studentInfo, setStudentInfo] = useState({
+        id: '',
+        programName: '',
+        name: '',
+        phone: '',
+        birthday: '',
+        gender: '',
+        address: ''
+    });
 
-    const handleLogout = async () => {
+    useEffect(() => {
+        const fetchStudentInfo = async () => {
+            try {
+                const email = localStorage.getItem('email');
+                if (email) {
+                    const response = await axios.post('http://localhost:5000/student', { email });
+                    const userInfo = response.data.userInfo;
+                    setStudentInfo(userInfo);
+                    console.log('Student info:', userInfo);
+                }
+            } catch (error) {
+                console.error('Failed to fetch student info:', error);
+            }
+        };
+        fetchStudentInfo();
+    }, []);
+
+    const handleLogout = () => {
         try {
-            await axios.get('/admin/logout');
+            axios.get('/admin/logout');
             console.log('Logged out successfully');
             localStorage.removeItem('auth');
             navigate('/');
@@ -19,28 +45,47 @@ export const Home = () => {
         }
     };
 
+    const renderInfoStudent = () => {
+        return (
+            <div className='main_content'>
+                <div className='image_student'>
+                    <img src={avatar} alt="anh" className="anh-the" />
+                </div>
+                <div className='info_student'>
+                    <p><strong>MSSV:</strong>  {studentInfo.id}</p>
+                    <p><strong>Chuyên ngành:</strong> {studentInfo.programName}</p>
+                    <p><strong>Họ và tên:</strong> {studentInfo.name}</p>
+                    <p><strong>Số điện thoại:</strong> {studentInfo.phone}</p>
+                    <p><strong>Ngày sinh:</strong> {studentInfo.birthday}</p>
+                    <p><strong>Giới tính:</strong> {studentInfo.gender}</p>
+                    <p><strong>Địa chỉ:</strong> {studentInfo.address}</p>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className="homepage-background px-1">
-            <Container>
+            <Container fluid>
                 <Row className="content">
                     <Col md={3} className="left-content">
                         <img src={avatar} alt="Anh" className="anh_the" />
-                        <h3 className="text-name">Nguyen Van A</h3>
+                        <h3 className="text-name">{studentInfo.name}</h3>
                         <ul className="sitemap">
                             <li>
-                                <a href="">Thông tin sinh viên</a>
+                                <NavLink to="/">Thông tin sinh viên</NavLink>
                             </li>
                             <li>
-                                <a href="">Đăng kí học tập</a>
+                                <NavLink to="/registration">Đăng kí học tập</NavLink>
                             </li>
                             <li>
-                                <a href="">Thời khóa biểu</a>
+                                <NavLink to="/">Thời khóa biểu</NavLink>
                             </li>
                             <li>
-                                <a href="">Thành tích học tập</a>
+                                <NavLink to="/">Thành tích học tập</NavLink>
                             </li>
                             <li>
-                                <a href="">Thông tin giảng viên</a>
+                                <NavLink to="/">Thông tin giảng viên</NavLink>
                             </li>
                             <li>
                                 <Button variant="primary" onClick={handleLogout}>Đăng xuất</Button>
@@ -49,20 +94,7 @@ export const Home = () => {
                     </Col>
                     <Col md={9} className="right-content">
                         <h2>THÔNG TIN SINH VIÊN</h2>
-                        <div className='main_content'>
-                            <div className='image_student'>
-                                <img src={avatar} alt="anh" className="anh-the" />
-                            </div>
-                            <div className='info_student'>
-                                <p><strong>MSSV:</strong> 123456</p>
-                                <p><strong>Chuyên ngành:</strong> Thợ code</p>
-                                <p><strong>Họ và tên:</strong> Nguyễn Văn A</p>
-                                <p><strong>Số điện thoại:</strong> 0123456789</p>
-                                <p><strong>Ngày sinh:</strong> 01/01/2000</p>
-                                <p><strong>Giới tính:</strong> Nam</p>
-                                <p><strong>Địa chỉ:</strong> Hà Nội, Việt Nam</p>
-                            </div>
-                        </div>
+                        {renderInfoStudent()}
                     </Col>
                 </Row>
             </Container>

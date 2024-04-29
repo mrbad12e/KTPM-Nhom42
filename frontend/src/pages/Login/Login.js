@@ -17,6 +17,7 @@ export const Login = () => {
             if (response && response.data) {
                 const { data } = response;
                 localStorage.setItem('auth', data.success);
+                localStorage.setItem('email', email); // Lưu email vào localStorage
                 navigate('/home');
             } else {
                 setError('Unexpected response from server');

@@ -46,4 +46,32 @@ export default class Student extends User {
             throw error;
         }
     }
+
+    //-----------------------------------------------------------------------------------------------------------------------------
+    //test 
+    static async getUserInfoFromDatabase(req, res, next) {
+        try {
+            const { email } = req.body; // Lấy email từ body của yêu cầu HTTP
+            let query = `SELECT id, CONCAT(first_name, ' ', last_name) AS name, phone, birthday, gender, address, program_id 
+                            FROM student WHERE email = $1`;
+            const { rows: studentRows } = await client.query(query, [email]); // Truyền email vào câu truy vấn
+            const programId = studentRows[0].program_id;
+            
+            // Truy vấn tên chương trình dựa trên program_id
+            let query1 = `SELECT name FROM program WHERE id = $1`;    
+            const { rows: programRows } = await client.query(query1, [programId]);           
+            const rows = { ...studentRows[0], programName: programRows[0].name };
+            rows.birthday = rows.birthday.toISOString().split('T')[0];
+            // Chuyển đổi ngày sinh thành định dạng "DD-MM-YY"
+            const birthday = new Date(rows.birthday);   // Chuyển đổi ngày sinh thành định dạng "YY-MM-DD"
+            const formattedBirthday = `${birthday.getDate().toString().padStart(2, '0')}-${(birthday.getMonth() + 1).toString().padStart(2, '0')}-${birthday.getFullYear().toString()}`;
+            rows.birthday = formattedBirthday;
+            // chuyển đổi giới tính về dạng nam, nữ
+            rows.gender = rows.gender === "M" ? "Nam" : "Nữ";
+            // Gửi phản hồi chỉ khi tất cả các truy vấn đã hoàn thành
+            return rows;
+        } catch (error) {
+            next(error); // Chuyển lỗi tới middleware xử lý lỗi tiếp theo
+        }
+    }
 }
