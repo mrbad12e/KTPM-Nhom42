@@ -8,15 +8,8 @@ import './Profile.css';
 
 export const Profile = () => {
     const navigate = useNavigate();
-    const [studentInfo, setStudentInfo] = useState({
-        id: '',
-        programName: '',
-        name: '',
-        phone: '',
-        birthday: '',
-        gender: '',
-        address: ''
-    });
+    const [studentInfo, setStudentInfo] = 
+                            useState({ id: '', programName: '', name: '', phone: '', birthday: '', gender: '', address: '' });
 
     useEffect(() => {
         const fetchStudentInfo = async () => {
@@ -35,23 +28,9 @@ export const Profile = () => {
         fetchStudentInfo();
     }, []);
 
-    const handleLogout = () => {
-        try {
-            axios.get('/admin/logout');
-            console.log('Logged out successfully');
-            localStorage.removeItem('auth');
-            navigate('/');
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     const renderInfoStudent = () => {
         return (
             <div className='main_content'>
-                <div className='image_student'>
-                    <img src={avatar} alt="anh" className="anh-the" />
-                </div>
                 <div className='info_student'>
                     <p><strong>MSSV:</strong>  {studentInfo.id}</p>
                     <p><strong>Chuyên ngành:</strong> {studentInfo.programName}</p>
@@ -66,14 +45,16 @@ export const Profile = () => {
     };
 
     return (
-        <div className="homepage-background px-1">
-            <Container fluid>
+        <div className="profile-background">
+            <Container fluid className="gray-background">
                 <Row className="content">
-                    <Sidebar studentInfo={studentInfo} handleLogout={handleLogout} /> 
-                    <Col md={9} className="right-content">
-                        <h2>THÔNG TIN SINH VIÊN</h2>
-                        {renderInfoStudent()}
-                    </Col>
+                    <Sidebar />
+                    <Container fluid className="profile-bounder">
+                        <Col md={9} className="right-content">
+                            <h2>THÔNG TIN SINH VIÊN</h2>
+                            {renderInfoStudent()}
+                        </Col>
+                    </Container>
                 </Row>
             </Container>
         </div>

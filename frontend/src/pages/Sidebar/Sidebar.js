@@ -41,7 +41,7 @@ const Sidebar = () => {
                     <NavLink to="/">Công nợ học phí</NavLink>
                 </li>
                 <li>
-                    <Button variant="primary" onClick={handleLogout}>Đăng xuất</Button>
+                    <Button variant="primary" onClick={handleLogout} className="logout-button">Đăng xuất</Button>
                 </li>
             </ul>
         </Col>
