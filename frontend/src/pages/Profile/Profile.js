@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '../Sidebar/Sidebar'; 
 import avatar from '../../../assets/img/avatar.jpg';
+import './Profile.css';
 
 export const Profile = () => {
     const navigate = useNavigate();
@@ -68,7 +69,7 @@ export const Profile = () => {
         <div className="homepage-background px-1">
             <Container fluid>
                 <Row className="content">
-                    <Sidebar studentInfo={studentInfo} handleLogout={handleLogout} /> {/* Sử dụng component Sidebar */}
+                    <Sidebar studentInfo={studentInfo} handleLogout={handleLogout} /> 
                     <Col md={9} className="right-content">
                         <h2>THÔNG TIN SINH VIÊN</h2>
                         {renderInfoStudent()}
@@ -78,3 +79,5 @@ export const Profile = () => {
         </div>
     );
 };
+
+<Container fluid className="container-background"></Container>

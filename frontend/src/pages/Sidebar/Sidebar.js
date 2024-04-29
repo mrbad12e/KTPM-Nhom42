@@ -1,13 +1,13 @@
 import React from 'react';
 import { Col,Button } from 'react-bootstrap';
-import { NavLink, useNavigate } from 'react-router-dom'; // Thêm import useNavigate
+import { NavLink, useNavigate } from 'react-router-dom'; 
 import './Sidebar.css';
 import axios from 'axios';
 
 
 const Sidebar = () => {
     const navigate = useNavigate();
-    
+
     const handleLogout = () => {
         try {
             axios.get('/admin/logout');
@@ -21,7 +21,6 @@ const Sidebar = () => {
 
     return (
         <Col md={3} className="left-content">
-            <h3 className="text-name">Quang</h3>
             <ul className="sitemap">
                 <li>
                     <NavLink to="/">Trang chủ</NavLink>
@@ -36,10 +35,10 @@ const Sidebar = () => {
                     <NavLink to="/registration">Đăng kí học tập</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/">Thành tích học tập</NavLink>
+                    <NavLink to="/">Kết quả học tập</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/">Học phí</NavLink>
+                    <NavLink to="/">Công nợ học phí</NavLink>
                 </li>
                 <li>
                     <Button variant="primary" onClick={handleLogout}>Đăng xuất</Button>

@@ -1,0 +1,14 @@
+/* Trong Header.css */
+
+.header-background {
+    background: linear-gradient(135deg,rgb(0, 0, 0) 0%,rgb(176, 176, 176) 100%);
+ 
+    color: #fff; /* Chỉ định màu chữ cho phần header */
+    padding: 10px; /* Thêm padding để cách lề */
+}
+
+.header-title {
+    margin-left: 80px; /* Sử dụng chỉ margin-right */
+    font-family: "Times New Roman", Times, serif; /* Sử dụng font chữ Times New Roman */
+}
+
