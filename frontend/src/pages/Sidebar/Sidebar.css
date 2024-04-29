@@ -1,11 +1,14 @@
 .left-content {
     margin: 0;
+    position: fixed;
+    top: 75px;
+    left: 0;
     padding: 0;
     width: 15%;
     background: linear-gradient(135deg,rgb(0, 0, 0) 0%,rgb(107, 107, 106) 100%);
-    position: fixed;
     height: 100%;
     overflow: auto;
+    min-width: 200px;
 }
 
 h3 {

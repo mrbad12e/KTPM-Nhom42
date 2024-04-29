@@ -1,5 +1,3 @@
-/* Header.css */
-
 .header-background {
     position: fixed;
     top: 0;
@@ -12,14 +10,14 @@
 }
 
 .header-title {
-    margin-left: 80px;
+    margin-left: 10vw; /* Sử dụng giá trị động dựa trên viewport width */
     font-family: "Times New Roman", Times, serif;
 }
 
 .dropdown-container {
     position: fixed;
     top: 10px; /* Điều chỉnh vị trí từ phía trên */
-    right: 10px; /* Điều chỉnh vị trí từ phía bên phải */
+    right: 2vw; /* Sử dụng giá trị động dựa trên viewport width */
     z-index: 1000; /* Đảm bảo dropdown-container hiển thị trên header-background */
 }
 
