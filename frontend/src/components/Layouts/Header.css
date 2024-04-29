@@ -120,10 +120,10 @@ input {
     border-radius: 5px;
 }
 
-button {
+.confirm-button {
     width: 100%;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #000000;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -131,8 +131,12 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #0056b3;
+.confirm-button:hover {
+    background-color: #686868;
+    color: #ffffff;
 }
 
 
+.black-text {
+    color: black; /* Màu chữ đen */
+}

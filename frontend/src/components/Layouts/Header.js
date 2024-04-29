@@ -39,8 +39,8 @@ export const Header = () => {
                             <button className="dropbtn">Xin chào sinh viên</button>
                             <i className="bx bx-chevron-down"></i>
                             <div className="dropdown-content">
-                                <a onClick={handleChangePassword}>Đổi mật khẩu</a>
-                                <a onClick={handleLogout}>Đăng xuất</a> 
+                                <a onClick={handleChangePassword} className="black-text">Đổi mật khẩu</a>
+                                <a onClick={handleLogout} className="black-text">Đăng xuất</a>
                             </div>
                         </div>
                     </div>
@@ -61,7 +61,7 @@ export const Header = () => {
                             <label htmlFor="confirmPassword">Nhập lại mật khẩu mới:</label>
                             <input type="password" id="confirmPassword" name="confirmPassword" required />
 
-                            <button type="submit">Xác nhận</button>
+                            <button type="submit" className="confirm-button">Xác nhận</button>
                         </form>
                     </div>
                 </div>
