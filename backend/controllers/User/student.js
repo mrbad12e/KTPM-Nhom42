@@ -41,20 +41,30 @@ export default class StudentController extends UserControllers{
            try {
                const userInfo = await Student.getUserInfoFromDatabase(req, res, next);
                res.status(200).json({
-                   userInfo: userInfo,
-                   message: 'Student info fetched successfully',
+                   userInfo: userInfo
                });
            } catch (error) {
                res.status(500).json({ error: error.message });
            }
        }
 
-       static async getSubject(req, res, next) {
+    // static async getSubject(req, res, next) {
+    //     try {
+    //         const userInfo = await Student.getSubjectFromDatabase(req, res, next);
+    //         res.status(200).json({
+    //             userInfo: userInfo,
+    //             message: 'Student info fetched successfully',
+    //         });
+    //     } catch (error) {
+    //         res.status(500).json({ error: error.message });
+    //     }
+    // }
+
+    static async getTimetable(req, res, next) {
         try {
-            const userInfo = await Student.getSubjectFromDatabase(req, res, next);
+            const TimetableInfo = await Student.getTimetableFromDatabase(req, res, next);
             res.status(200).json({
-                userInfo: userInfo,
-                message: 'Student info fetched successfully',
+                TimetableInfo: TimetableInfo
             });
         } catch (error) {
             res.status(500).json({ error: error.message });
