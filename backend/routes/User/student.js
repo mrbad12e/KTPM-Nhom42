@@ -16,6 +16,9 @@ router.route('/profile')
 router.route('/timetable')
     .post(StudentController.getTimetable); 
 
+router.route('/classDetail')
+    .post(StudentController.getClassDetail); 
+    
 // Bo qua doc thong tin giang vien vi thong tin giang vien public
 
 router.route('/login')

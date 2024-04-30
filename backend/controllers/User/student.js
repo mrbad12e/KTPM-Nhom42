@@ -71,4 +71,17 @@ export default class StudentController extends UserControllers{
         }
     }
 
+    static async getClassDetail(req, res, next) {
+        try {
+            const ClassDetailInfo = await Student.getClassDetailFromDatabase(req, res, next);
+            res.status(200).json({
+                ClassDetailInfo: ClassDetailInfo
+            });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    
+
 }

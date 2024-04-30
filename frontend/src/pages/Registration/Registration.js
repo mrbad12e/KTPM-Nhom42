@@ -1,10 +1,19 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import Sidebar from '../Sidebar/Sidebar'; 
+import Sidebar from '../Sidebar/Sidebar';
 import '../CSSglobal.css';
 
 export const Registration = () => {
 
+    const [tooltipContent, setTooltipContent] = useState(null);
+
+    const handleMouseEnter = (time) => {
+        setTooltipContent(time);
+    };
+
+    const handleMouseLeave = () => {
+        setTooltipContent(null);
+    };
 
     return (
         <div className="gray-background">
@@ -35,26 +44,35 @@ export const Registration = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                        <tr>
-                            <td>101</td>
-                            <td>001</td>
-                            <td>Lập trình Java</td>
-                            <td>Thứ 2, 7:30 - 9:30</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>102</td>
-                            <td>002</td>
-                            <td>Web Development</td>
-                            <td>Thứ 3, 9:00 - 11:00 Thứ 3, 9:00 - 11:00
-                            </td>
-                            <td>25</td>
-                        </tr>
-                    </tbody>
+                                <tr>
+                                    <td>101</td>
+                                    <td>001</td>
+                                    <td>Lập trình Java</td>
+                                    <td onMouseEnter={() => handleMouseEnter("Thứ 2, 7:30 - 9:30")} onMouseLeave={handleMouseLeave}>
+                                        Thứ 2, 7:30 - 9:30
+                                        {tooltipContent && (
+                                            <span className="tooltip">{tooltipContent}</span>
+                                        )}
+                                    </td>
+                                    <td>30</td>
+                                </tr>
+                                <tr>
+                                    <td>102</td>
+                                    <td>002</td>
+                                    <td>Web Development</td>
+                                    <td onMouseEnter={() => handleMouseEnter("Thứ 3, 9:00 - 11:00")} onMouseLeave={handleMouseLeave}>
+                                        Thứ 3, 9:00 - 11:00
+                                        {tooltipContent && (
+                                            <span className="tooltip">{tooltipContent}</span>
+                                        )}
+                                    </td>
+                                    <td>25</td>
+                                </tr>
+                            </tbody>
                         </table>
                     </Col>
                 </Container>
             </Row>
         </div>
     );
-}
+};
