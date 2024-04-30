@@ -59,8 +59,9 @@ export const Timetable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {selectedClassInfo.studentDetails.map((student, index) => (
-                        <tr key={index}>
+                    {/* Kiểm tra selectedClassInfo trước khi truy cập vào studentDetails */}
+                    {selectedClassInfo && selectedClassInfo.studentDetails && selectedClassInfo.studentDetails.map((student, index) => (
+                        <tr key={student.id}>
                             <td>{index + 1}</td>
                             <td>{student.id}</td>
                             <td>{student.name}</td>
@@ -93,7 +94,7 @@ export const Timetable = () => {
                                     </thead>
                                     <tbody>
                                         {timetable.map(item => (
-                                            <tr key={item.class_id}>
+                                           <tr key={`${item.class_id}-${item.weekday}-${item.subject_name}-${item.time}-${item.location} `}>
                                                 <td style={{ textAlign: 'center' }}>{item.weekday}</td>
                                                 <td style={{ textAlign: 'center' }}>{item.class_id}</td>
                                                 <td>
