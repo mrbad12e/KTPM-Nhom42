@@ -1,18 +1,34 @@
-import User from "./user.js";
-import client from "../../config/db.js";
+import User from './user.js';
+import client from '../../config/db.js';
 
 export default class Lecturer extends User {
-    static async createLecturer(req, res, next){
+    constructor(id, role) {
+        super(id, role);
+        this.lecturerSetup();
+    }
+
+    async lecturerSetup() {
         try {
-            
+            const query = `
+            REVOKE SELECT ON TABLE public.admin FROM "${this.id}";
+            GRANT ALL PRIVILEGES ON TABLE public.enrollment TO "${this.id}";
+
+            GRANT USAGE ON SCHEMA lecturer TO "${this.id}";
+            GRANT SELECT ON ALL TABLES IN SCHEMA lecturer TO "${this.id}";
+            GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA lecturer TO "${this.id}";
+
+            SET ROLE "${this.id}";
+            `;
+            await client.query(query);
         } catch (error) {
             throw error;
         }
     }
-    static async readLecturer(req, res, next){
+    
+    static async readLecturer(req, res, next) {
         try {
             let query = `SELECT * FROM public.${req._parsedUrl.pathname.split('/')[1]}`;
-            
+
             if (Object.keys(req.query).length > 0) {
                 query += ' WHERE ';
                 const conditions = [];
@@ -31,9 +47,8 @@ export default class Lecturer extends User {
         }
     }
 
-    static async updateLecturer(req, res, next){
+    static async updateLecturer(req, res, next) {
         try {
-            
         } catch (error) {
             throw error;
         }
