@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Table } from 'react-bootstrap';
 import axios from 'axios';
-import Sidebar from '../Sidebar/Sidebar';
+import { Sidebar } from '../../components/Layouts/Sidebar/Sidebar';
 import { NavLink, useNavigate } from 'react-router-dom';
 import '../CSSglobal.css';
 import './Timetable.css';
@@ -14,7 +14,7 @@ export const Timetable = () => {
             try {
                 const email = localStorage.getItem('email');
                 if (email) {
-                    const response = await axios.post('http://localhost:5000/student/timetable', { email });
+                    const response = await axios.post('/student/timetable', { email });
                     setTimetable(response.data.TimetableInfo);
                 }        
             } catch (error) {
@@ -30,7 +30,7 @@ export const Timetable = () => {
         <div className="outer-container">
             <Container fluid className="gray-background"> 
                 <Row>
-                    <Sidebar />
+                    <Sidebar></Sidebar>
                     <Container fluid className="main-background">
                     <Col md={9} className='right-content'>
                         <h2>THỜI KHÓA BIỂU HỌC KỲ 20212</h2>

@@ -5,7 +5,7 @@ import './Sidebar.css';
 import axios from 'axios';
 
 
-const Sidebar = () => {
+export const Sidebar = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -47,5 +47,3 @@ const Sidebar = () => {
         </Col>
     );
 };
-
-export default Sidebar;

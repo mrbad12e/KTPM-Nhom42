@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'; 
-import { Container , Row, Col ,Modal ,Button } from 'react-bootstrap'; 
+import { Container , Row, Col ,Modal ,Button,color } from 'react-bootstrap'; 
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Sidebar from '../Sidebar/Sidebar'; 
+import { Sidebar } from '../../components/Layouts/Sidebar/Sidebar';
+ 
 import avatar from '../../../assets/img/avatar.jpg';
 import '../CSSglobal.css';
 import './Profile.css';
@@ -21,7 +22,7 @@ export const Profile = () => {
             try {
                 const email = localStorage.getItem('email');
                 if (email) {
-                    const response = await axios.post('http://localhost:5000/student/profile', {email});
+                    const response = await axios.post('/student/profile', {email});
                     const userInfo = response.data.userInfo;
                     setStudentInfo(userInfo);
                     console.log('Student info:', userInfo);
@@ -58,13 +59,13 @@ export const Profile = () => {
     return (
         <div className="gray-background">
             <Row className="content">
-                <Sidebar />
+                <Sidebar></Sidebar>
                 <Container fluid className="main-background">
                     <Col md={9} className="right-content">
                         <h2>THÔNG TIN SINH VIÊN</h2>
                         {renderInfoStudent()}
                         <Row>
-                            <Button style={{ border: 'none', margin: '30px 0' }} onClick={handleShowModal}>Update</Button>
+                            <Button style={{ border: 'none', margin: '30px 0'  }} onClick={handleShowModal}>Update</Button>
                         </Row>
                     </Col>
                     
