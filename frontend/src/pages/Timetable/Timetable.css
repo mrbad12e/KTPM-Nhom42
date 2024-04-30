@@ -19,6 +19,27 @@ h2 {
 }
 
 .tableStudent-container {
-    width: 100%; /* hoặc kích thước mong muốn */
-    margin-right: 0%; /* căn giữa theo chiều ngang */
+    width: 90%; /* hoặc kích thước mong muốn */
+    margin: 0 auto; /* căn giữa theo chiều ngang */
+}
+
+.tableStudent-container th {
+    text-align: center; /* căn giữa nội dung trong cột */
+}
+
+.tableStudent-container td {
+    
+}
+
+/* Thiết lập kích thước cột */
+.tableStudent-container th:first-child,
+.tableStudent-container td:first-child {
+    width: 10%; /* kích thước cột STT */
+    text-align: center; /* căn giữa nội dung trong cột */
+}
+
+.tableStudent-container th:nth-child(2),
+.tableStudent-container td:nth-child(2) {
+    width: 20%; /* kích thước cột MSSV */
+    text-align: center; /* căn giữa nội dung trong cột */
 }
