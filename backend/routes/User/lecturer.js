@@ -10,6 +10,15 @@ router.route('/')
     .get(LecturerController.readLecturers)
     .patch(isAuthUser, LecturerController.updateLecturer);
 
+router.route('/class')
+    .get(isAuthUser, LecturerController.viewClassAssigned);
+
+router.route('/grade')
+    .get(isAuthUser, LecturerController.report_grade_distribution);
+
+router.route('/attendance')
+    .get(isAuthUser, LecturerController.report_attendance);
+
 router.route('/login')
     .post(LecturerController.loginUser);
 router.route('/logout')

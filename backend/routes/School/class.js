@@ -10,12 +10,12 @@ router.route('/')
     // .delete(isAuthUser, ClassControllers.deleteClass);
     // Phai la admin/lecturer moi co the tao, sua, xoa class
 
-// router.route('/assign-lecturer')
-//     .patch(isAuthUser, ClassControllers.assignLecturer);
-//     // Phai la admin/lecturer moi co the assign lecturer
+router.route('/lecturer')
+    .patch(isAuthUser, ClassControllers.assignLecturer);
+    // Phai la admin/lecturer moi co the assign lecturer
 
-// router.route('/enroll')
-//     .patch(isAuthUser, ClassControllers.enrollClass);
-//     // Phai la student moi co the enroll class
+router.route('/enroll')
+    .patch(isAuthUser, ClassControllers.enrollClass);
+    // Phai la student moi co the enroll class
 
 export default router;

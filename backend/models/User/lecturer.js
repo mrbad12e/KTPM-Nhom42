@@ -1,18 +1,34 @@
-import User from "./user.js";
-import client from "../../config/db.js";
+import User from './user.js';
+import client from '../../config/db.js';
 
 export default class Lecturer extends User {
-    static async createLecturer(req, res, next){
+    constructor(id, role) {
+        super(id, role);
+        this.lecturerSetup();
+    }
+
+    async lecturerSetup() {
         try {
-            
+            const query = `
+            REVOKE SELECT ON TABLE public.admin FROM "${this.id}";
+            GRANT ALL PRIVILEGES ON TABLE public.enrollment TO "${this.id}";
+
+            GRANT USAGE ON SCHEMA lecturer TO "${this.id}";
+            GRANT SELECT ON ALL TABLES IN SCHEMA lecturer TO "${this.id}";
+            GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA lecturer TO "${this.id}";
+
+            SET ROLE "${this.id}";
+            `;
+            await client.query(query);
         } catch (error) {
             throw error;
         }
     }
-    static async readLecturer(req, res, next){
+    
+    static async readLecturer(req, res, next) {
         try {
-            let query = `SELECT * FROM public.${req._parsedUrl.pathname.split('/')[1]}`;
-            
+            let query = `SELECT * FROM public.lecturer`;
+
             if (Object.keys(req.query).length > 0) {
                 query += ' WHERE ';
                 const conditions = [];
@@ -31,9 +47,19 @@ export default class Lecturer extends User {
         }
     }
 
-    static async updateLecturer(req, res, next){
+    static async updateLecturer(req, res, next) {
         try {
-            
+            const id = req.query.id;
+            const query = `UPDATE public.lecturer SET`;
+            const keys = Object.keys(req.body);
+            const values = Object.values(req.body);
+            const set = [];
+            for (let i = 0; i < keys.length; i++) {
+                set.push(`${keys[i]} = $${i + 1}, `);
+            }
+            query += set.join('');
+            query += ` WHERE id = ${id};`;
+            await client.query(query, values);
         } catch (error) {
             throw error;
         }

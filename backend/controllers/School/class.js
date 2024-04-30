@@ -39,8 +39,10 @@ export default class ClassControllers {
 
     static async assignLecturer(req, res, next) {
         try {
-            const assignedLecturer = await Class.assignLecturer(req, res, next);
-            res.status(200).json({ assignedLecturer });
+            await Class.assignLecturer(req, res, next);
+            res.status(200).json({
+                message: 'Lecturer assigned successfully',
+            });
         } catch (error) {
             res.status(500).json({ error: error });
         }
@@ -48,8 +50,10 @@ export default class ClassControllers {
 
     static async enrollClass(req, res, next) {
         try {
-            const enrolledClass = await Class.enrollClass(req, res, next);
-            res.status(200).json({ enrolledClass });
+            await Class.enrollClass(req, res, next);
+            res.status(200).json({ 
+                message: 'Class enrolled successfully',
+            });
         }
         catch (error) {
             res.status(500).json({ error: error });
