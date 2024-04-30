@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from 'react'; 
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container , Row, Col ,Modal ,Button } from 'react-bootstrap'; 
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '../Sidebar/Sidebar'; 
 import avatar from '../../../assets/img/avatar.jpg';
+import '../CSSglobal.css';
 import './Profile.css';
+import Cookies from 'js-cookie';
+
 
 export const Profile = () => {
     const navigate = useNavigate();
     const [studentInfo, setStudentInfo] = 
                             useState({ id: '', programName: '', name: '', phone: '', birthday: '', gender: '', address: '' });
+    const [showModal, setShowModal] = useState(false);
 
+    
     useEffect(() => {
         const fetchStudentInfo = async () => {
             try {
                 const email = localStorage.getItem('email');
                 if (email) {
-                    const response = await axios.post('http://localhost:5000/student', { email });
+                    const response = await axios.post('http://localhost:5000/student/profile', {email});
                     const userInfo = response.data.userInfo;
                     setStudentInfo(userInfo);
                     console.log('Student info:', userInfo);
@@ -27,10 +32,16 @@ export const Profile = () => {
         };
         fetchStudentInfo();
     }, []);
+    
+    const handleCloseModal = () => setShowModal(false);
+    const handleShowModal = () => setShowModal(true);
 
     const renderInfoStudent = () => {
         return (
             <div className='main_content'>
+                <div className='image_student ml-auto'>
+                    <img src={avatar} alt="anh" className="anh-the"/>
+                </div>
                 <div className='info_student'>
                     <p><strong>MSSV:</strong>  {studentInfo.id}</p>
                     <p><strong>Chuyên ngành:</strong> {studentInfo.programName}</p>
@@ -45,20 +56,48 @@ export const Profile = () => {
     };
 
     return (
-        <div className="profile-background">
-            <Container fluid className="gray-background">
-                <Row className="content">
-                    <Sidebar />
-                    <Container fluid className="profile-bounder">
-                        <Col md={9} className="right-content">
-                            <h2>THÔNG TIN SINH VIÊN</h2>
-                            {renderInfoStudent()}
-                        </Col>
-                    </Container>
-                </Row>
-            </Container>
+        <div className="gray-background">
+            <Row className="content">
+                <Sidebar />
+                <Container fluid className="main-background">
+                    <Col md={9} className="right-content">
+                        <h2>THÔNG TIN SINH VIÊN</h2>
+                        {renderInfoStudent()}
+                        <Row>
+                            <Button style={{ border: 'none', margin: '30px 0' }} onClick={handleShowModal}>Update</Button>
+                        </Row>
+                    </Col>
+                    
+                </Container>
+            </Row>
+
+
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Update Information</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className='modal-user-body'>
+                        <div className='input-container'>
+                            <label>So dien thoai</label>
+                            <input type='text' ></input>
+                        </div>
+                        <div className='input-container'>
+                            <label>Dia chi</label>
+                            <input type='text' ></input>
+                        </div>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    
+                    <Button variant="primary" onClick={handleCloseModal}>
+                        Save Changes
+                    </Button>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
-
-<Container fluid className="container-background"></Container>

@@ -49,4 +49,15 @@ export default class StudentController extends UserControllers{
            }
        }
 
+       static async getTimetable(req, res, next) {
+        try {
+            const TimetableInfo = await Student.getTimetableFromDatabase(req, res, next);
+            res.status(200).json({
+                TimetableInfo: TimetableInfo
+            });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
 }

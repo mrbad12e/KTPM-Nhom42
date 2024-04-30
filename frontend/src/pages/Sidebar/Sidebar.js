@@ -12,7 +12,7 @@ const Sidebar = () => {
         try {
             axios.get('/admin/logout');
             console.log('Logged out successfully');
-            localStorage.removeItem('auth');
+            localStorage.clear();
             navigate('/');
         } catch (error) {
             console.log(error);
@@ -29,7 +29,7 @@ const Sidebar = () => {
                     <NavLink to="/profile">Thông tin sinh viên</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/">Thời khóa biểu</NavLink>
+                    <NavLink to="/timetable">Thời khóa biểu</NavLink>
                 </li>
                 <li>
                     <NavLink to="/registration">Đăng kí học tập</NavLink>

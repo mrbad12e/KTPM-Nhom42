@@ -5,6 +5,7 @@ import { Home } from './pages/Home/Home';
 import { Login } from './pages/Login/Login';
 import { Registration } from './pages/Registration/Registration';
 import { Profile } from './pages/Profile/Profile';
+import {Timetable} from './pages/Timetable/Timetable';
 
 export const App = () => {
     return (
@@ -15,6 +16,8 @@ export const App = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/registration" element={<Registration />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/timetable" element={<Timetable />} />
+
             </Routes>
         </HashRouter>
     );
