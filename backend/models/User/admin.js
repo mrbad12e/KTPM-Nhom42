@@ -13,7 +13,6 @@ export default class Admin extends User {
             SET ROLE "${this.id}";
             `;
             await client.query(query);
-            console.log('Role changed to Admin');
         } catch (error) {
             throw error;
         }

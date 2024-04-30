@@ -2,6 +2,7 @@ import Student from '../../models/User/student.js';
 import Lecturer from '../../models/User/lecturer.js';
 import UserControllers from './user.js';
 import client from '../../config/db.js';
+import Class from '../../models/School/class.js';
 
 export default class AdminController extends UserControllers {
     static async add_Student(req, res, next) {
@@ -162,9 +163,8 @@ export default class AdminController extends UserControllers {
 
     static async assign_lecturer(req, res, next) {
         try {
-            const query = 'CALL assign_lecturer($1, $2)';
-            const values = [req.body.lecturer_id, req.body.class_id];
-            await client.query(query, values);
+            await Class.assignLecturer(req, res, next);
+            res.status(200).json({ message: 'Lecturer assigned successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

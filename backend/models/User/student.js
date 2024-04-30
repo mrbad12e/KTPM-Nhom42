@@ -17,16 +17,17 @@ export default class Student extends User {
             GRANT SELECT ON ALL TABLES IN SCHEMA student TO "${this.id}";
             GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA student TO "${this.id}";
 
-            SET ROLE "${this.id}";
-            `
+            SET ROLE "${this.id}"
+            `;
+            await client.query(query);
         } catch (error) {
-            
+            throw error;
         }
     }
     
     static async readStudent(req, res, next){
         try {
-            let query = `SELECT * FROM public.${req._parsedUrl.pathname.split('/')[1]}`;
+            let query = `SELECT * FROM public.student`;
             // if req.query.id is undefined then it will return all students
             // else loop through the query string and add the query to the query string
             if (Object.keys(req.query).length > 0) {
@@ -47,9 +48,51 @@ export default class Student extends User {
         }
     }
 
+    static async show_estimated_fees(req, res, next){
+        try {
+            if (!req.query.id) {
+                const query = 'SELECT * FROM show_estimated_fees()';
+                const { rows } = await client.query(query);
+                return rows;
+            } else {
+                const query = 'SELECT * FROM show_estimated_fees($1)';
+                const { rows } = await client.query(query, [req.query.id]);
+                return rows;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async report_student(req, res, next){
+        try {
+            if (!req.query.id) {
+                const query = 'SELECT * FROM report_student()';
+                const { rows } = await client.query(query);
+                return rows;
+            } else {
+                const query = 'SELECT * FROM report_student($1)';
+                const { rows } = await client.query(query, [req.query.id]);
+                return rows;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async updateStudent(req, res, next){
         try {
-            
+            const id = req.query.id;
+            const query = `UPDATE public.student SET`;
+            const keys = Object.keys(req.body);
+            const values = Object.values(req.body);
+            const set = [];
+            for (let i = 0; i < keys.length; i++) {
+                set.push(`${keys[i]} = $${i + 1}, `);
+            }
+            query += set.join('');
+            query += ` WHERE id = ${id};`;
+            await client.query(query, values);
         } catch (error) {
             throw error;
         }
