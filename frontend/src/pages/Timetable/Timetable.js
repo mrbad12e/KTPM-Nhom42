@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Table } from 'react-bootstrap';
 import axios from 'axios';
-import Sidebar from '../Sidebar/Sidebar';
+import Sidebar from '../../components/Layouts/Sidebar/Sidebar'; 
 import '../CSSglobal.css';
 import './Timetable.css';
 
@@ -17,7 +17,7 @@ export const Timetable = () => {
                 if (email) {
                     const response = await axios.post('http://localhost:5000/student/timetable', { email });
                     setTimetable(response.data.TimetableInfo);
-                }        
+                }
             } catch (error) {
                 console.error('Error fetching timetable:', error.message);
             }

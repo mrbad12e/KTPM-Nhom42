@@ -10,8 +10,8 @@ router.route('/')
 router.route('/profile')
     .post(StudentController.getUserInfo);       
     
-// router.route('/registration')
-//     .post(isAuthUser,StudentController.getSubject); 
+router.route('/registration')
+    .post(StudentController.getSubject); 
     
 router.route('/timetable')
     .post(StudentController.getTimetable); 

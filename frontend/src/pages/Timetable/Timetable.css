@@ -9,7 +9,6 @@ h2 {
 }
 
 .selected-class-info {
-
     max-width: 1000px; /* Thiết lập chiều rộng tối đa */
     background-color: white; /* Màu nền */
     padding: 20px; /* Khoảng cách padding */
@@ -25,10 +24,6 @@ h2 {
 
 .tableStudent-container th {
     text-align: center; /* căn giữa nội dung trong cột */
-}
-
-.tableStudent-container td {
-    
 }
 
 /* Thiết lập kích thước cột */

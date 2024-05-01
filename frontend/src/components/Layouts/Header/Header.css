@@ -12,7 +12,11 @@
 .header-title {
     margin-left: 10vw; /* Sử dụng giá trị động dựa trên viewport width */
     font-family: "Times New Roman", Times, serif;
+    color: rgb(255, 255, 255);
+    text-decoration: none;
 }
+
+  
 
 .dropdown-container {
     position: fixed;

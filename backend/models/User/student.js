@@ -162,4 +162,37 @@ export default class Student extends User {
         }
     }
   
+    static async getSubjectFromDatabase(req, res, next) {
+        try {
+            const { subject_name, subject_id } = req.body; 
+    
+            let query1 = `SELECT class.id, class.subject_id, subject.name, class.current_cap, 
+                            class.max_cap, timetable.weekday, timetable.start_time, timetable.end_time
+                            FROM class 
+                            JOIN subject ON class.subject_id = subject.id 
+                            JOIN timetable ON class.id = timetable.class_id `;
+            if (subject_name && subject_id) {
+                query1 += 'WHERE (LOWER(subject.name) LIKE LOWER($1) OR LOWER(subject.id) LIKE LOWER($2) )ORDER BY subject.id';
+                const { rows } = await client.query(query1, [`${subject_name}%`, `${subject_id}%`]);
+                return rows;
+            }
+            else if (subject_name && !subject_id) {
+                query1 += 'WHERE LOWER(subject.name) LIKE LOWER($1) ORDER BY subject.id';
+                const { rows } = await client.query(query1, [`${subject_name}%`]);
+                return rows;
+            }
+            else if (!subject_name && subject_id) {                    
+                query1 += 'WHERE LOWER(subject.id) LIKE LOWER($1) ORDER BY subject.id';
+                const { rows } = await client.query(query1, [`${subject_id}%`]);
+                return rows;
+            } else {
+                const { rows } = await client.query(query1);
+                return rows;
+            }
+        } catch (error) {
+            next(error); 
+        }
+    }
+    
 }
+
