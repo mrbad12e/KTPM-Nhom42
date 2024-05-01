@@ -39,7 +39,7 @@ export const Registration = () => {
 
     const fetchSubjectInfo = async () => {
         try {
-            const response = await fetch('http://localhost:5000/student/registration', {
+            const response = await fetch('student/registration', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
