@@ -83,7 +83,7 @@ export const Timetable = () => {
                     <Col md={9} className="right-content">
                     <Row className="align-items-center">
                         <Col md={9}>
-                            <h2>THỜI KHÓA BIỂU HỌC KỲ</h2>
+                            <h2>THỜI KHÓA BIỂU KỲ</h2>
                         </Col>
                         <Col md={3} className="d-flex justify-content-end">
                             <Form.Select 

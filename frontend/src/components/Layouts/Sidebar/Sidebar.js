@@ -32,10 +32,10 @@ const Sidebar = () => {
                     <NavLink to="/registration">Đăng kí học tập</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/">Kết quả học tập</NavLink>
+                    <NavLink to="/courseGrade">Kết quả học tập</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/">Công nợ học phí</NavLink>
+                    <NavLink to="/feePayment">Công nợ học phí</NavLink>
                 </li>
                 <li>
                     <Button variant="primary" onClick={handleLogout} className="logout-button">Đăng xuất</Button>
