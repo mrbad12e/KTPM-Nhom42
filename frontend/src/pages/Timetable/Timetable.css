@@ -8,10 +8,3 @@
     font-size: 1.5vw;
     font-weight: bold;
 }
-
-/* Thiết lập kích thước cột */
-.tableStudent-container th:first-child,
-.tableStudent-container td:first-child {
-    width: 10%; /* kích thước cột STT */
-    text-align: center; /* căn giữa nội dung trong cột */
-}
