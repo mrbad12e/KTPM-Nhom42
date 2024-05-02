@@ -16,26 +16,24 @@ export const Timetable = () => {
             try {
                 const email = localStorage.getItem('email');
                 if (email) {
-                    const response = await axios.post('http://localhost:5000/student/timetable', { email });
+                    const response = await axios.post('student/timetable', { email });
                     setTimetable(response.data.TimetableInfo);
                 }
             } catch (error) {
                 console.error('Error fetching timetable:', error.message);
             }
         };
-
         fetchTimetable();
     }, []);
 
     // Function to handle click on class
     const handleClick = async (classInfo) => {
         try {
-            // Nếu đã có thông tin chi tiết lớp học được hiển thị và môn học click vào giống với môn học đã chọn trước đó, ẩn thông tin đi
             if (selectedClassInfo && selectedSubjectName === classInfo.subject_name) {
                 setSelectedClassInfo(null);
                 setSelectedSubjectName('');
             } else {
-                const response = await axios.post('http://localhost:5000/student/classDetail', {
+                const response = await axios.post('student/classDetail', {
                     email: localStorage.getItem('email'),
                     class_id: classInfo.class_id
                 });
@@ -50,85 +48,90 @@ export const Timetable = () => {
     // Function to render student details
     const renderStudentDetails = () => {
         return (
-            <table className="tableStudent-container">
+            <Table striped bordered hover style={{width: '65%', marginLeft: '15%'}}>
                 <thead>
                     <tr>
-                        <th>STT</th>
-                        <th>MSSV</th>
-                        <th>Họ và tên</th>
-                        <th>Email</th>
+                        <th style={{ textAlign: 'center' }}>STT</th>
+                        <th style={{ textAlign: 'center' }}>MSSV</th>
+                        <th style={{ textAlign: 'center' }}>Họ và tên</th>
+                        <th style={{ textAlign: 'center' }}>Email</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {/* Kiểm tra selectedClassInfo trước khi truy cập vào studentDetails */}
                     {selectedClassInfo && selectedClassInfo.studentDetails && selectedClassInfo.studentDetails.map((student, index) => (
                         <tr key={student.id}>
-                            <td>{index + 1}</td>
-                            <td>{student.id}</td>
+                            <td style={{ textAlign: 'center' }}>{index + 1}</td>
+                            <td style={{ textAlign: 'center' }}>{student.id}</td>
                             <td>{student.name}</td>
                             <td>{student.email}</td>
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </Table>
         );
     };
 
     return (
-        <div className="outer-container">
+        <div>
             <Container fluid className="gray-background"> 
                 <Row>
                     <Sidebar />
                     <Container fluid className="main-background">
-                    <Col md={9} className="right-content">
-                    <Row className="align-items-center">
-                        <Col md={9}>
-                            <h2>THỜI KHÓA BIỂU KỲ</h2>
-                        </Col>
-                        <Col md={3} className="d-flex justify-content-end">
-                            <Form.Select 
-                                className="select-semester" 
-                                onChange={(e) => setSelectedSemester(e.target.value)} 
-                                value={selectedSemester}
-                            >
-                                <option value="20212">20212</option>
-                                {/* Thêm các tùy chọn cho các kỳ học khác */}
-                            </Form.Select>
-                        </Col>
-                    </Row>
-                            <div className="table-container">
-                                <Table striped bordered hover>
-                                    <thead>
-                                        <tr>
-                                            <th style={{ textAlign: 'center' }}>Thứ</th>
-                                            <th style={{ textAlign: 'center' }}>Mã lớp</th>
-                                            <th style={{ textAlign: 'center' }}>Môn học</th>
-                                            <th style={{ textAlign: 'center' }}>Thời gian</th>
-                                            <th style={{ textAlign: 'center' }}>Phòng học</th>
+                        <Row>
+                            <Col style={{marginLeft: '20vw'}}>
+                                <h2 style={{fontSize: '2vw', fontWeight: 'bold'}}>THỜI KHÓA BIỂU KỲ</h2>
+                            </Col>
+                            <Col style={{marginRight: '10vw',position: 'relative', top: '-1vh'}}>
+                                <Form.Select 
+                                    className="select-semester" 
+                                    onChange={(e) => setSelectedSemester(e.target.value)} 
+                                    value={selectedSemester}
+                                >
+                                    <option value="20212">20212</option>
+                                    {/* Thêm các tùy chọn cho các kỳ học khác */}
+                                </Form.Select>
+                            </Col>
+                        </Row>
+                        <div style={{marginTop: '7vh'}}>
+                            <Table striped bordered hover style={{width: '80%', marginLeft: '10%'}}>
+                                <thead>
+                                    <tr>
+                                        <th style={{ textAlign: 'center' }}>Thứ</th>
+                                        <th style={{ textAlign: 'center' }}>Mã lớp</th>
+                                        <th style={{ textAlign: 'center' }}>Môn học</th>
+                                        <th style={{ textAlign: 'center' }}>Thời gian</th>
+                                        <th style={{ textAlign: 'center' }}>Phòng học</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {timetable.map(item => (
+                                        <tr key={`${item.class_id}-${item.weekday}-${item.subject_name}-${item.time}-${item.location} `}>
+                                            <td style={{ textAlign: 'center' }}>{item.weekday}</td>
+                                            <td style={{ textAlign: 'center' }}>{item.class_id}</td>
+                                            <td>
+                                                <span 
+                                                    onClick={() => handleClick(item)} 
+                                                    style={{ cursor: 'pointer' }}
+                                                >
+                                                    {item.subject_name}
+                                                </span>
+                                            </td>
+                                            <td style={{ textAlign: 'center' }}>{item.time}</td>
+                                            <td style={{ textAlign: 'center' }}>{item.location}</td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {timetable.map(item => (
-                                           <tr key={`${item.class_id}-${item.weekday}-${item.subject_name}-${item.time}-${item.location} `}>
-                                                <td style={{ textAlign: 'center' }}>{item.weekday}</td>
-                                                <td style={{ textAlign: 'center' }}>{item.class_id}</td>
-                                                <td>
-                                                    <span 
-                                                        onClick={() => handleClick(item)} 
-                                                        style={{ cursor: 'pointer' }}
-                                                    >
-                                                        {item.subject_name}
-                                                    </span>
-                                                </td>
-                                                <td style={{ textAlign: 'center' }}>{item.time}</td>
-                                                <td style={{ textAlign: 'center' }}>{item.location}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
-                                {selectedClassInfo && (
-                                    <div className="selected-class-info">
-                                        <h3>Thông tin chi tiết của lớp học</h3>
+                                    ))}
+                                </tbody>
+                            </Table>
+                            <hr style={{
+                                    borderStyle: 'solid', // Kiểu viền
+                                    borderWidth: '2px', // Độ dày
+                                    borderColor: 'black', // Màu sắc
+                                    margin: '6vh 2vh' // Khoảng cách top và bottom
+                                }} />
+                            {selectedClassInfo && (
+                                <div className="selected-class-info">
+                                    <h2 style={{fontSize: '1.5vw', fontWeight: 'bold', marginLeft: '25vw', marginBottom: '3vh'}}>Thông tin chi tiết của lớp học</h2>
+                                    <Container style={{ marginLeft: '5vw'}}> 
                                         <p><strong>Môn học:</strong> {selectedSubjectName}</p>
                                         <p><strong>Loại lớp:</strong> {selectedClassInfo.classInfo.type}</p>
                                         {selectedClassInfo.lecturerInfo && selectedClassInfo.lecturerInfo.length > 0 && (
@@ -139,11 +142,12 @@ export const Timetable = () => {
                                             </>
                                         )}
                                         <p><strong>Sĩ số:</strong> {selectedClassInfo.studentCount}</p>
-                                        {renderStudentDetails()}
-                                    </div>
-                                )}
-                            </div>
-                        </Col>
+                                    </Container>
+                                    {renderStudentDetails()}
+                                </div>
+                            )}
+                        </div>
+
                     </Container>
                 </Row>
             </Container>
