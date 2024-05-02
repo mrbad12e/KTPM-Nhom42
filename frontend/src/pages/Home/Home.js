@@ -33,9 +33,9 @@ export const Home = () => {
             <div>
                 <Row>
                     <Col>{/*Ảnh */}
-                        <div >
-                            <img src={avatar} alt="anh" style={{ marginLeft: '15vw', height: '30vh', border: '2px solid black'  }} className="image_student" />
-                        </div>           
+                            <img src={avatar} alt="anh" 
+                                style={{ position: 'fixed', right: '45vw', top: '31vh',width: '15.5vw', border: '2px solid black'  }} 
+                            className="image_student" />
                     </Col>       
                     <Col>{/*Thông tin */}
                         <div className='info_student'>
