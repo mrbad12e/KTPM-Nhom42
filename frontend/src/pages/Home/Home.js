@@ -14,7 +14,7 @@ export const Home = () => {
     useEffect(() => {
         const fetchStudentInfo = async () => {
             try {
-                const email = localStorage.getItem('email');
+                const email = localStorage.getItem('email');    // lấy email từ local 
                 if (email) {
                     const response = await axios.post('/student/profile', {email});
                     const userInfo = response.data.userInfo;
@@ -30,34 +30,40 @@ export const Home = () => {
 
     const renderInfoStudent = () => {
         return (
-            <div className='main_content'>
-                <div className='image_student ml-auto'>
-                    <img src={avatar} alt="anh" className="anh-the"/>
-                </div>
-                <div className='info_student'>
-                    <p><strong>MSSV:</strong>  {studentInfo.id}</p>
-                    <p><strong>Chuyên ngành:</strong> {studentInfo.programName}</p>
-                    <p><strong>Họ và tên:</strong> {studentInfo.name}</p>
-                    <p><strong>Số điện thoại:</strong> {studentInfo.phone}</p>
-                    <p><strong>Ngày sinh:</strong> {studentInfo.birthday}</p>
-                    <p><strong>Giới tính:</strong> {studentInfo.gender}</p>
-                    <p><strong>Địa chỉ:</strong> {studentInfo.address}</p>
-                </div>
-            </div>
+            <div>
+                <Row>
+                    <Col>{/*Ảnh */}
+                        <div >
+                            <img src={avatar} alt="anh" style={{ marginLeft: '15vw', height: '30vh', border: '2px solid black'  }} className="image_student" />
+                        </div>           
+                    </Col>       
+                    <Col>{/*Thông tin */}
+                        <div className='info_student'>
+                            <p style={{ fontSize: '1vw', marginBottom: '2vh'  }}><strong>MSSV:</strong>  {studentInfo.id}</p>
+                            <p style={{ fontSize: '1vw', marginBottom: '2vh'  }}><strong>Chuyên ngành:</strong> {studentInfo.programName}</p>
+                            <p style={{ fontSize: '1vw', marginBottom: '2vh'  }}><strong>Họ và tên:</strong> {studentInfo.name}</p>
+                            <p style={{ fontSize: '1vw', marginBottom: '2vh'  }}><strong>Số điện thoại:</strong> {studentInfo.phone}</p>
+                            <p style={{ fontSize: '1vw', marginBottom: '2vh'  }}><strong>Ngày sinh:</strong> {studentInfo.birthday}</p>
+                            <p style={{ fontSize: '1vw', marginBottom: '2vh'  }}><strong>Giới tính:</strong> {studentInfo.gender}</p>
+                            <p style={{ fontSize: '1vw', marginBottom: '2vh'  }}><strong>Địa chỉ:</strong> {studentInfo.address}</p>
+                        </div>
+                    </Col>
+                </Row>
+            </div>       
         );
     };
 
     return (
         <div className="gray-background">
-            <Row className="content">
-                <Sidebar />
-                <Container fluid className="main-background">
-                    <Col md={9} className="right-content">
-                        <h2>THÔNG TIN SINH VIÊN</h2>
-                        {renderInfoStudent()}
-                    </Col>
-                </Container>
-            </Row>
+            <Sidebar />
+            <Container fluid className="main-background">
+                <Col className="right-content">
+                    <div style={{ textAlign: 'center', fontSize: '2vw', marginBottom: '10vh', fontWeight: 'bold' }}>
+                        THÔNG TIN SINH VIÊN
+                    </div>
+                    {renderInfoStudent()}
+                </Col>
+            </Container>
         </div>
     );
 };

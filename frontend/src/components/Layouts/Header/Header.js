@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import './Header.css'; // Import file CSS mới
 import { NavLink, useNavigate } from 'react-router-dom';
+import './Header.css';
 import axios from 'axios'; 
 
 export const Header = () => {
@@ -35,17 +35,16 @@ export const Header = () => {
     return (
         <header className="container-fluid header-background">
             <Row>
-                <Col sm={6}>
+                <Col sm="auto">
                     <h1><NavLink className="header-title" to="/home">ĐẠI HỌC BÁCH KHOA HÀ NỘI</NavLink></h1>
                 </Col>
-                <Col sm={{ span: 3, offset: 3 }}>
+                <Col >
                     <div className="dropdown-container">
                         <div className="dropdown">
                             <button className="dropbtn">Xin chào sinh viên</button>
-                            <i className="bx bx-chevron-down"></i>
                             <div className="dropdown-content">
-                                <a onClick={handleChangePassword} className="black-text">Đổi mật khẩu</a>
-                                <a onClick={handleLogout} className="black-text">Đăng xuất</a>
+                                <a onClick={handleChangePassword} className="dropdown-text">Đổi mật khẩu</a>
+                                <a onClick={handleLogout} className="dropdown-text">Đăng xuất</a>
                             </div>
                         </div>
                     </div>

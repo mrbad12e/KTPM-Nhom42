@@ -1,43 +1,43 @@
 .header-background {
     position: fixed;
-    top: 0;
-    left: 0;
+    height: 10vh; 
     width: 100%;
+    z-index: 999; 
     background: linear-gradient(135deg,rgb(0, 0, 0) 0%,rgb(176, 176, 176) 100%);
     color: #fff;
-    padding: 10px;
-    z-index: 999; 
 }
 
 .header-title {
-    margin-left: 10vw; /* Sử dụng giá trị động dựa trên viewport width */
+    margin-left: 5vw; 
+    line-height: 8vh;
+    height: 10vh;
     font-family: "Times New Roman", Times, serif;
     color: rgb(255, 255, 255);
     text-decoration: none;
+    font-size: 5vh;
 }
 
-  
+.dropbtn {
+    height: 6vh;
+    background-color: transparent;
+    background: rgb(255, 255, 255) 0%;
+    border: 3px solid black; 
+    border-radius: 5px;
+    padding: 0 1vw;
+    font-size: 2vh;
+    text-align: center;
+    color: black;
+    margin-top :2vh
+}
 
 .dropdown-container {
     position: fixed;
-    top: 10px; /* Điều chỉnh vị trí từ phía trên */
-    right: 2vw; /* Sử dụng giá trị động dựa trên viewport width */
-    z-index: 1000; /* Đảm bảo dropdown-container hiển thị trên header-background */
+    right: 2vw; 
+    height: 6vh;
 }
 
 .dropdown {
     display: inline-block;
-}
-
-.dropbtn {
-    background-color: transparent;
-    color: black; /* Chữ đen */
-    background: rgb(255, 255, 255) 0%;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
-    border: 3px solid black; /* Viền đen */
-    border-radius: 5px; /* Bo tròn góc */
 }
 
 .dropbtn:hover {
@@ -48,20 +48,30 @@
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: white; /* Màu trắng */
-    min-width: 160px;
+    background-color: white; 
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
-    border: 2px solid black; /* Viền đen */
-    border-radius: 5px; /* Bo tròn góc */
+    border: 2px solid black; 
+    border-radius: 5px; 
+    width: 100%;
 }
 
 .dropdown-content a {
     color: black; /* Màu chữ đen */
-    padding: 12px 16px;
+    
     text-decoration: none;
     display: block;
+    padding: 0 1vw;
 }
+
+.dropdown-text {
+    color: black; /* Màu chữ đen */
+    text-align: center;
+    line-height: 6vh;
+    font-size: 2vh;
+    height: 6vh; 
+}
+
 
 .dropdown-content a:hover {
     background-color: #ddd;
@@ -139,6 +149,4 @@ input {
 }
 
 
-.black-text {
-    color: black; /* Màu chữ đen */
-}
+

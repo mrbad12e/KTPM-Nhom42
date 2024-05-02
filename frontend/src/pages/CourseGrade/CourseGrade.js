@@ -31,7 +31,7 @@ export const CourseGrade = () => {
                             />
                         </Col>
                         <Col md={6}>
-                            <Button onClick={handleSearchButtonClick}>Tìm kiếm</Button> 
+                            <Button onClick={handleSearchButtonClick} variant="dark">Tìm kiếm</Button> 
                         </Col>
                     </Row>
                     <div style={{ marginLeft: '15%' }}>

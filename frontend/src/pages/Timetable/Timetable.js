@@ -131,7 +131,6 @@ export const Timetable = () => {
                                         <h3>Thông tin chi tiết của lớp học</h3>
                                         <p><strong>Môn học:</strong> {selectedSubjectName}</p>
                                         <p><strong>Loại lớp:</strong> {selectedClassInfo.classInfo.type}</p>
-                                        {/* Thêm các điều kiện để tránh lỗi khi truy cập vào thuộc tính của đối tượng null hoặc undefined */}
                                         {selectedClassInfo.lecturerInfo && selectedClassInfo.lecturerInfo.length > 0 && (
                                             <>
                                                 <p><strong>Giảng viên:</strong> {selectedClassInfo.lecturerInfo[0].name}</p>
@@ -140,8 +139,6 @@ export const Timetable = () => {
                                             </>
                                         )}
                                         <p><strong>Sĩ số:</strong> {selectedClassInfo.studentCount}</p>
-                                        
-                                        {/* Render student details */}
                                         {renderStudentDetails()}
                                     </div>
                                 )}
