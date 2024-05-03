@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import homeCSS from './Home.css'
+// import homeCSS from './Home.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import avatar from '../../../assets/img/avatar.jpg'

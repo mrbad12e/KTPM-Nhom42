@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import loginCSS from './Login.css';
+// import loginCSS from './Login.css';
 import axios from 'axios';
 
 export const Login = () => {
@@ -13,7 +13,7 @@ export const Login = () => {
     const handleLogin = async () => {
         try {
             const config = { headers: { 'Content-Type': 'application/json' } };
-            const { data } = await axios.post('/admin/login', { email, password }, config);
+            const { data } = await axios.post('/student/login', { email, password }, config);
             localStorage.setItem('auth', data.success);
             navigate('/home');
         } catch (error) {
