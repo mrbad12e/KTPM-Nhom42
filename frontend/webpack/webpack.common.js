@@ -50,7 +50,7 @@ module.exports = {
         historyApiFallback: {
             rewrites: [
                 { from: /^\/$/, to: '/index.html' },
-                { from: /^\/home/, to: '/index.html' },
+                { from: /^\/profile/, to: '/index.html' },
                 { from: /./, to: '/index.html' },
             ],
         },

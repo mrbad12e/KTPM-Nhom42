@@ -9,6 +9,7 @@ export const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [role, setRole] = useState('student'); // Mặc định là sinh viên
 
     const handleLogin = async () => {
         try {
@@ -18,7 +19,7 @@ export const Login = () => {
                 const { data } = response;
                 localStorage.setItem('auth', data.success);
                 localStorage.setItem('email', email); // Lưu email vào localStorage
-                navigate('/home');
+                navigate('/profile');
             } else {
                 setError('Unexpected response from server');
             }
@@ -33,7 +34,7 @@ export const Login = () => {
         }
         if (localStorage.getItem('auth')) {
             console.log('Logged in successfully');
-            navigate('/home');
+            navigate('/profile');
         }
     }, [error]);
 
@@ -64,6 +65,16 @@ export const Login = () => {
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                         />
+                                    
+                                    <Form.Group controlId="formBasicRole">
+                                        <Form.Label>Role:</Form.Label>
+                                        <Form.Select value={role} onChange={(e) => setRole(e.target.value)}>
+                                            <option value="admin">Admin</option>
+                                            <option value="student">Student</option>
+                                            <option value="lecturer">Lecturer</option>
+                                        </Form.Select>
+                                    </Form.Group>
+
                                     </Form.Group>
                                     <div style={{ color: 'red' }}>{error && <p>{error}</p>}</div>
                                     <Button variant="primary" className="btn-login" onClick={handleLogin}>

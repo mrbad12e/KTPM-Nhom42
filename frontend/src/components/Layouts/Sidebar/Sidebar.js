@@ -23,9 +23,6 @@ export const Sidebar = () => {
         <Col md={3} className="left-content">
             <ul className="sitemap">
                 <li>
-                    <NavLink to="/">Trang chủ</NavLink>
-                </li>
-                <li>
                     <NavLink to="/profile">Thông tin sinh viên</NavLink>
                 </li>
                 <li>
