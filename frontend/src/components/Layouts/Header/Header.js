@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Container, Card } from 'react-bootstrap';
 import './Header.css'; // Import file CSS mới
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
@@ -36,7 +36,7 @@ export const Header = () => {
         <header className="container-fluid header-background">
             <Row>
                 <Col sm={6}>
-                    <h1 className="header-title">ĐẠI HỌC BÁCH KHOA HÀ NỘI</h1>
+                    <Card.Title>ĐẠI HỌC BÁCH KHOA HÀ NỘI</Card.Title>
                 </Col>
                 <Col sm={{ span: 3, offset: 3 }}>
                     <div className="dropdown-container">

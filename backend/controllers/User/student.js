@@ -2,7 +2,7 @@ import Student from '../../models/User/student.js';
 import Lecturer from '../../models/User/lecturer.js';
 import UserControllers from './user.js';
 
-export default class StudentController extends UserControllers{
+export default class StudentController extends UserControllers {
     static async readStudent(req, res, next) {
         try {
             res.status(200).json({
@@ -34,54 +34,39 @@ export default class StudentController extends UserControllers{
         }
     }
 
-    controller
+    controller;
     //-----------------------------------------------------------------------------------------------------------------------------
-       //test
-       static async getUserInfo(req, res, next) {
-           try {
-               const userInfo = await Student.getUserInfoFromDatabase(req, res, next);
-               res.status(200).json({
-                   userInfo: userInfo
-               });
-           } catch (error) {
-               res.status(500).json({ error: error.message });
-           }
-       }
-
-    // static async getSubject(req, res, next) {
-    //     try {
-    //         const userInfo = await Student.getSubjectFromDatabase(req, res, next);
-    //         res.status(200).json({
-    //             userInfo: userInfo,
-    //             message: 'Student info fetched successfully',
-    //         });
-    //     } catch (error) {
-    //         res.status(500).json({ error: error.message });
-    //     }
-    // }
+    //test
+    static async getUserInfo(req, res, next) {
+        try {
+            const userInfo = await Student.getUserInfoFromDatabase(req, res, next);
+            res.status(200).json({
+                userInfo: userInfo,
+            });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 
     static async getTimetable(req, res, next) {
         try {
             const TimetableInfo = await Student.getTimetableFromDatabase(req, res, next);
             res.status(200).json({
-                TimetableInfo: TimetableInfo
+                TimetableInfo: TimetableInfo,
             });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
     }
-
+    
     static async getClassDetail(req, res, next) {
         try {
             const ClassDetailInfo = await Student.getClassDetailFromDatabase(req, res, next);
             res.status(200).json({
-                ClassDetailInfo: ClassDetailInfo
+                ClassDetailInfo: ClassDetailInfo,
             });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
     }
-
-    
-
 }

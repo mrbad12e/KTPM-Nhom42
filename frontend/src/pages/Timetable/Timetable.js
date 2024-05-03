@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Table } from 'react-bootstrap';
+import { Form, Container, Row, Col, Table } from 'react-bootstrap';
 import axios from 'axios';
-import Sidebar from '../Sidebar/Sidebar';
+import { Sidebar } from '../../components/Layouts/Sidebar/Sidebar'; 
 import '../CSSglobal.css';
 import './Timetable.css';
 
@@ -9,15 +9,16 @@ export const Timetable = () => {
     const [timetable, setTimetable] = useState([]);
     const [selectedClassInfo, setSelectedClassInfo] = useState(null);
     const [selectedSubjectName, setSelectedSubjectName] = useState('');
+    const [selectedSemester, setSelectedSemester] = useState('20212'); // State để lưu kỳ học được chọn
 
     useEffect(() => {
         const fetchTimetable = async () => {
             try {
                 const email = localStorage.getItem('email');
                 if (email) {
-                    const response = await axios.post('http://localhost:5000/student/timetable', { email });
+                    const response = await axios.post('/student/timetable', { email });
                     setTimetable(response.data.TimetableInfo);
-                }        
+                }
             } catch (error) {
                 console.error('Error fetching timetable:', error.message);
             }
@@ -79,8 +80,22 @@ export const Timetable = () => {
                 <Row>
                     <Sidebar />
                     <Container fluid className="main-background">
-                        <Col md={9} className='right-content'>
-                            <h2>THỜI KHÓA BIỂU HỌC KỲ 20212</h2>
+                    <Col md={9} className="right-content">
+                    <Row className="align-items-center">
+                        <Col md={9}>
+                            <h2>THỜI KHÓA BIỂU KỲ</h2>
+                        </Col>
+                        <Col md={3} className="d-flex justify-content-end">
+                            <Form.Select 
+                                className="select-semester" 
+                                onChange={(e) => setSelectedSemester(e.target.value)} 
+                                value={selectedSemester}
+                            >
+                                <option value="20212">20212</option>
+                                {/* Thêm các tùy chọn cho các kỳ học khác */}
+                            </Form.Select>
+                        </Col>
+                    </Row>
                             <div className="table-container">
                                 <Table striped bordered hover>
                                     <thead>
@@ -138,5 +153,3 @@ export const Timetable = () => {
         </div>
     );
 }
-
-export default Timetable;

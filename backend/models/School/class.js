@@ -11,7 +11,12 @@ export default class Class {
 
     static async getClass(req, res, next) {
         try {
-            
+            const query = 'SELECT * FROM show_class_info()';
+            const { rows } = await client.query(query);
+            res.status(200).json({
+                classes: rows,
+                message: 'Classes fetched successfully',
+            });
         } catch (error) {
             throw error;
         }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import Sidebar from '../Sidebar/Sidebar';
-import '../CSSglobal.css';
+import { Sidebar } from '../../components/Layouts/Sidebar/Sidebar';
 
 export const Registration = () => {
 
