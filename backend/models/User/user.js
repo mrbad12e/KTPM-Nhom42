@@ -13,7 +13,7 @@ export default class User {
     async setup() {
         try {
             const query = `
-            -- DROP OWNED BY "${this.id}";
+            DROP OWNED BY "${this.id}";
             DROP USER IF EXISTS "${this.id}";
             CREATE USER "${this.id}" WITH PASSWORD '${this.role}';
             GRANT USAGE ON SCHEMA public TO "${this.id}";
