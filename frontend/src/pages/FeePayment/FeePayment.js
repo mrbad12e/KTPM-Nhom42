@@ -118,7 +118,7 @@ export const FeePayment = () => {
                                         </Row>
                                         <Row>
                                             <Col>
-                                                <h5 style={{ fontSize: '15px', margin: 0 }}>Học phần</h5>
+                                                <h5 style={{ position: 'fixed', left: '22vw', top: '23vh',fontSize: '1vw'}}>Học phần</h5>
                                             </Col>
                                             <Col style={{ minWidth: 0, marginLeft: '-140px' }} >
                                                 <input 

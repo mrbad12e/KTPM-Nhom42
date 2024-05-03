@@ -44,6 +44,18 @@
     background-color: red; /* Màu nền sẽ thay đổi thành đỏ khi di chuột vào */
 }
 
+.sitemap {
+    padding: 0;
+    margin: 0;
+}
 
+.left-content {
+    margin: 0;
+    padding: 0;
+}
 
-
+.item-link {
+    width: 100%;
+    margin-top: 0;
+    display: block;
+}

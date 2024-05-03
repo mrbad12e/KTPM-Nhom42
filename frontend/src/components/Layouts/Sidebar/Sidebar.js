@@ -1,6 +1,6 @@
 import React from 'react';
-import { Col,Button } from 'react-bootstrap';
-import { NavLink, useNavigate } from 'react-router-dom'; 
+import { Col, Button } from 'react-bootstrap';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './Sidebar.css';
 import axios from 'axios';
 
@@ -22,22 +22,22 @@ const Sidebar = () => {
     return (
         <Col md={3} className="left-content">
             <ul className="sitemap">
-                <li>
+                <li className="item-link">
                     <NavLink to="/home">Trang chủ</NavLink>
                 </li>
-                <li>
+                <li className="item-link">
                     <NavLink to="/timetable">Thời khóa biểu</NavLink>
                 </li>
-                <li>
+                <li className="item-link">
                     <NavLink to="/registration">Đăng kí học tập</NavLink>
                 </li>
-                <li>
+                <li className="item-link">
                     <NavLink to="/courseGrade">Kết quả học tập</NavLink>
                 </li>
-                <li>
+                <li className="item-link">
                     <NavLink to="/feePayment">Công nợ học phí</NavLink>
                 </li>
-                <li>
+                <li className="item-link">
                     <Button variant="primary" onClick={handleLogout} className="logout-button">Đăng xuất</Button>
                 </li>
             </ul>

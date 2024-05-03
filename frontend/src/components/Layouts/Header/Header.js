@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
-import { NavLink, useNavigate } from 'react-router-dom';
-import './Header.css';
-import axios from 'axios'; 
+import { Col, Row, Nav, Navbar, Container, NavDropdown } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import styles from './Header.module.css';
+import axios from 'axios';
 
 export const Header = () => {
     const navigate = useNavigate();
@@ -10,7 +10,7 @@ export const Header = () => {
 
     const handleLogout = () => {
         try {
-            axios.get('/admin/logout');
+            axios.get('/student/logout');
             console.log('Logged out successfully');
             localStorage.clear();
             navigate('/');
@@ -33,27 +33,19 @@ export const Header = () => {
     };
 
     return (
-        <header className="container-fluid header-background">
-            <Row>
-                <Col sm="auto">
-                    <h1><NavLink className="header-title" to="/home">ĐẠI HỌC BÁCH KHOA HÀ NỘI</NavLink></h1>
-                </Col>
-                <Col >
-                    <div className="dropdown-container">
-                        <div className="dropdown">
-                            <button className="dropbtn">Xin chào sinh viên</button>
-                            <div className="dropdown-content">
-                                <a onClick={handleChangePassword} className="dropdown-text">Đổi mật khẩu</a>
-                                <a onClick={handleLogout} className="dropdown-text">Đăng xuất</a>
-                            </div>
-                        </div>
-                    </div>
-                </Col>
-            </Row>
+        <Navbar className={styles['header-background']}>
+            <Navbar.Brand className={styles["header-title"]}>ĐẠI HỌC BÁCH KHOA HÀ NỘI</Navbar.Brand>
+            <Navbar.Toggle />
+            <Navbar.Collapse className="justify-content-end">
+                <NavDropdown title="Xin chào sinh viên" id="basic-nav-dropdown">
+                    <NavDropdown.Item onClick={handleChangePassword}>Đổi mật khẩu</NavDropdown.Item>
+                    <NavDropdown.Item onClick={handleLogout}>Đăng xuất</NavDropdown.Item>
+                </NavDropdown>
+            </Navbar.Collapse>
             {showChangePassword && (
-                <div className="overlay">
-                    <div className="change-password-form">
-                        <span className="close" onClick={handleCloseChangePassword}>&times;</span>
+                <div className={styles["overlay"]}>
+                    <div className={styles["change-password-form"]}>
+                        <span className={styles["close"]} onClick={handleCloseChangePassword}>&times;</span>
                         <h2>Đổi mật khẩu</h2>
                         <form>
                             <label htmlFor="oldPassword">Mật khẩu cũ:</label>
@@ -65,12 +57,11 @@ export const Header = () => {
                             <label htmlFor="confirmPassword">Nhập lại mật khẩu mới:</label>
                             <input type="password" id="confirmPassword" name="confirmPassword" required />
 
-                            <button type="button" className="confirm-button" onClick={handleSubmit}>Xác nhận</button>
-
+                            <button type="submit" className="confirm-button">Xác nhận</button>
                         </form>
                     </div>
                 </div>
             )}
-        </header>
+        </Navbar>
     );
 };
