@@ -77,7 +77,7 @@ export const Timetable = () => {
                 <Row>
                     <Sidebar />
                     <Container fluid className="main-background">
-                        <Row>
+                        <Row style={{ marginTop: '5vh'}}>
                             <Col style={{marginLeft: '20vw'}}>
                                 <h2 style={{fontSize: '2vw', fontWeight: 'bold'}}>THỜI KHÓA BIỂU KỲ</h2>
                             </Col>

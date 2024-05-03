@@ -137,7 +137,7 @@ export const Registration = () => {
     
     return (
         <div className="gray-background">
-            <Row className="content">
+            <Row >
                 <Sidebar />
                 <Container fluid className="main-background">
                     <Col md={9} className="right-content">

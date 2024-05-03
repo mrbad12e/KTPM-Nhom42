@@ -93,30 +93,31 @@ export const FeePayment = () => {
                 <Container fluid className="main-background">
                     <Row>
                         <Col>
-                            <h4>Thêm mới thông tin lớp</h4>
+                        <h2 style={{fontSize: '1.5vw', fontWeight: 'bold'}}>Thêm mới thông tin lớp</h2>
                         </Col>
                     </Row>
-                    <Container fluid style={{ marginTop: '20px' }}>
+                    <Container fluid style={{ marginTop: '5vh' }}>
                         <Row>
                             <Col style={{ width: '40%' }}>{/* Nửa trái */}
                                 <Container>
-                                    <Col md={6}>
-                                        <Row  style={{ alignItems: 'center' }}>
-                                            <Col style={{ minWidth: 0 }}>
-                                                <h5 style={{ fontSize: '15px', margin: 0 }}>Mã lớp</h5>
+                                    <Col>
+                                        <Row>
+                                            <Col>
+                                                <div style={{ position: 'fixed', left: '22vw', top: '23vh',fontSize: '1vw'}}>Mã lớp</div>
                                             </Col>
-                                            <Col style={{ minWidth: 0, marginLeft: '-140px' }} >
+                                            <Col style={{ position: 'fixed', left: '25vw', top: '23vh',width: '15.5vw'}} 
+                                            >
                                                 <input 
                                                     type="text" 
                                                     value={inputClassID} 
                                                     onChange={handleInputClassID} 
                                                     placeholder="Nhập mã lớp" 
-                                                    style={{ fontSize: '14px', width: '255px', height: '30px' }}
+                                                    style={{ fontSize: '1vw', width: '255px', height: '30px' }}
                                                 />
                                             </Col>
                                         </Row>
-                                        <Row  style={{ alignItems: 'center' }}>
-                                            <Col style={{ minWidth: 0 }}>
+                                        <Row>
+                                            <Col>
                                                 <h5 style={{ fontSize: '15px', margin: 0 }}>Học phần</h5>
                                             </Col>
                                             <Col style={{ minWidth: 0, marginLeft: '-140px' }} >

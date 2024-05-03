@@ -38,7 +38,7 @@ export const Home = () => {
                             className="image_student" />
                     </Col>       
                     <Col>{/*Thông tin */}
-                        <div className='info_student'>
+                        <div style={{ marginTop: '5vh'}}>
                             <p style={{ fontSize: '1vw', marginBottom: '2vh'  }}><strong>MSSV:</strong>  {studentInfo.id}</p>
                             <p style={{ fontSize: '1vw', marginBottom: '2vh'  }}><strong>Chuyên ngành:</strong> {studentInfo.programName}</p>
                             <p style={{ fontSize: '1vw', marginBottom: '2vh'  }}><strong>Họ và tên:</strong> {studentInfo.name}</p>
@@ -57,8 +57,8 @@ export const Home = () => {
         <div className="gray-background">
             <Sidebar />
             <Container fluid className="main-background">
-                <Col className="right-content">
-                    <div style={{ textAlign: 'center', fontSize: '2vw', marginBottom: '10vh', fontWeight: 'bold' }}>
+                <Col>
+                    <div style={{ textAlign: 'center', fontSize: '2vw', margin: '2vh 10vh', fontWeight: 'bold' }}>
                         THÔNG TIN SINH VIÊN
                     </div>
                     {renderInfoStudent()}
