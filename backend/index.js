@@ -10,6 +10,11 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use(express.json());
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // Cho phép truy cập từ domain này
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 // Routes declaration
 import adminRoute from './routes/User/admin.js';

@@ -97,4 +97,49 @@ export default class StudentController extends UserControllers {
             res.status(500).json({ error: error });
         }
     }
+    static async getUserInfo(req, res, next) {
+        try {
+            const userInfo = await Student.getUserInfoFromDatabase(req, res, next);
+            res.status(200).json({
+                userInfo: userInfo
+            });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+ static async getSubject(req, res, next) {
+     try {
+         const SubjectInfo = await Student.getSubjectFromDatabase(req, res, next);
+         res.status(200).json({
+             SubjectInfo: SubjectInfo
+         });
+     } catch (error) {
+         res.status(500).json({ error: error.message });
+     }
+ }
+
+    static async getTimetable(req, res, next) {
+        try {
+            const TimetableInfo = await Student.getTimetableFromDatabase(req, res, next);
+            res.status(200).json({
+                TimetableInfo: TimetableInfo
+            });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    static async getClassDetail(req, res, next) {
+        try {
+            const ClassDetailInfo = await Student.getClassDetailFromDatabase(req, res, next);
+            res.status(200).json({
+                ClassDetailInfo: ClassDetailInfo
+            });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    
 }
