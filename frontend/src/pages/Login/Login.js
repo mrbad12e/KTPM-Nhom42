@@ -38,7 +38,7 @@ export const Login = () => {
     }, [error]);
 
     return (
-        <div className="login-background">
+        <div>
             <Container>
                 <Row className="justify-content-md-center">
                     <Col xs={12} md={6}>

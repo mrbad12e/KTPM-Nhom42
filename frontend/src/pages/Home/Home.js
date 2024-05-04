@@ -1,3 +1,4 @@
+// Home.jsx
 import React, { useState, useEffect } from 'react'; 
 import { Container , Row, Col } from 'react-bootstrap'; 
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -5,7 +6,7 @@ import axios from 'axios';
 import Sidebar from '../../components/Layouts/Sidebar/Sidebar'; 
 import avatar from '../../../assets/img/avatar.jpg';
 import '../CSSglobal.css';
-import './Home.css';
+import './Home.css'; // Import CSS file
 
 export const Home = () => {
     const [studentInfo, setStudentInfo] = 
@@ -54,11 +55,11 @@ export const Home = () => {
     };
 
     return (
-        <div className="gray-background">
-            <Sidebar />
+        <div >
+            <Sidebar/>
             <Container fluid className="main-background">
                 <Col>
-                    <div style={{ textAlign: 'center', fontSize: '2vw', margin: '2vh 10vh', fontWeight: 'bold' }}>
+                    <div style={{ textAlign: 'center', fontSize: '30px', marginTop: '2vh', fontWeight: 'bold' }}>
                         THÔNG TIN SINH VIÊN
                     </div>
                     {renderInfoStudent()}
