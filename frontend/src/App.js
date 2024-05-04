@@ -8,6 +8,7 @@ import { Registration } from './pages/Registration/Registration';
 import { Profile } from './pages/Profile/Profile';
 import {Timetable} from './pages/Timetable/Timetable';
 import { FeePayment } from './pages/FeePayment/FeePayment';
+import { Student } from './pages_admin/student/student';
 
 export const App = () => {
     return (
@@ -20,6 +21,9 @@ export const App = () => {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/timetable" element={<Timetable />} />
                 <Route path="/feePayment" element={<FeePayment />} />
+
+                <Route path="/student" element={<Student />} />
+
 
             </Routes>
         </HashRouter>

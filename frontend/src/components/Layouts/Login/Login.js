@@ -14,19 +14,30 @@ export const Login = () => {
     const handleLogin = async () => {
         try {
             const config = { headers: { 'Content-Type': 'application/json' } };
-            const response = await axios.post('/student/login', { email, password }, config);
+            let response;
+            if (role === 'admin') {
+                response = await axios.post('/admin/login', { email, password }, config);
+            } else {
+                response = await axios.post('/student/login', { email, password }, config);
+            }
+            
             if (response && response.data) {
                 const { data } = response;
                 localStorage.setItem('auth', data.success);
                 localStorage.setItem('email', email); // Lưu email vào localStorage
-                navigate('/profile');
+                if (role === 'admin') {
+                    navigate('/student');
+                } else {
+                    navigate('/profile');
+                }
             } else {
                 setError('Unexpected response from server');
             }
         } catch (error) {
-            setError(error.response.data.message);
+            setError(error.response ? error.response.data.message : 'An error occurred');
         }
     };
+
 
     useEffect(() => {
         if (error) {
@@ -34,7 +45,11 @@ export const Login = () => {
         }
         if (localStorage.getItem('auth')) {
             console.log('Logged in successfully');
-            navigate('/profile');
+            if (role === 'admin') {
+                navigate('/student');
+            } else {
+                navigate('/profile');
+            }
         }
     }, [error]);
 
@@ -65,6 +80,7 @@ export const Login = () => {
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                         />
+                                    </Form.Group>
                                     
                                     <Form.Group controlId="formBasicRole">
                                         <Form.Label>Role:</Form.Label>
@@ -75,7 +91,6 @@ export const Login = () => {
                                         </Form.Select>
                                     </Form.Group>
 
-                                    </Form.Group>
                                     <div style={{ color: 'red' }}>{error && <p>{error}</p>}</div>
                                     <Button variant="primary" className="btn-login" onClick={handleLogin}>
                                         Log in

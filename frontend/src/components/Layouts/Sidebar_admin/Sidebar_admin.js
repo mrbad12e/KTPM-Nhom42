@@ -1,16 +1,16 @@
 import React from 'react';
 import { Col,Button } from 'react-bootstrap';
 import { NavLink, useNavigate } from 'react-router-dom'; 
-import './Sidebar.css';
+import './Sidebar_admin.css';
 import axios from 'axios';
 
 
-export const Sidebar = () => {
+export const Sidebar_admin = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
         try {
-            axios.get('/student/logout');
+            axios.get('/admin/logout');
             console.log('Logged out successfully');
             localStorage.clear();
             navigate('/');
@@ -23,19 +23,19 @@ export const Sidebar = () => {
         <Col md={3} className="left-content">
             <ul className="sitemap">
                 <li>
-                    <NavLink to="/profile">Thông tin sinh viên</NavLink>
+                    <NavLink to="">Khoa</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/timetable">Thời khóa biểu</NavLink>
+                    <NavLink to="">Lớp</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/registration">Đăng kí học tập</NavLink>
+                    <NavLink to="">Môn học</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/">Kết quả học tập</NavLink>
+                    <NavLink to="">Giảng viên</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/">Công nợ học phí</NavLink>
+                    <NavLink to="/student">Sinh viên</NavLink>
                 </li>
                 <li>
                     <Button variant="primary" onClick={handleLogout} className="logout-button">Đăng xuất</Button>
