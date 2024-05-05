@@ -63,10 +63,10 @@ const Sidebar_admin = () => {
             {showOverlay && <div className={styles['overlay']} onClick={handleHamburgerButtonClick}></div>}
             <div className={`${styles['left-content']} ${showMenu ? styles['show'] : ''}`}>
                 <ul className={styles['sitemap']} onClick={window.innerWidth <= 1000 ? handleHamburgerButtonClick : null}>
-                    <li><NavLink to="/student">Quản lý khoa</NavLink></li>
-                    <li><NavLink to="/student">Môn học</NavLink></li>
-                    <li><NavLink to="/student">Lớp</NavLink></li>
-                    <li><NavLink to="/student">Giảng viên</NavLink></li>
+                    <li><NavLink to="/faculty">Khoa</NavLink></li>
+                    <li><NavLink to="/subject">Học phần</NavLink></li>
+                    <li><NavLink to="/class">Lớp</NavLink></li>
+                    <li><NavLink to="/lecturer">Giảng viên</NavLink></li>
                     <li><NavLink to="/student">Sinh viên</NavLink></li>
                     <li><Button variant="primary" onClick={handleLogout} className={styles['logout-button']}>Đăng xuất</Button></li>
                 </ul>
