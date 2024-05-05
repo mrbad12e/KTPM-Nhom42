@@ -22,6 +22,7 @@ export default class AdminController extends UserControllers {
                 req.body.program_id,
             ];
             await client.query(query, values);
+            res.status(200).json({ message: 'Student added successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -41,9 +42,10 @@ export default class AdminController extends UserControllers {
                 req.body.address,
                 req.body.email,
                 req.body.phone,
-                req.boy.faculty_id,
+                req.body.faculty_id,
             ];
             await client.query(query, values);
+            res.status(200).json({ message: 'Lecturer added successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -62,6 +64,7 @@ export default class AdminController extends UserControllers {
                 req.body.faculty_id,
             ];
             await client.query(query, values);
+            res.status(200).json({ message: 'Subject added successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -82,6 +85,7 @@ export default class AdminController extends UserControllers {
                 req.body.subject_id,
             ];
             await client.query(query, values);
+            res.status(200).json({ message: 'Class added successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -98,6 +102,7 @@ export default class AdminController extends UserControllers {
                 req.body.location,
             ];
             await client.query(query, values);
+            res.status(200).json({ message: 'Timetable added successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
