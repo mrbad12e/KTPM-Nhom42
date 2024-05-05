@@ -24,8 +24,8 @@ export const App = () => {
                 <Route path="/registration" element={<Registration />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/timetable" element={<Timetable />} />
-                {/* <Route path="/feePayment" element={<FeePayment />} />
-                <Route path="/student" element={<Student />} /> */}
+                {/* <Route path="/feePayment" element={<FeePayment />} /> */}
+                <Route path="/student" element={<Student />} />
 
             </Routes>
         </HashRouter>

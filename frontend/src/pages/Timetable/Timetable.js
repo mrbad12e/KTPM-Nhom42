@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Container, Table } from 'react-bootstrap';
 import axios from 'axios';
-import Sidebar from '../../components/Layouts/Sidebar/Sidebar'; 
+import Sidebar from '../../components/Layouts/Sidebar/Sidebar_student'; 
 import globalstyles from '../../CSSglobal.module.css';
 import styles from './Timetable.module.css';
 
@@ -131,7 +131,7 @@ export const Timetable = () => {
                             </div>
                         ))
                     ) : (
-                        <Table striped bordered hover className={styles['class-table']}>
+                        <Table striped bordered hover className={globalstyles['table-1000']}>
                             <thead>
                                 <tr>
                                     <th style={{ textAlign: 'center' }}>Thứ</th>

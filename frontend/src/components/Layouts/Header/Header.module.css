@@ -1,16 +1,17 @@
 .header-background {
     position: relative;
-    height: 12vh; 
+    height: 100px; 
     background: linear-gradient(135deg,rgb(0, 0, 0) 0%,rgb(176, 176, 176) 100%);
     z-index: 999;
 }
 
 .header-title {
     margin-left: 5vw; 
-    height: 10vh;
+    height: 80px;
     font-family: "Times New Roman", Times, serif;
     color: white;
     font-size: 30px;
+    cursor: pointer;
 }
 
 .header-user {
@@ -19,23 +20,21 @@
 }
 
 @media (max-width: 680px) {
-    .header-background {
-        height: 15vh; 
-    }
-
     .header-title {
-        top: 1vh; 
+        position: absolute;
+        top: 5px;
     }
 
     .header-user {
-        top: 8vh; 
+        position: absolute;
+        top: 60px;
     }
 }
 
 @media (max-width: 460px) {
     .header-title {
-        line-height: 6vh;
-        font-size: 25px;
+        line-height: 60px;
+        font-size: 20px;
     }
 }
 
