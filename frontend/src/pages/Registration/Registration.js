@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import Sidebar from '../../components/Layouts/Sidebar/Sidebar_student'; 
+import Sidebar from '../../components/Layouts/Sidebar/sidebarStudent';
 import globalstyles from '../../CSSglobal.module.css';
 import styles from './Registration.module.css';
 

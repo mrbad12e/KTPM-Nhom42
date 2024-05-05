@@ -6,7 +6,7 @@ import { Registration } from './pages/Registration/Registration';
 import { Home } from './pages/Home/Home';
 import {Timetable} from './pages/Timetable/Timetable';
 import { FeePayment } from './pages/FeePayment/FeePayment';
-import { Student } from './pages_admin/student/student';
+import { Student } from './PagesAdmin/student/student';
 // import { Lecturer } from './pages-Admin/lecturer/lecturer';
 // import { Class } from './pages-Admin/class/class';s
 // import { Faculty } from './pages-Admin/faculty/faculty';

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Container, Table } from 'react-bootstrap';
 import axios from 'axios';
-import Sidebar from '../../components/Layouts/Sidebar/Sidebar_student'; 
+import Sidebar from '../../components/Layouts/Sidebar/sidebarStudent'; 
 import globalstyles from '../../CSSglobal.module.css';
 import styles from './Timetable.module.css';
 
@@ -13,28 +13,11 @@ export const Timetable = () => {
     const [tableWidth, setTableWidth] = useState(null);
 
     useEffect(() => {
-        const fetchTimetable = async () => {
-            try {
-                const email = localStorage.getItem('email');
-                if (email) {
-                    const response = await axios.post('student/timetable', { email });
-                    setTimetable(response.data.TimetableInfo);
-                }
-            } catch (error) {
-                console.error('Error fetching timetable:', error.message);
-            }
-        };
-
-        fetchTimetable();
-    }, []);
-
-    useEffect(() => {
         const handleResize = () => {
             setTableWidth(document.getElementById('table-container').offsetWidth);
         };
 
         window.addEventListener('resize', handleResize);
-
         handleResize(); // Đảm bảo rằng biến state được cập nhật ban đầu
         return () => {
             window.removeEventListener('resize', handleResize);
@@ -85,6 +68,21 @@ export const Timetable = () => {
             </Table>
         );
     };
+
+    useEffect(() => {
+        const fetchTimetable = async () => {
+            try {
+                const email = localStorage.getItem('email');
+                if (email) {
+                    const response = await axios.post('student/timetable', { email });
+                    setTimetable(response.data.TimetableInfo);
+                }
+            } catch (error) {
+                console.error('Error fetching timetable:', error.message);
+            }
+        };
+        fetchTimetable();
+    }, []);
 
     return (
         <div>

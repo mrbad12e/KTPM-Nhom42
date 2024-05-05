@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Container, Row, Col, Button } from 'react-bootstrap';
-import Sidebar_admin from '../../components/Layouts/Sidebar/Sidebar_admin'; 
+import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin'; 
 import ViewIcon from '../../../assets/img/View.png';
 import DeleteIcon from '../../../assets/img/Delete.png';
 import styles from './student.module.css';
 import globalstyles from '../../CSSglobal.module.css';
+import axios from 'axios';
 
 export const Student = () => {
     const [inputValue, setInputValue] = useState('');
@@ -17,6 +18,7 @@ export const Student = () => {
         console.log('Đã nhấn nút Tìm kiếm với giá trị:', inputValue);
     };
 
+
     return (
         <div>
             <Sidebar_admin/>
@@ -25,7 +27,7 @@ export const Student = () => {
                 <Button className={globalstyles['add-button']} onClick={handleSearchButtonClick} variant="dark">Thêm mới</Button> 
                 <div className={globalstyles['search-input']}>
                     <input type="text" value={inputValue} onChange={handleChange} placeholder="Tìm tên lớp hoặc mã lớp"/>
-                    <Button className={globalstyles['button-search']} onClick={handleSearchButtonClick} variant="dark">Tìm kiếm</Button> 
+                    <Button className={globalstyles['button-search']} variant="dark">Tìm kiếm</Button> 
                 </div>
                 <Table className={globalstyles['table-1300']}>
                     <thead>
@@ -46,10 +48,10 @@ export const Student = () => {
                             <td style={{ textAlign: 'center'}}>4.0</td>
                             <td> luongquangcbvn@gmail.com</td>
                             <td style={{ display: 'flex', justifyContent: 'center' }}>
-                                <div className={globalstyles['img-button-container']} onClick={handleSearchButtonClick}>
+                                <div className={globalstyles['img-button-container']} >
                                     <img src={ViewIcon} alt="View" className={globalstyles['img-button']} />
                                 </div>
-                                <div className={globalstyles['img-button-container']} onClick={handleSearchButtonClick} style ={{marginLeft: '10px'}}>
+                                <div className={globalstyles['img-button-container']} style ={{marginLeft: '10px'}}>
                                     <img src={DeleteIcon} alt="Delete" className={globalstyles['img-button']} />
                                 </div>
                             </td>

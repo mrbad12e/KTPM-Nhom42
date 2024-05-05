@@ -28,13 +28,15 @@ body {
 }
 
 .title {
-    margin-top: 20px;
+    position: relative;
+    top: 20px;
     text-align: center;
     font-size: 25px;
     font-weight: bold;
 }
 
 .left-title {
+    position: relative;
     margin-top: 10px;
     margin-left: 10px;
     font-size: 25px;

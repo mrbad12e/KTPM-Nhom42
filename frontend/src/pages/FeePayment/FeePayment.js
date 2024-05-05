@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Container, Row, Col, Button, TabContainer } from 'react-bootstrap';
-import Sidebar from '../../components/Layouts/Sidebar/Sidebar_student'; 
+import Sidebar from '../../components/Layouts/Sidebar/sidebarStudent'; 
 import './FeePayment.module.css';
 import UpdateIcon from '../../../assets/img/Update.png';
 import DeleteIcon from '../../../assets/img/Delete.png';
