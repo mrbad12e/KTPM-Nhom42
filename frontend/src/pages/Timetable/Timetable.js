@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Container, Table } from 'react-bootstrap';
+import { Form, Row, Col, Container, Table } from 'react-bootstrap';
 import axios from 'axios';
 import Sidebar from '../../components/Layouts/Sidebar/Sidebar'; 
 import globalstyles from '../../CSSglobal.module.css';
@@ -101,11 +101,33 @@ export const Timetable = () => {
                         timetable.map(item => (
                             <div style={{marginLeft: '50px'}} key={`${item.class_id}-${item.weekday}-${item.subject_name}-${item.time}-${item.location}`}>
                                 <hr/>
-                                <div onClick={() => handleClick(item)} style={{ cursor: 'pointer' }}>Thứ: {item.weekday}</div>
-                                <div onClick={() => handleClick(item)} style={{ cursor: 'pointer' }}>Mã lớp: {item.class_id}</div>
-                                <div onClick={() => handleClick(item)} style={{ cursor: 'pointer' }}>Tên môn học: {item.subject_name}</div>
-                                <div onClick={() => handleClick(item)} style={{ cursor: 'pointer' }}>Thời gian: {item.time}</div>
-                                <div onClick={() => handleClick(item)} style={{ cursor: 'pointer' }}>Địa điểm: {item.location}</div>
+                            
+                                <Row>
+                                    <Col style={{ flex: '0 0 30%', maxWidth: '30%', textAlign: 'center'}}>
+                                        <div onClick={() => handleClick(item)}>
+                                            <Row><div>Thứ: {item.weekday}</div></Row>
+                                            <Row><div style={{ textAlign: 'center' }}>{item.startTime}</div></Row>   
+                                            <Row><div>|</div></Row> 
+                                            <Row><div>{item.endTime}</div></Row>        
+                                        </div>
+                                    </Col>
+                                    <Col style={{ flex: '0 0 50%', maxWidth: '50%' }}>
+                                        <div onClick={() => handleClick(item)}>
+                                            <Row><div>{item.subject_name}</div></Row>
+                                            <Row><div>Mã lớp: {item.class_id}</div></Row>
+                                            <Row><div>Địa điểm: {item.location}</div></Row>
+                                        </div>
+                                    </Col>
+                                </Row>
+                             
+
+                                {/* <div onClick={() => handleClick(item)} style={{ cursor: 'pointer' }}>
+                                    <span style={{ marginRight: '5vw' }}>Thứ: {item.weekday}</span>
+                                    <span style={{ marginRight: '5vw' }}>{item.time}</span>
+                                    <span>Địa điểm: {item.location}</span>
+                                </div>
+                                <div onClick={() => handleClick(item)} style={{ cursor: 'pointer', marginTop:'10px' }}>Mã lớp: {item.class_id}</div>
+                                <div onClick={() => handleClick(item)} style={{ cursor: 'pointer' }}>Tên môn học: {item.subject_name}</div> */}
                             </div>
                         ))
                     ) : (
@@ -125,7 +147,7 @@ export const Timetable = () => {
                                         <td onClick={() => handleClick(item)} style={{ textAlign: 'center', cursor: 'pointer' }}>{item.weekday}</td>
                                         <td onClick={() => handleClick(item)} style={{ textAlign: 'center', cursor: 'pointer' }}>{item.class_id}</td>
                                         <td onClick={() => handleClick(item)} style={{ cursor: 'pointer' }}>{item.subject_name}</td>
-                                        <td onClick={() => handleClick(item)} style={{ textAlign: 'center', cursor: 'pointer' }}>{item.time}</td>
+                                        <td onClick={() => handleClick(item)} style={{ textAlign: 'center', cursor: 'pointer' }}>{item.startTime} - {item.endTime}</td>
                                         <td onClick={() => handleClick(item)} style={{ textAlign: 'center', cursor: 'pointer' }}>{item.location}</td>
                                     </tr>
                                 ))}
@@ -134,7 +156,7 @@ export const Timetable = () => {
                     )}
                 </div>
                 <hr/>
-                {selectedClassInfo && (
+                {/* {selectedClassInfo && (
                     <div className="selected-class-info">
                         <div className={globalstyles['title']}>Thông tin chi tiết của lớp học</div>
                         <Container style={{ marginLeft: '5vw' }}>
@@ -151,7 +173,7 @@ export const Timetable = () => {
                         </Container>
                         {renderStudentDetails()}
                     </div>
-                )}
+                )} */}
             </Container>
         </div>
     );

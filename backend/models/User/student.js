@@ -98,11 +98,11 @@ export default class Student extends User {
                 const subjectInfo = subjectResult.find(subject => subject.id === item.class_id);
                 const startTime = item.start_time.slice(0, 2) + ':' + item.start_time.slice(2);
                 const endTime = item.end_time.slice(0, 2) + ':' + item.end_time.slice(2);
-                const time = startTime + ' - ' + endTime;
                 return { 
                     class_id: item.class_id,
                     weekday: item.weekday,
-                    time: time,
+                    startTime: startTime,
+                    endTime: endTime,
                     location: item.location,
                     subject_name: subjectInfo ? subjectInfo.name : null 
                 };

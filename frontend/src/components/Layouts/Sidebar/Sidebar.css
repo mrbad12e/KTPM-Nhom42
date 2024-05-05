@@ -10,7 +10,6 @@
     z-index: 998;
 }
 
-
 .left-content.show {
     transform: translateX(0); /* Hiển thị menu khi được mở */
 }
@@ -41,7 +40,7 @@
 .sitemap li {
     margin-top: 20px;
     list-style: none;
-    font-size: 16px;
+    font-size: 20px;
 }
 
 .sitemap li a {
@@ -82,6 +81,13 @@
     z-index: 997; 
 }
 
+@media (max-width: 1250px) {
+    .sitemap li {
+        font-size: 16px;
+    }
+
+}
+
 @media (max-width: 1000px) {
     .left-content {
         width: 300px;
@@ -95,6 +101,7 @@
         list-style: none;
         font-size: 20px;
     }
+
     .hamburger-button {
         position: fixed;
         left: 10px;
