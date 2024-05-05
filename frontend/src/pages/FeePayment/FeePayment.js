@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Container, Row, Col, Button, TabContainer } from 'react-bootstrap';
 import Sidebar from '../../components/Layouts/Sidebar/Sidebar'; 
-import './FeePayment.css';
+import './FeePayment.module.css';
 import UpdateIcon from '../../../assets/img/Update.png';
 import DeleteIcon from '../../../assets/img/Delete.png';
 

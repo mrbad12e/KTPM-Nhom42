@@ -1,0 +1,30 @@
+.student-table {
+    width: 60%;
+
+}
+
+.add-button {
+    position: relative;
+    right: 100px;
+}
+
+.custom-table {
+    width: 100%;  
+}
+
+.custom-table th {
+    text-align: center !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+    font-size: 5px !important;
+}
+
+@media screen and (max-width: 1000px) {
+    .table-content {
+        font-size: 10px
+    }
+
+    .table-content {
+        font-size: 10px
+    }
+}

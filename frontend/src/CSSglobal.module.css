@@ -14,12 +14,25 @@ body {
     border-radius: 10px;
     margin-top: 2vh; 
     margin-left: 20vw;
-    width: 77vw;
+    width: 78vw;
+    padding-bottom: 30px;
 }
 
-@media screen and (max-width: 800px) {
+.title {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.table {
+    max-width: 800px;
+
+}
+
+@media screen and (max-width: 1000px) {
     .main-background  {
-        margin-left: 2vw;
-        width: 95vw;
+        margin-left: 4vw;
+        width: 92vw;
     }
 }

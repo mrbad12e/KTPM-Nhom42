@@ -1,25 +1,47 @@
 .left-content {
-    padding-left: 1vw; 
-    margin: 0;
     position: fixed;
-    top: 12vh;
+    top: 0vh;
     width: 18vw;
     background: linear-gradient(135deg,rgb(0, 0, 0) 0%,rgb(107, 107, 106) 100%);
     height:100vh;
     overflow: auto;
-    
+    transition: transform 0.3s ease-in-out; /* Thêm hiệu ứng chuyển động */
+    transform: translateX(-100%); /* Ẩn menu khi không được mở */
+    z-index: 998;
 }
 
-@media screen and (max-width: 800px) {
-    .left-content {
-        display: none;
+
+.left-content.show {
+    transform: translateX(0); /* Hiển thị menu khi được mở */
+}
+
+.hamburger-button {
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    display: block;
+    cursor: pointer;
+}
+
+.hamburger-button.active img {
+    transform: rotate(90deg); /* Đảo hình ảnh khi menu mở */
+}
+
+@media screen and (min-width: 1000px) {
+    .hamburger-button {
+        display: none; /* Ẩn nút hamburger trên màn hình rộng */
     }
+}
+
+.sitemap {
+    margin-top: 13vh;
 }
 
 .sitemap li {
     margin-top: 20px;
     list-style: none;
-    font-size: 1.3vw;
+    font-size: 16px;
 }
 
 .sitemap li a {
@@ -50,19 +72,32 @@
     background-color: red; /* Màu nền sẽ thay đổi thành đỏ khi di chuột vào */
 }
 
-.sitemap {
-    padding: 0;
-    margin: 0;
-}
-
-.left-content {
-    margin: 0;
-    padding: 0;
-}
-
-.item-link {
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    margin-top: 0;
-    display: block;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 997; 
 }
 
+@media (max-width: 1000px) {
+    .left-content {
+        width: 300px;
+    }
+    .sitemap {
+        margin-top: 16vh;
+    }
+
+    .sitemap li {
+        margin-top: 20px;
+        list-style: none;
+        font-size: 20px;
+    }
+    .hamburger-button {
+        position: fixed;
+        left: 10px;
+        z-index: 996; 
+    }
+}

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Sidebar from '../../components/Layouts/Sidebar/Sidebar'; 
-import '../CSSglobal.css';
-import './Registration.css';
+import globalstyles from '../../CSSglobal.module.css';
+import styles from './Registration.module.css';
 
 export const Registration = () => {
     const [subjectInfo, setSubjectInfo] = useState([]); // State to store subject information
@@ -136,101 +136,100 @@ export const Registration = () => {
     };
     
     return (
-        <div className="gray-background">
-            <Row >
-                <Sidebar />
-                <Container fluid className="main-background">
-                    <Col md={9} className="right-content">
-                        <h2>Đăng ký học tập kỳ </h2>
-                        <div className="row mb-3">
-                            <div className="col-md-4">
-                                <input 
-                                    type="text" 
-                                    className="form-control" 
-                                    placeholder="Mã môn học" 
-                                    name="subject_id" 
-                                    value={searchInput.subject_id}
-                                    onChange={handleSearchInputChange}
-                                />
-                            </div>
-                            <div className="col-md-4">
-                                <input 
-                                    type="text" 
-                                    className="form-control" 
-                                    placeholder="Tên môn học" 
-                                    name="subject_name" 
-                                    value={searchInput.subject_name}
-                                    onChange={handleSearchInputChange}
-                                />
-                            </div>
-                            <div className="col-md-4">
-                                <Button onClick={handleSearchButtonClick}>Tìm kiếm</Button> 
-                            </div>
+        <div >
+            <Sidebar />
+            <Container fluid className={globalstyles['main-background']}>
+                <div className={globalstyles['title']}>Đăng ký học tập kỳ </div>
+                <Row style={{ marginTop: '20px'}}>
+                    <Col>
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        placeholder="Mã môn học" 
+                        name="subject_id" 
+                        value={searchInput.subject_id}
+                        onChange={handleSearchInputChange}
+                    />
+                    </Col>
+                    <Col>
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        placeholder="Tên môn học" 
+                        name="subject_name" 
+                        value={searchInput.subject_name}
+                        onChange={handleSearchInputChange}
+                    />
+                    </Col>
+                    <Col>
+                        <div>
+                            <Button onClick={handleSearchButtonClick}>Tìm kiếm</Button> 
                         </div>
-                        {(searched || subjectInfo.length > 0) && (
-                            <div style={{ overflowX: 'auto' }}>
-                                <table className="Subject-Table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" style={{ width: '10%' }}>Mã lớp</th>
-                                            <th scope="col" style={{ width: '10%' }}>Mã môn học</th>
-                                            <th scope="col" style={{ width: '30%' }}>Tên môn học</th>
-                                            <th scope="col" style={{ width: '12%' }}>Thời gian</th>
-                                            <th scope="col" style={{ width: '8%' }}>Số lượng</th>
-                                            <th scope="col" style={{ width: '10%' }}>Hành động</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {subjectInfo.slice((currentPage - 1) * 10, currentPage * 10).map((row, index) => (
-                                            <tr key={index}>
-                                                <td>{row.id}</td>
-                                                <td>{row.subject_id}</td>
-                                                <td>{row.name}</td>
-                                                <td>{row.start_time} - {row.end_time}</td>
-                                                <td>{row.current_cap}/{row.max_cap}</td>
-                                                <td>
-                                                    <Button style={{ fontWeight: 'bold', border: 'none' }} onClick={() => handleAddCourse(row)}>Chọn</Button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                <div className="col-md-12 text-center mb-3">
-                                    {renderPagination()}
-                                </div>
-                            </div>
-                        )}
-                        <h3>Danh sách các môn học đã thêm:</h3>
-                        <table className="table table-bordered">
+                    </Col>
+                </Row>
+                {(searched || subjectInfo.length > 0) && (
+                    <div style={{ overflowX: 'auto' }}>
+                        <table className="Subject-Table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Mã lớp</th>
-                                    <th scope="col">Mã môn học</th>
-                                    <th scope="col">Tên môn học</th>
-                                    <th scope="col">Thời gian</th>
-                                    <th scope="col">Hành động</th>
+                                    <th scope="col" style={{ width: '10%' }}>Mã lớp</th>
+                                    <th scope="col" style={{ width: '10%' }}>Mã môn học</th>
+                                    <th scope="col" style={{ width: '30%' }}>Tên môn học</th>
+                                    <th scope="col" style={{ width: '12%' }}>Thời gian</th>
+                                    <th scope="col" style={{ width: '8%' }}>Số lượng</th>
+                                    <th scope="col" style={{ width: '10%' }}>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {selectedCourses.map((course, index) => (
+                                {subjectInfo.slice((currentPage - 1) * 10, currentPage * 10).map((row, index) => (
                                     <tr key={index}>
-                                        <td>{course.id}</td>
-                                        <td>{course.subject_id}</td>
-                                        <td>{course.name}</td>
-                                        <td>{course.start_time} - {course.end_time}</td>
+                                        <td>{row.id}</td>
+                                        <td>{row.subject_id}</td>
+                                        <td>{row.name}</td>
+                                        <td>{row.start_time} - {row.end_time}</td>
+                                        <td>{row.current_cap}/{row.max_cap}</td>
                                         <td>
-                                            <Button style={{ fontWeight: 'bold', border: 'none' }} onClick={() => handleDeleteCourse(course)}>Xóa</Button>
+                                            <Button style={{ fontWeight: 'bold', border: 'none' }} onClick={() => handleAddCourse(row)}>Chọn</Button>
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                         <div className="col-md-12 text-center mb-3">
-                            <Button onClick={handleRegister} variant="primary">Đăng ký</Button>
+                            {renderPagination()}
                         </div>
-                    </Col>
-                </Container>
-            </Row>
+                    </div>
+                )}
+                <h3>Danh sách các môn học đã thêm:</h3>
+                <table className="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Mã lớp</th>
+                            <th scope="col">Mã môn học</th>
+                            <th scope="col">Tên môn học</th>
+                            <th scope="col">Thời gian</th>
+                            <th scope="col">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {selectedCourses.map((course, index) => (
+                            <tr key={index}>
+                                <td>{course.id}</td>
+                                <td>{course.subject_id}</td>
+                                <td>{course.name}</td>
+                                <td>{course.start_time} - {course.end_time}</td>
+                                <td>
+                                    <Button style={{ fontWeight: 'bold', border: 'none' }} onClick={() => handleDeleteCourse(course)}>Xóa</Button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <div className="col-md-12 text-center mb-3">
+                    <Button onClick={handleRegister} variant="primary">Đăng ký</Button>
+                </div>
+
+            </Container>
         </div>
     );
 };

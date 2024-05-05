@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Container, Row, Col, Button } from 'react-bootstrap';
 import Sidebar from '../../components/Layouts/Sidebar/Sidebar'; 
-import './CourseGrade.css';
+import './CourseGrade.module.css';
 
 export const CourseGrade = () => {
     const [inputValue, setInputValue] = useState('');
