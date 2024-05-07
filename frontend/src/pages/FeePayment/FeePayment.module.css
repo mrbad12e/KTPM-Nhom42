@@ -1,0 +1,50 @@
+
+.scrollbar-container {
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.scrollbar-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.scrollbar-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.scrollbar-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+.scrollbar-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+.custom-select {
+    width: 200px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 5px; /* Làm tròn 4 góc */
+    text-align: center; /* Canh giữa nội dung */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+
+.error-message {
+    position: fixed;
+    top: 60%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+    background-color: #ffcccc;
+    padding: 10px;
+    border: 1px solid #ff0000;
+    border-radius: 5px;
+}
+

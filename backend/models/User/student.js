@@ -113,11 +113,11 @@ export default class Student extends User {
                 const subjectInfo = subjectResult.find(subject => subject.id === item.class_id);
                 const startTime = item.start_time.slice(0, 2) + ':' + item.start_time.slice(2);
                 const endTime = item.end_time.slice(0, 2) + ':' + item.end_time.slice(2);
-                const time = startTime + ' - ' + endTime;
                 return { 
                     class_id: item.class_id,
                     weekday: item.weekday,
-                    time: time,
+                    startTime: startTime,
+                    endTime: endTime,
                     location: item.location,
                     subject_name: subjectInfo ? subjectInfo.name : null 
                 };
@@ -177,4 +177,37 @@ export default class Student extends User {
         }
     }
   
+    static async getSubjectFromDatabase(req, res, next) {
+        try {
+            const { subject_name, subject_id } = req.body; 
+    
+            let query1 = `SELECT class.id, class.subject_id, subject.name, class.current_cap, 
+                            class.max_cap, timetable.weekday, timetable.start_time, timetable.end_time
+                            FROM class 
+                            JOIN subject ON class.subject_id = subject.id 
+                            JOIN timetable ON class.id = timetable.class_id `;
+            if (subject_name && subject_id) {
+                query1 += 'WHERE (LOWER(subject.name) LIKE LOWER($1) OR LOWER(subject.id) LIKE LOWER($2) )ORDER BY subject.id';
+                const { rows } = await client.query(query1, [`${subject_name}%`, `${subject_id}%`]);
+                return rows;
+            }
+            else if (subject_name && !subject_id) {
+                query1 += 'WHERE LOWER(subject.name) LIKE LOWER($1) ORDER BY subject.id';
+                const { rows } = await client.query(query1, [`${subject_name}%`]);
+                return rows;
+            }
+            else if (!subject_name && subject_id) {                    
+                query1 += 'WHERE LOWER(subject.id) LIKE LOWER($1) ORDER BY subject.id';
+                const { rows } = await client.query(query1, [`${subject_id}%`]);
+                return rows;
+            } else {
+                const { rows } = await client.query(query1);
+                return rows;
+            }
+        } catch (error) {
+            next(error); 
+        }
+    }
+    
 }
+

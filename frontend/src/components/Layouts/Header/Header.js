@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { Col, Row, Container, Card } from 'react-bootstrap';
-import './Header.css'; // Import file CSS mới
+import { Navbar, Dropdown} from 'react-bootstrap'; 
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; 
+import styles from './Header.module.css';
+import axios from 'axios';
 
 export const Header = () => {
     const navigate = useNavigate();
-    const [showChangePassword, setShowChangePassword] = useState(false);
 
     const handleLogout = () => {
         try {
-            axios.get('/admin/logout');
+            axios.get('/student/logout');
             console.log('Logged out successfully');
             localStorage.clear();
             navigate('/');
@@ -20,58 +19,21 @@ export const Header = () => {
     };
 
     const handleChangePassword = () => {
-        setShowChangePassword(true);
-    };
-
-    const handleCloseChangePassword = () => {
-        setShowChangePassword(false);
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        // Xử lý logic đổi mật khẩu ở đây
+        
     };
 
     return (
-        <header className="container-fluid header-background">
-            <Row>
-                <Col sm={6}>
-                    <Card.Title>ĐẠI HỌC BÁCH KHOA HÀ NỘI</Card.Title>
-                </Col>
-                <Col sm={{ span: 3, offset: 3 }}>
-                    <div className="dropdown-container">
-                        <div className="dropdown">
-                            <button className="dropbtn">Xin chào sinh viên</button>
-                            <i className="bx bx-chevron-down"></i>
-                            <div className="dropdown-content">
-                                <a onClick={handleChangePassword} className="black-text">Đổi mật khẩu</a>
-                                <a onClick={handleLogout} className="black-text">Đăng xuất</a>
-                            </div>
-                        </div>
-                    </div>
-                </Col>
-            </Row>
-            {showChangePassword && (
-                <div className="overlay">
-                    <div className="change-password-form">
-                        <span className="close" onClick={handleCloseChangePassword}>&times;</span>
-                        <h2>Đổi mật khẩu</h2>
-                        <form>
-                            <label htmlFor="oldPassword">Mật khẩu cũ:</label>
-                            <input type="password" id="oldPassword" name="oldPassword" required />
-
-                            <label htmlFor="newPassword">Mật khẩu mới:</label>
-                            <input type="password" id="newPassword" name="newPassword" required />
-
-                            <label htmlFor="confirmPassword">Nhập lại mật khẩu mới:</label>
-                            <input type="password" id="confirmPassword" name="confirmPassword" required />
-
-                            <button type="button" className="confirm-button" onClick={handleSubmit}>Xác nhận</button>
-
-                        </form>
-                    </div>
-                </div>
-            )}
-        </header>
+        <Navbar className={styles['header-background']}>
+            <Navbar.Brand className={styles["header-title"]}>ĐẠI HỌC BÁCH KHOA HÀ NỘI</Navbar.Brand>
+            <Dropdown className={styles["header-user"]}>
+                <Dropdown.Toggle variant="dark" style={{ border: 'none' }} id="dropdown-basic">
+                    Xin chào sinh viên
+                </Dropdown.Toggle>
+                <Dropdown.Menu >
+                    <Dropdown.Item style={{ fontSize: '14px', padding: '5px 10px' }}>Đổi mật khẩu</Dropdown.Item>
+                    <Dropdown.Item style={{ fontSize: '14px', padding: '5px 10px', width: '20px' }} onClick={handleLogout}>Đăng xuất</Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
+        </Navbar>
     );
 };

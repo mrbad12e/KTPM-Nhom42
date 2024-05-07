@@ -1,0 +1,110 @@
+.left-content {
+    position: fixed;
+    top: 0vh;
+    width: 18vw;
+    background: linear-gradient(135deg,rgb(0, 0, 0) 0%,rgb(107, 107, 106) 100%);
+    height:100vh;
+    overflow: auto;
+    transition: transform 0.3s ease-in-out; /* Thêm hiệu ứng chuyển động */
+    transform: translateX(-100%); /* Ẩn menu khi không được mở */
+    z-index: 998;
+}
+
+.left-content.show {
+    transform: translateX(0); /* Hiển thị menu khi được mở */
+}
+
+.hamburger-button {
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    display: block;
+    cursor: pointer;
+}
+
+.hamburger-button.active img {
+    transform: rotate(90deg); /* Đảo hình ảnh khi menu mở */
+}
+
+@media screen and (min-width: 1000px) {
+    .hamburger-button {
+        display: none; /* Ẩn nút hamburger trên màn hình rộng */
+    }
+}
+
+.sitemap {
+    margin-top: 13vh;
+}
+
+.sitemap li {
+    margin-top: 20px;
+    list-style: none;
+    font-size: 20px;
+}
+
+.sitemap li a {
+    margin-top: 5%;
+    /* display: block; Chuyển thành: */
+    display: inline-block;
+    color: #ffffff;
+    padding: 8px 16px;
+    text-decoration: none;
+    white-space: nowrap; /* Ngăn văn bản bị cắt ngắn */
+}
+
+.sitemap li a:hover:not(.active) {
+    background-color: #545499;
+    margin-right: 30px;
+    border-radius: 10px;
+    color: white;
+}
+
+
+.logout-button {
+    background-color: rgb(11, 9, 9);
+    border-color: rgb(184, 6, 6);
+    margin-top: 19vh;
+}
+
+.logout-button:hover {
+    background-color: red; /* Màu nền sẽ thay đổi thành đỏ khi di chuột vào */
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 997; 
+}
+
+@media (max-width: 1250px) {
+    .sitemap li {
+        font-size: 16px;
+    }
+
+}
+
+@media (max-width: 1000px) {
+    .left-content {
+        width: 300px;
+    }
+    .sitemap {
+        margin-top: 16vh;
+    }
+
+    .sitemap li {
+        margin-top: 20px;
+        list-style: none;
+        font-size: 20px;
+    }
+
+    .hamburger-button {
+        position: fixed;
+        left: 10px;
+        z-index: 996; 
+    }
+}

@@ -11,8 +11,11 @@ router.route('/')
 
 
 router.route('/profile')
-    .post(StudentController.getUserInfo); 
-
+    .post(StudentController.getUserInfo);       
+    
+router.route('/registration')
+    .post(StudentController.getSubject); 
+    
 router.route('/timetable')
     .post(StudentController.getTimetable);
 
