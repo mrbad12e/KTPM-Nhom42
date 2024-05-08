@@ -1,14 +1,8 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { Sidebar } from '../../components/Layouts/Sidebar/Sidebar';
-=======
 import React, { useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Sidebar from '../../components/Layouts/Sidebar/sidebarStudent';
 import globalstyles from '../../CSSglobal.module.css';
 import styles from './Registration.module.css';
->>>>>>> 0b1e225134f8c74686cf802ca5632caa7d5d5f75
 
 export const Registration = () => {
     const [subjectInfo, setSubjectInfo] = useState([]); // State to store subject information
