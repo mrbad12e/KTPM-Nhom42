@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Container, Table } from 'react-bootstrap';
 import axios from 'axios';
-import Sidebar from '../../components/Layouts/Sidebar/sidebarStudent'; 
+import Sidebar_student from '../../components/Layouts/Sidebar/sidebarStudent'; 
 import globalstyles from '../../CSSglobal.module.css';
-import styles from './Timetable.module.css';
+import styles from './timetable.module.css';
 
 export const Timetable = () => {
     const [timetable, setTimetable] = useState([]);
@@ -52,7 +52,7 @@ export const Timetable = () => {
                         <th style={{ textAlign: 'center' }}>STT</th>
                         <th style={{ textAlign: 'center' }}>MSSV</th>
                         <th style={{ textAlign: 'center' }}>Họ và tên</th>
-                        <th style={{ textAlign: 'center' }}>Email</th>
+                        {tableWidth && tableWidth >= 660 && <th style={{ textAlign: 'center' }}>Email</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -61,7 +61,7 @@ export const Timetable = () => {
                             <td style={{ textAlign: 'center' }}>{index + 1}</td>
                             <td style={{ textAlign: 'center' }}>{student.id}</td>
                             <td>{student.name}</td>
-                            <td>{student.email}</td>
+                            {tableWidth && tableWidth >= 660 && <td>{student.email}</td>}
                         </tr>
                     ))}
                 </tbody>
@@ -86,7 +86,7 @@ export const Timetable = () => {
 
     return (
         <div>
-            <Sidebar />
+            <Sidebar_student />
             <Container fluid className={globalstyles['main-background']}>
                 <div className={globalstyles['title']}>THỜI KHÓA BIỂU KỲ</div>
                 <Form.Select className={styles['select-semester']} onChange={(e) => setSelectedSemester(e.target.value)} value={selectedSemester}>
@@ -98,34 +98,24 @@ export const Timetable = () => {
                     {tableWidth && tableWidth < 660 ? (
                         timetable.map(item => (
                             <div style={{marginLeft: '50px'}} key={`${item.class_id}-${item.weekday}-${item.subject_name}-${item.time}-${item.location}`}>
-                                <hr/>
-                            
+                                <hr/>                         
                                 <Row>
                                     <Col style={{ flex: '0 0 30%', maxWidth: '30%', textAlign: 'center'}}>
                                         <div onClick={() => handleClick(item)}>
-                                            <Row><div>Thứ: {item.weekday}</div></Row>
-                                            <Row><div style={{ textAlign: 'center' }}>{item.startTime}</div></Row>   
-                                            <Row><div>|</div></Row> 
+                                            <Row><div style={{fontSize: '19px'}}>Thứ {item.weekday}</div></Row>
+                                            <Row><div style={{ textAlign: 'center'}}>{item.startTime}</div></Row>   
+                                            <Row><div style={{fontSize: '8px'}}>|</div></Row> 
                                             <Row><div>{item.endTime}</div></Row>        
                                         </div>
                                     </Col>
                                     <Col style={{ flex: '0 0 50%', maxWidth: '50%' }}>
                                         <div onClick={() => handleClick(item)}>
-                                            <Row><div>{item.subject_name}</div></Row>
+                                            <Row><div style={{fontWeight: 'bold', marginBottom: '10px'}}> {item.subject_name}</div></Row>
                                             <Row><div>Mã lớp: {item.class_id}</div></Row>
                                             <Row><div>Địa điểm: {item.location}</div></Row>
                                         </div>
                                     </Col>
-                                </Row>
-                             
-
-                                {/* <div onClick={() => handleClick(item)} style={{ cursor: 'pointer' }}>
-                                    <span style={{ marginRight: '5vw' }}>Thứ: {item.weekday}</span>
-                                    <span style={{ marginRight: '5vw' }}>{item.time}</span>
-                                    <span>Địa điểm: {item.location}</span>
-                                </div>
-                                <div onClick={() => handleClick(item)} style={{ cursor: 'pointer', marginTop:'10px' }}>Mã lớp: {item.class_id}</div>
-                                <div onClick={() => handleClick(item)} style={{ cursor: 'pointer' }}>Tên môn học: {item.subject_name}</div> */}
+                                </Row> 
                             </div>
                         ))
                     ) : (
@@ -154,10 +144,10 @@ export const Timetable = () => {
                     )}
                 </div>
                 <hr/>
-                {/* {selectedClassInfo && (
-                    <div className="selected-class-info">
-                        <div className={globalstyles['title']}>Thông tin chi tiết của lớp học</div>
-                        <Container style={{ marginLeft: '5vw' }}>
+                {selectedClassInfo && (
+                    <div>
+                        <div className={globalstyles['title']}>Thông tin chi tiết lớp học</div>
+                        <Container style={{ marginLeft: '5vw', marginTop: '30px' }}>
                             <p><strong>Môn học:</strong> {selectedSubjectName}</p>
                             <p><strong>Loại lớp:</strong> {selectedClassInfo.classInfo.type}</p>
                             {selectedClassInfo.lecturerInfo && selectedClassInfo.lecturerInfo.length > 0 && (
@@ -171,7 +161,7 @@ export const Timetable = () => {
                         </Container>
                         {renderStudentDetails()}
                     </div>
-                )} */}
+                )}
             </Container>
         </div>
     );

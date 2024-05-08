@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Container, Row, Col, Button } from 'react-bootstrap';
-import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin'; 
+import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
 import ViewIcon from '../../../assets/img/View.png';
 import DeleteIcon from '../../../assets/img/Delete.png';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 import styles from './class.module.css';
 import globalstyles from '../../CSSglobal.module.css';
-import axios from 'axios';
 
 export const Class = () => {
     const [inputValue, setInputValue] = useState('');
@@ -19,15 +20,18 @@ export const Class = () => {
     };
 
 
+
+
+
     return (
         <div>
             <Sidebar_admin/>
             <Container fluid className={globalstyles['main-background']}>
                 <div className={globalstyles['left-title']}>Danh sách lớp</div>
-                <Button className={globalstyles['add-button']} onClick={handleSearchButtonClick} variant="dark">Thêm mới</Button> 
+                <Link to="/addClass"><Button className={globalstyles['add-button']} variant="dark"> Thêm mới</Button></Link>
                 <div className={globalstyles['search-input']}>
                     <input type="text" value={inputValue} onChange={handleChange} placeholder="Tìm tên lớp hoặc mã lớp"/>
-                    <Button className={globalstyles['button-search']} variant="dark">Tìm kiếm</Button> 
+                    <Button className={globalstyles['button-search']} onClick={handleSearchButtonClick} variant="dark">Tìm kiếm</Button> 
                 </div>
                 <Table className={globalstyles['table-1300']}>
                     <thead>

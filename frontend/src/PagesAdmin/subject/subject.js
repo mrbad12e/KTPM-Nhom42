@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Container, Row, Col, Button } from 'react-bootstrap';
-import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin'; 
+import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
 import ViewIcon from '../../../assets/img/View.png';
 import DeleteIcon from '../../../assets/img/Delete.png';
 import styles from './subject.module.css';

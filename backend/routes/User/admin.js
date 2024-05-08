@@ -4,7 +4,7 @@ import { isAuthUser } from '../../middleware/auth.js';
 const router = express.Router();
 
 router.route('/student')
-    .get(isAuthUser, AdminController.readStudents)
+    .get( AdminController.readStudents)
     .delete(isAuthUser, AdminController.deleteStudent)
     .patch(isAuthUser, AdminController.updateStudent);
 router.route('/lecturer')

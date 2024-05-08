@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Container, Row, Col, Button, TabContainer } from 'react-bootstrap';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin'; 
-import UpdateIcon from '../../../assets/img/Update.png';
-import DeleteIcon from '../../../assets/img/Delete.png';
-import styles from './feePayment.module.css';
+import styles from './addClass.module.css';
 import globalstyles from '../../CSSglobal.module.css';
 
-export const FeePayment = () => {
+export const AddClass = () => {
 
     const [inputClassID, setInputClassID] = useState('');
     const handleInputClassID = (event) => {
@@ -149,6 +147,9 @@ export const FeePayment = () => {
                             </tbody>
                         </Table>
                     </div>
+                    {errorStart && <div style={{ color: 'red', fontSize: '12px' }}>{errorStart}</div>}
+                    {errorEnd && <div style={{ color: 'red', fontSize: '12px' }}>{errorEnd}</div>}
+                    
                 </Container>
                 <Table style={{marginTop: '140px'}}>
                     <thead>
@@ -170,4 +171,4 @@ export const FeePayment = () => {
     );
 };
 
-export default FeePayment;
+export default AddClass;

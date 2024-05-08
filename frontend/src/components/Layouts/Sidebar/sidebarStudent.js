@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Button } from 'react-bootstrap';
 import { NavLink, useNavigate } from 'react-router-dom';
-import styles from './Sidebar.module.css';
 import axios from 'axios';
 import MenuIcon from '../../../../assets/img/Menu.jpg';
+import styles from './Sidebar.module.css';
 
-const Sidebar = () => {
+const Sidebar_student = () => {
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(window.innerWidth > 1000); // Ban đầu hiển thị sidebar
     const [showOverlay, setShowOverlay] = useState(false); // Trạng thái hiển thị lớp phủ
@@ -74,4 +74,4 @@ const Sidebar = () => {
     );
 };
 
-export default Sidebar;
+export default Sidebar_student;
