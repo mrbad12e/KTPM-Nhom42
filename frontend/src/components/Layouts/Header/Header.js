@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Navbar, Dropdown} from 'react-bootstrap'; 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './Header.module.css';
 import axios from 'axios';
 
 export const Header = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const shouldShowGreeting = location.pathname !== '/';
 
     const handleLogout = () => {
         try {
@@ -25,15 +27,17 @@ export const Header = () => {
     return (
         <Navbar className={styles['header-background']}>
             <Navbar.Brand className={styles["header-title"]}>ĐẠI HỌC BÁCH KHOA HÀ NỘI</Navbar.Brand>
-            <Dropdown className={styles["header-user"]}>
-                <Dropdown.Toggle variant="dark" style={{ border: 'none' }} id="dropdown-basic">
-                    Xin chào sinh viên
-                </Dropdown.Toggle>
-                <Dropdown.Menu >
-                    <Dropdown.Item style={{ fontSize: '14px', padding: '5px 10px' }}>Đổi mật khẩu</Dropdown.Item>
-                    <Dropdown.Item style={{ fontSize: '14px', padding: '5px 10px', width: '20px' }} onClick={handleLogout}>Đăng xuất</Dropdown.Item>
-                </Dropdown.Menu>
-            </Dropdown>
+            {shouldShowGreeting && (
+                <Dropdown className={styles["header-user"]}>
+                    <Dropdown.Toggle variant="dark" style={{ border: 'none' }} id="dropdown-basic">
+                        Xin chào user
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item style={{ fontSize: '14px', padding: '5px 10px'}}>Đổi mật khẩu</Dropdown.Item>
+                        <Dropdown.Item style={{ fontSize: '14px', padding: '5px 10px'}} onClick={handleLogout}>Đăng xuất</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+            )}
         </Navbar>
     );
 };

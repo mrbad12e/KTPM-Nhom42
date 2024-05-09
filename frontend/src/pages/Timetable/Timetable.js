@@ -90,10 +90,10 @@ export const Timetable = () => {
             <Container fluid className={globalstyles['main-background']}>
                 <div className={globalstyles['title']}>THỜI KHÓA BIỂU KỲ</div>
                 <Form.Select className={styles['select-semester']} onChange={(e) => setSelectedSemester(e.target.value)} value={selectedSemester}>
-                    <optgroup label="20212" className={styles['select-option-group']}>
-                        <option value="20212">20212</option>
-                    </optgroup>
+                    <option value="20212">20212</option>
+                    <option value="20211">20211</option>
                 </Form.Select>
+
                 <div id="table-container">
                     {tableWidth && tableWidth < 660 ? (
                         timetable.map(item => (
