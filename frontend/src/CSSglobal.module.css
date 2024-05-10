@@ -8,15 +8,6 @@ body {
     background-color: linear-gradient(135deg,rgb(0, 0, 0) 0%,rgb(176, 176, 176) 100%);
 }
 
-/* @media (min-width: 1600px) {
-    html, body {
-        font-size: 1.3em; 
-    }
-    table {
-        max-width: 90% !important; 
-    }
-} */
-
 .main-background {
     position: relative;
     background-color: #ffffff;
@@ -45,6 +36,7 @@ body {
 .search-input{
     margin-top: 20px;
     margin-left: 35px;
+
 }
 
 .button-search{
@@ -54,6 +46,7 @@ body {
     text-align: 'center'; 
     line-height: normal;
     margin-left: 10px;
+    margin-top: 2px;
 }
 
 .table-1000 {

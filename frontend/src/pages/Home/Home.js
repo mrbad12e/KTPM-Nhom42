@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'; 
 import { Container , Row, Col } from 'react-bootstrap'; 
 import axios from 'axios';
-import Sidebar from '../../components/Layouts/Sidebar/sidebarStudent'
+import Sidebar_student from '../../components/Layouts/Sidebar/sidebarStudent'
 import avatar from '../../../assets/img/avatar.jpg';
 import globalstyles from '../../CSSglobal.module.css';
 import styles from './Home.module.css';
@@ -47,7 +47,7 @@ export const Home = () => {
 
     return (
         <div>
-           <Sidebar/>
+           <Sidebar_student/>
            <Container fluid className={globalstyles['main-background']}>
                 <div className={globalstyles.title}>THÔNG TIN SINH VIÊN</div>
                 {renderInfoStudent()}  
