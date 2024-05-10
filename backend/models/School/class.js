@@ -40,7 +40,9 @@ export default class Class {
 
     static async assignLecturer(req, res, next) {
         try {
-            
+            const query = 'CALL assign_lecturer($1, $2)';
+            const values = [req.body.lecturer_id, req.body.class_id];
+            await client.query(query, values);
         } catch (error) {
             throw error;
         }
@@ -48,7 +50,9 @@ export default class Class {
 
     static async enrollClass(req, res, next) {
         try {
-            
+            const values = [req.body.student_id, req.body.class_id];
+            const query = 'CALL enroll_class($1, $2)';
+            await client.query(query, values);
         } catch (error) {
             throw error;
         }

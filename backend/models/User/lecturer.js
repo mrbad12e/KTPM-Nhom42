@@ -27,7 +27,7 @@ export default class Lecturer extends User {
     
     static async readLecturer(req, res, next) {
         try {
-            let query = `SELECT * FROM public.${req._parsedUrl.pathname.split('/')[1]}`;
+            let query = `SELECT * FROM public.lecturer`;
 
             if (Object.keys(req.query).length > 0) {
                 query += ' WHERE ';
@@ -49,6 +49,17 @@ export default class Lecturer extends User {
 
     static async updateLecturer(req, res, next) {
         try {
+            const id = req.query.id;
+            const query = `UPDATE public.lecturer SET`;
+            const keys = Object.keys(req.body);
+            const values = Object.values(req.body);
+            const set = [];
+            for (let i = 0; i < keys.length; i++) {
+                set.push(`${keys[i]} = $${i + 1}, `);
+            }
+            query += set.join('');
+            query += ` WHERE id = ${id};`;
+            await client.query(query, values);
         } catch (error) {
             throw error;
         }

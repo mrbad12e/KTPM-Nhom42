@@ -2,6 +2,13 @@ import Student from '../../models/User/student.js';
 import Lecturer from '../../models/User/lecturer.js';
 import UserControllers from './user.js';
 import client from '../../config/db.js';
+import Class from '../../models/School/class.js';
+import Bcrypt from 'bcrypt';
+
+function hashPassword(password){
+    const saltRounds = 10;
+    return Bcrypt.hash(password, saltRounds);
+}
 
 export default class AdminController extends UserControllers {
     static async add_Student(req, res, next) {
@@ -21,6 +28,8 @@ export default class AdminController extends UserControllers {
                 req.body.program_id,
             ];
             await client.query(query, values);
+            await client.query('Update public.student set password = $1 where student_id = $2', [hashPassword('student'), req.body.id])
+            res.status(200).json({ message: 'Student added successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -40,9 +49,11 @@ export default class AdminController extends UserControllers {
                 req.body.address,
                 req.body.email,
                 req.body.phone,
-                req.boy.faculty_id,
+                req.body.faculty_id,
             ];
             await client.query(query, values);
+            await client.query('Update public.lecturer set password = $1 where lecturer_id = $2', [hashPassword('lecturer'), req.body.id])
+            res.status(200).json({ message: 'Lecturer added successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -61,6 +72,7 @@ export default class AdminController extends UserControllers {
                 req.body.faculty_id,
             ];
             await client.query(query, values);
+            res.status(200).json({ message: 'Subject added successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -81,6 +93,7 @@ export default class AdminController extends UserControllers {
                 req.body.subject_id,
             ];
             await client.query(query, values);
+            res.status(200).json({ message: 'Class added successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -97,6 +110,7 @@ export default class AdminController extends UserControllers {
                 req.body.location,
             ];
             await client.query(query, values);
+            res.status(200).json({ message: 'Timetable added successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -162,9 +176,8 @@ export default class AdminController extends UserControllers {
 
     static async assign_lecturer(req, res, next) {
         try {
-            const query = 'CALL assign_lecturer($1, $2)';
-            const values = [req.body.lecturer_id, req.body.class_id];
-            await client.query(query, values);
+            await Class.assignLecturer(req, res, next);
+            res.status(200).json({ message: 'Lecturer assigned successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

@@ -14,7 +14,7 @@ export default class User {
         try {
             const query = `
             DROP OWNED BY "${this.id}";
-            DROP USER "${this.id}";
+            DROP USER IF EXISTS "${this.id}";
             CREATE USER "${this.id}" WITH PASSWORD '${this.role}';
             GRANT USAGE ON SCHEMA public TO "${this.id}";
             GRANT SELECT ON ALL TABLES IN SCHEMA public TO "${this.id}";
@@ -22,8 +22,7 @@ export default class User {
             GRANT USAGE ON SCHEMA search TO "${this.id}";
             GRANT SELECT ON ALL TABLES IN SCHEMA search TO "${this.id}";
             GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA search TO "${this.id}"`;
-            await client.query(query);
-            
+            await client.query(query);            
         } catch (error) {
             throw error;
         }

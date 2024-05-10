@@ -2,6 +2,7 @@ import User from '../../models/User/user.js';
 import Admin from '../../models/User/admin.js';
 import Student from '../../models/User/student.js';
 import Lecturer from '../../models/User/lecturer.js';
+import client from '../../config/db.js';
 
 export default class UserControllers {
     static async loginUser(req, res, next) {
