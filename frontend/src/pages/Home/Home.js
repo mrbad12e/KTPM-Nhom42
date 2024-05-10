@@ -13,7 +13,7 @@ export const Home = () => {
         const fetchStudent = async () => {
             try {
                 const email = localStorage.getItem('email');  
-                const response = await axios.get(`/student?email=${email}`); // Thêm 'email=' vào trước tham số email
+                const response = await axios.get(`/student?email=${email}`);
                 const students = response.data.students;
                 if (students.length > 0) {
                     setStudent(students[0]);
@@ -36,7 +36,7 @@ export const Home = () => {
                             <img src={avatar} alt="anh" className={styles.image_student}/>
                             <div className={styles.container}>
                                 <p><strong>MSSV: </strong>{student.id}</p>
-                                <p><strong>Chuyên ngành: </strong>{student.program_id}</p>
+                                <p><strong>Mã chuyên ngành: </strong>{student.program_id}</p>
                                 <p><strong>Họ và tên: </strong>{`${student.first_name} ${student.last_name}`}</p>
                                 <p><strong>Số điện thoại: </strong>{student.phone}</p>
                                 <p><strong>Ngày sinh: </strong>{new Date(student.birthday).toLocaleDateString()}</p>

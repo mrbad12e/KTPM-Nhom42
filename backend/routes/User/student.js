@@ -21,9 +21,18 @@ router.route('/timetable')
 
 // Bo qua doc thong tin giang vien vi thong tin giang vien public
 
-router.route('/login')
-    .post(StudentController.loginUser);
-router.route('/logout')
-    .get(StudentController.logoutUser);
+    router.route('/login')
+        .post(StudentController.loginUser);
+    router.route('/logout')
+        .get(StudentController.logoutUser);
 
+        router.route('/registration')
+        .post(StudentController.getSubject); 
+        
+    router.route('/timetable')
+        .post(StudentController.getTimetable);
+
+    router.route('/classDetail')
+        .post(StudentController.getClassDetail); 
+        
 export default router;

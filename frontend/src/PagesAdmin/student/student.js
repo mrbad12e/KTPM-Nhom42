@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Table, Container, Button } from 'react-bootstrap';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
 import ViewIcon from '../../../assets/img/View.png';
-import DeleteIcon from '../../../assets/img/Delete.png';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Pagination from '../../components/pagination/pagination';
@@ -11,34 +10,45 @@ import globalstyles from '../../CSSglobal.module.css';
 
 export const Student = () => {
     const [students, setStudents] = useState([]);
-    const [inputValue, setInputValue] = useState('');
+    const [inputMSSV, setInputMSSV] = useState('');
+    const [inputCTDT, setInputCTDT] = useState('');
     const [currentPage, setCurrentPage] = useState(1); 
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-        fetchStudents();
+        fetchSearchStudents();
     }, []);
 
-    const fetchStudents = async () => {
+    const fetchSearchStudents = async () => {
         try {
-            // let query = `/admin/student`
-            const response = await axios.get('/admin/student');
+            let response;
+            if (inputMSSV && inputCTDT) {
+                response = await axios.get(`/admin/student?id=${inputMSSV}&&program_id=${inputCTDT}`);
+            } else if (inputMSSV) {
+                response = await axios.get(`/admin/student?id=${inputMSSV}`);
+            } else if (inputCTDT) {
+                response = await axios.get(`/admin/student?program_id=${inputCTDT}`);
+            } else { response = await axios.get(`/admin/student`);}
             const studentData = response.data.students;
             setStudents(studentData);
-            // Tính toán số trang dựa trên số lượng sinh viên và số lượng sinh viên hiển thị trên mỗi trang (ví dụ: 10 sinh viên/trang)
             const pageCount = Math.ceil(studentData.length / 10);
             setTotalPages(pageCount);
         } catch (error) {
             console.error('Error fetching students:', error);
         }
     };
+    
 
-    const handleChange = (event) => {
-        setInputValue(event.target.value);
+    const inputValueMSSV = (event) => {
+        setInputMSSV(event.target.value);
+    };
+
+    const inputValueCTDT = (event) => {
+        setInputCTDT(event.target.value);
     };
 
     const handleSearchButtonClick = () => {
-        console.log('Đã nhấn nút Tìm kiếm với giá trị:', inputValue);
+        fetchSearchStudents();
     };
 
     const handlePageChange = (pageNumber) => {
@@ -49,10 +59,11 @@ export const Student = () => {
         <div>
             <Sidebar_admin/>
             <Container fluid className={globalstyles['main-background']}>
-                <div className={globalstyles['left-title']}>Danh sách lớp</div>
+                <div className={globalstyles['left-title']}>Danh sách sinh viên</div>
                 <Link to="/addStudent"><Button className={globalstyles['add-button']}variant="dark">Thêm mới</Button></Link>
                 <div className={globalstyles['search-input']}>
-                    <input type="text" value={inputValue} onChange={handleChange} placeholder="Tìm tên lớp hoặc mã lớp"/>
+                    <input type="text" value={inputMSSV} onChange={inputValueMSSV} placeholder="Nhập mã số sinh viên" style={{marginRight: '10px'}}/>
+                    <input type="text" value={inputCTDT} onChange={inputValueCTDT} placeholder="Nhập mã CTDT"/>
                     <Button className={globalstyles['button-search']} variant="dark" onClick={handleSearchButtonClick}>Tìm kiếm</Button> 
                 </div>
                 <Table className={globalstyles['table-1300']}>
@@ -60,7 +71,7 @@ export const Student = () => {
                         <tr style={{ textAlign: 'center', whiteSpace: '2px' }}>
                             <th>MSSV</th>
                             <th>Họ và tên</th>
-                            <th>Chương trình đào tạo</th>
+                            <th>Mã CTDT</th>
                             <th>CPA</th>
                             <th>Email</th>
                             <th>Thao tác</th>
@@ -71,15 +82,12 @@ export const Student = () => {
                             <tr key={student.id}>
                                 <td style={{ textAlign: 'center'}}>{student.id}</td>
                                 <td>{student.first_name} {student.last_name}</td>
-                                <td>{student.program_id}</td>
+                                <td style={{ textAlign: 'center'}}>{student.program_id}</td>
                                 <td style={{ textAlign: 'center'}}>{student.cpa_total_score_product}</td>
                                 <td>{student.email}</td>
                                 <td style={{ display: 'flex', justifyContent: 'center' }}>
                                     <div className={globalstyles['img-button-container']} >
                                         <img src={ViewIcon} alt="View" className={globalstyles['img-button']} />
-                                    </div>
-                                    <div className={globalstyles['img-button-container']} style ={{marginLeft: '10px'}}>
-                                        <img src={DeleteIcon} alt="Delete" className={globalstyles['img-button']} />
                                     </div>
                                 </td>
                             </tr>

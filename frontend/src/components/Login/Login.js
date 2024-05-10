@@ -13,7 +13,7 @@ export const Login = () => {
 
     const handleLogin = async () => {
         try {
-            const config = { headers: { 'Content-Type': 'application/json' } };
+            const config = { headers: { 'Content-Type': 'application/json'} };
             let response;
             if (role === 'admin') {
                 response = await axios.post('/admin/login', { email, password }, config);
@@ -24,7 +24,7 @@ export const Login = () => {
             if (response && response.data) {
                 const { data } = response;
                 localStorage.setItem('auth', data.success);
-                localStorage.setItem('email', email); // Lưu email vào localStorage
+                localStorage.setItem('email', email);
                 if (role === 'admin') {
                     navigate('/student');
                 } else {
@@ -37,21 +37,6 @@ export const Login = () => {
             setError(error.response ? error.response.data.message : 'An error occurred');
         }
     };
-
-
-    useEffect(() => {
-        if (error) {
-            console.log(error);
-        }
-        if (localStorage.getItem('auth')) {
-            console.log('Logged in successfully');
-            if (role === 'admin') {
-                navigate('/student');
-            } else {
-                navigate('/home');
-            }
-        }
-    }, [error]);
 
     return (
         <div style={{marginTop: '50px'}}>
