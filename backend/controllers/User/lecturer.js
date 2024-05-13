@@ -76,16 +76,15 @@ export default class LecturerController extends UserControllers{
         }
     }
 
-    static async update_grade(req, res, next) {
+    static async updateLecturer(req, res, next) {
         try {
-            const query = 'CALL update_grade($1, $2, $3, $4)';
-            const values = [req.body.student_id, req.body.class_id, req.body.midterm_score, req.body.final_score];
-            await client.query(query, values);
-            res.status(200).json({ message: 'Grade updated successfully' });
+            await Lecturer.updateLecturer(req, res, next);
+            res.status(200).json({ message: 'Lecturer updated successfully' });
         } catch (error) {
             res.status(500).json({ error: error });
         }
     }
+
 
     static async mark_absence(req, res, next) {
         try {

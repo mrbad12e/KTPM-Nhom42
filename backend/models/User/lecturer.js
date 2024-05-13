@@ -50,16 +50,16 @@ export default class Lecturer extends User {
     static async updateLecturer(req, res, next) {
         try {
             const id = req.query.id;
-            const query = `UPDATE public.lecturer SET`;
-            const keys = Object.keys(req.body);
-            const values = Object.values(req.body);
-            const set = [];
-            for (let i = 0; i < keys.length; i++) {
-                set.push(`${keys[i]} = $${i + 1}, `);
-            }
-            query += set.join('');
-            query += ` WHERE id = ${id};`;
-            await client.query(query, values);
+            const updates = req.body;
+    
+            const columnsToUpdate = Object.keys(updates);
+            const valuesToUpdate = Object.values(updates);
+    
+            let placeholders = columnsToUpdate.map((col, index) => `${col} = $${index + 1}`).join(', ');
+            const query = `UPDATE public.lecturer SET ${placeholders} WHERE id = $${columnsToUpdate.length + 1};`;
+    
+            const queryValues = [...valuesToUpdate, id];
+            await client.query(query, queryValues);
         } catch (error) {
             throw error;
         }

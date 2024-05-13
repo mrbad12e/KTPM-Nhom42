@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, InputGroup, InputGroupText } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './Login.css'; // Đảm bảo import CSS đúng cách
 import axios from 'axios'; // Thêm import axios
+import NotEye from '../../../../assets/img/noteyes.jpg'
+import Eye from '../../../../assets/img/eye.jpg'
 
 export const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [role, setRole] = useState('student'); // Mặc định là sinh viên
 
@@ -72,13 +75,25 @@ export const Login = () => {
                                         />
                                     </Form.Group>
 
-                                    <Form.Group controlId="formBasicPassword">
+                                    <Form.Group controlId="formBasicPassword" style={{ position: 'relative' }}>
                                         <Form.Label>Password:</Form.Label>
                                         <Form.Control
-                                            type="password"
+                                            type={showPassword ? "text" : "password"}
                                             placeholder="Enter your password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
+                                            style={{ paddingRight: '40px' }} // Thêm padding bên phải để không che khuất biểu tượng mắt
+                                        />
+                                        <img
+                                            src={showPassword ? Eye : NotEye}
+                                            style={{
+                                                position: 'absolute',
+                                                right: '10px', // Điều chỉnh vị trí của biểu tượng mắt từ phía bên phải
+                                                top: '50%', // Điều chỉnh vị trí của biểu tượng mắt theo chiều dọc
+                                                transform: 'translateY(15%)', // Dịch chuyển biểu tượng mắt theo chiều dọc
+                                                cursor: 'pointer'
+                                            }}
+                                            onClick={() => setShowPassword(!showPassword)}
                                         />
                                     </Form.Group>
                                     
