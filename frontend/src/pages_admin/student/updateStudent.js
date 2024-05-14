@@ -10,11 +10,34 @@ export const UpdateStudent = () => {
     const location = useLocation();
     const [student, setStudent] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [id, setId] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [programId, setProgramId] = useState('');
+    const [email, setEmail] = useState('');
+    const [status, setStatus] = useState(true);
+    const [phone, setPhone] = useState('');
+    const [birthday, setBirthday] = useState('');
+    const [gender, setGender] = useState('M');
+    const [address, setAddress] = useState('');
+    const [joinDate, setJoinDate] = useState('');
 
     useEffect(() => {
         // Lấy thông tin sinh viên từ location state
         if (location.state && location.state.student) {
-            setStudent(location.state.student);
+            const studentData = location.state.student;
+            setStudent(studentData);
+            setId(studentData.id);
+            setFirstName(studentData.first_name);
+            setLastName(studentData.last_name);
+            setProgramId(studentData.program_id);
+            setEmail(studentData.email);
+            setStatus(studentData.status);
+            setPhone(studentData.phone);
+            setBirthday(studentData.birthday.substring(0, 10));
+            setGender(studentData.gender);
+            setAddress(studentData.address);
+            setJoinDate(studentData.join_date.substring(0, 10));
         } else {
             // Nếu không có dữ liệu sinh viên, có thể thực hiện gọi API để lấy dữ liệu từ server
             fetchStudentData();
@@ -25,7 +48,19 @@ export const UpdateStudent = () => {
     const fetchStudentData = async () => {
         try {
             const response = await axios.get(`/admin/student?id=${location.pathname.split('/').pop()}`);
-            setStudent(response.data.students[0]);
+            const studentData = response.data.students[0];
+            setStudent(studentData);
+            setId(studentData.id);
+            setFirstName(studentData.first_name);
+            setLastName(studentData.last_name);
+            setProgramId(studentData.program_id);
+            setEmail(studentData.email);
+            setStatus(studentData.status);
+            setPhone(studentData.phone);
+            setBirthday(studentData.birthday.substring(0, 10));
+            setGender(studentData.gender);
+            setAddress(studentData.address);
+            setJoinDate(studentData.join_date.substring(0, 10));
         } catch (error) {
             console.error('Error fetching student detail:', error);
         }
@@ -33,6 +68,32 @@ export const UpdateStudent = () => {
 
     const handleCloseModal = () => setShowModal(false);
     const handleShowModal = () => setShowModal(true);
+
+
+
+    const handleSaveChanges = async () => {
+        try {
+            const updatedStudent = {
+                id,
+                first_name: firstName,
+                last_name: lastName,
+                program_id: programId,
+                email: email,
+                status: status,
+                phone: phone,
+                birthday: birthday,
+                gender: gender,
+                address: address,
+                join_date: joinDate
+            };
+
+            await axios.patch(`/admin/student`, updatedStudent, { params: { id } });
+            setStudent(updatedStudent);
+            handleCloseModal();
+        } catch (error) {
+            console.error('Error updating student detail:', error);
+        }
+    };
 
     // Render form cập nhật thông tin sinh viên
     const renderUpdateForm = () => {
@@ -190,24 +251,87 @@ export const UpdateStudent = () => {
                     <Modal.Title>Chỉnh sửa thông tin</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div className='modal-user-body'>
-                        <div className='input-container'>
-                            <label>So dien thoai</label>
-                            <input type='text' ></input>
-                        </div>
-                        <div className='input-container'>
-                            <label>Dia chi</label>
-                            <input type='text' ></input>
-                        </div>
-                    </div>
+                    <Form>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">MSSV:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control type="text" value={id} readOnly/>
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Họ:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control type='text' value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Tên:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control type='text' value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">CTDT:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control type='text' value={programId} onChange={(e) => setProgramId(e.target.value)} />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Email:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Trạng thái:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control as='select' value={status} onChange={(e) => setStatus(e.target.value === 'true')}>
+                                    <option value={true}>Đang học</option>
+                                    <option value={false}>Ra trường</option>
+                                </Form.Control>
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Số điện thoại:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control type='text' value={phone} onChange={(e) => setPhone(e.target.value)}/>
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Ngày sinh:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control type='date' value={birthday} onChange={(e) => setBirthday(e.target.value)}/>
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Giới tính:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control as='select' value={gender} onChange={(e) => setGender(e.target.value)}>
+                                    <option value='M'>Nam</option>
+                                    <option value='F'>Nữ</option>
+                                </Form.Control>
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Địa chỉ:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control type='text' value={address} onChange={(e) => setAddress(e.target.value)}/>
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center">
+                            <Form.Label column sm="4">Ngày nhập học:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control type='date' value={joinDate} onChange={(e) => setJoinDate(e.target.value)}/>
+                            </Col>
+                        </Form.Group>
+                    </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    
-                    <Button variant="primary" onClick={handleCloseModal}>
-                        Save Changes
+                    <Button variant="primary" onClick={handleSaveChanges}>
+                        Lưu thay đổi
                     </Button>
                     <Button variant="secondary" onClick={handleCloseModal}>
-                        Close
+                        Đóng
                     </Button>
                 </Modal.Footer>
             </Modal>
