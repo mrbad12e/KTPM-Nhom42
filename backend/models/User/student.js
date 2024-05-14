@@ -1,5 +1,6 @@
 import User from "./user.js";
 import client from "../../config/db.js";
+import { hashPassword } from "../../middleware/hashPassword.js";
 
 export default class Student extends User {
     constructor(id, role){
@@ -22,6 +23,29 @@ export default class Student extends User {
             await client.query(query);
         } catch (error) {
             throw error;
+        }
+    }
+
+    static async add_Student(req, res, next) {
+        try {
+            const query = 'CALL add_student($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)';
+            const values = [
+                req.body.id,
+                req.body.first_name,
+                req.body.last_name,
+                req.body.gender,
+                req.body.birthday,
+                req.body.status,
+                req.body.join_date,
+                req.body.address,
+                req.body.email,
+                req.body.phone,
+                req.body.program_id,
+            ];
+            await client.query(query, values);
+            await client.query('Update public.student set password = $1 where student_id = $2', [hashPassword('student'), req.body.id])
+        } catch (error) {
+            res.status(500).json({ error: error.message });
         }
     }
     
@@ -98,10 +122,5 @@ export default class Student extends User {
         }
     }
 
-    static async deleteStudent(req, res, next){
-        try {
-        } catch (error) {
-            throw error;
-        }
-    }
+    // static async deleteStudent(req, res, next) {}
 }

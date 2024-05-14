@@ -1,7 +1,6 @@
 import Student from '../../models/User/student.js';
 import Lecturer from '../../models/User/lecturer.js';
 import UserControllers from './user.js';
-import Class from '../../models/School/class.js';
 import client from '../../config/db.js';
 
 export default class StudentController extends UserControllers {
@@ -16,12 +15,10 @@ export default class StudentController extends UserControllers {
         }
     }
 
-    static async readLecturers(req, res, next) {
+    static async updateStudent(req, res, next) {
         try {
-            res.status(200).json({
-                lecturers: await Lecturer.readLecturer(req, res, next),
-                message: 'Lecturers fetched successfully',
-            });
+            await Student.updateStudent(req, res, next);
+            res.status(200).json({ message: 'Student updated successfully' });
         } catch (error) {
             res.status(500).json({ error: error });
         }
@@ -87,14 +84,5 @@ export default class StudentController extends UserControllers {
         } catch (error) {
             res.status(500).json({ error: error });
         }
-    }
-
-    static async updateStudent(req, res, next) {
-        try {
-            await Student.updateStudent(req, res, next);
-            res.status(200).json({ message: 'Student updated successfully' });
-        } catch (error) {
-            res.status(500).json({ error: error });
-        }
-    }
+    }  
 }

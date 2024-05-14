@@ -28,14 +28,7 @@ export default class ClassControllers {
         }
     }
 
-    static async deleteClass(req, res, next) {
-        try {
-            const deletedClass = await Class.deleteClass(req, res, next);
-            res.status(200).json({ deletedClass });
-        } catch (error) {
-            res.status(500).json({ error: error });
-        }
-    }
+    // static async deleteClass(req, res, next) {}
 
     static async assignLecturer(req, res, next) {
         try {
@@ -56,6 +49,15 @@ export default class ClassControllers {
             });
         }
         catch (error) {
+            res.status(500).json({ error: error });
+        }
+    }
+
+    static async readStudents(req, res, next) {
+        try {
+            const students = await Class.readStudents(req, res, next);
+            res.status(200).json({ students });
+        } catch (error) {
             res.status(500).json({ error: error });
         }
     }

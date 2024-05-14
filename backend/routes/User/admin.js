@@ -14,15 +14,10 @@ router.route('/lecturer')
     // .delete(isAuthUser, AdminController.deleteLecturer)
     .patch(isAuthUser, AdminController.updateLecturer);
 
+router.route('/gpa/reset').patch(isAuthUser, AdminController.reset_gpa) // Optional
 router.route('/report/enrolled').get(isAuthUser, AdminController.report_enrolled)
 router.route('/report/credit').get(isAuthUser, AdminController.report_credit_debt)
 router.route('/report/scholarship').get(isAuthUser, AdminController.report_scholarship)
-
-router.route('/class')
-    .post(isAuthUser, AdminController.add_Class)
-
-router.route('/subject')
-    .post(isAuthUser, AdminController.add_Subject)
 
 router.route('/login')
     .post(AdminController.loginUser);

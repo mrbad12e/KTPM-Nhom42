@@ -1,5 +1,6 @@
 import User from './user.js';
 import client from '../../config/db.js';
+import { hashPassword } from '../../middleware/hashPassword.js';
 
 export default class Lecturer extends User {
     constructor(id, role) {
@@ -22,6 +23,30 @@ export default class Lecturer extends User {
             await client.query(query);
         } catch (error) {
             throw error;
+        }
+    }
+
+    static async add_Lecturer(req, res, next) {
+        try {
+            const query = 'CALL add_lecturer($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)';
+            const values = [
+                req.body.id,
+                req.body.first_name,
+                req.body.last_name,
+                req.body.gender,
+                req.body.birthday,
+                req.body.status,
+                req.body.join_date,
+                req.body.address,
+                req.body.email,
+                req.body.phone,
+                req.body.faculty_id,
+            ];
+            await client.query(query, values);
+            await client.query('Update public.lecturer set password = $1 where lecturer_id = $2', [hashPassword('lecturer'), req.body.id])
+            res.status(200).json({ message: 'Lecturer added successfully' });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
         }
     }
     
@@ -56,7 +81,7 @@ export default class Lecturer extends User {
             const valuesToUpdate = Object.values(updates);
     
             let placeholders = columnsToUpdate.map((col, index) => `${col} = $${index + 1}`).join(', ');
-            const query = `UPDATE public.student SET ${placeholders} WHERE id = $${columnsToUpdate.length + 1};`;
+            const query = `UPDATE public.lecturer SET ${placeholders} WHERE id = $${columnsToUpdate.length + 1};`;
     
             const queryValues = [...valuesToUpdate, id];
             await client.query(query, queryValues);
@@ -65,10 +90,5 @@ export default class Lecturer extends User {
         }
     }
 
-    static async deleteLecturer(req, res, next) {
-        try {
-        } catch (error) {
-            throw error;
-        }
-    }
+    // static async deleteLecturer(req, res, next) {}
 }
