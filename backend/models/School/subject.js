@@ -21,9 +21,21 @@ export default class Subject {
 
     static async getSubject(req, res, next) {
         try {
-            const query = `SELECT * FROM subject WHERE id = $1`;
-            const { rows } = await client.query(query, [req.query.id]);
+            let query = `SELECT * FROM public.subject`;
+            if (Object.keys(req.query).length > 0) {
+                query += ' WHERE ';
+                const conditions = [];
+                for (const key in req.query) {
+                    // Prevent SQL injection by using parameterized queries
+                    conditions.push(`${key} = $${conditions.length + 1}`);
+                }
+                query += conditions.join(' AND ');
+            }
+            query += ';';
+            const queryParams = Object.values(req.query);
+            const { rows } = await client.query(query, queryParams);
             return rows;
+        
         } catch (error) {
             throw error;
         }
