@@ -5,8 +5,9 @@ export default class ProgramControllers {
 
     static async getProgram(req, res, next) {
         try {
-            const program = await Program.getProgram(req, res, next);
-            res.status(200).json({ program });
+            res.status(200).json({ 
+                program: await Program.getProgram(req, res, next)
+            });
         } catch (error) {
             res.status(500).json({ error: error });
         }

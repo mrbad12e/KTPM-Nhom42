@@ -25,10 +25,10 @@ export default class Class {
     static async getClass(req, res, next) {
         // For student login only
         try {
-            const query = 'SELECT * FROM show_class_info($1, $2)';
-            const values = [null, null];
+            const query = 'SELECT * FROM student.show_class_info($1, $2)';
+            let values = [null, null];
             if (req.body.class_id) values[0] = req.body.class_id;
-            if (req.body.student_id) values[1] = req.body.student_id;
+            if (req.body.semester) values[1] = req.body.semester;
             const { rows } = await client.query(query, values);
             return rows;
         } catch (error) {

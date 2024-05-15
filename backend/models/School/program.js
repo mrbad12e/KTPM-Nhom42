@@ -15,7 +15,6 @@ export default class Program {
                 }
                 query += conditions.join(' AND ');
             }
-            query += ';';
             const queryParams = Object.values(req.query);
             const { rows } = await client.query(query, queryParams);
             return rows;

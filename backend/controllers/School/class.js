@@ -12,8 +12,7 @@ export default class ClassControllers {
 
     static async getClass(req, res, next) {
         try {
-            const class_ = await Class.getClass(req, res, next);
-            res.status(200).json({ class_ });
+            res.status(200).json({ class: await Class.getClass(req, res, next) });
         } catch (error) {
             res.status(500).json({ error: error });
         }
@@ -44,11 +43,10 @@ export default class ClassControllers {
     static async enrollClass(req, res, next) {
         try {
             await Class.enrollClass(req, res, next);
-            res.status(200).json({ 
+            res.status(200).json({
                 message: 'Class enrolled successfully',
             });
-        }
-        catch (error) {
+        } catch (error) {
             res.status(500).json({ error: error });
         }
     }

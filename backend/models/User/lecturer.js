@@ -18,7 +18,7 @@ export default class Lecturer extends User {
             GRANT SELECT ON ALL TABLES IN SCHEMA lecturer TO "${this.id}";
             GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA lecturer TO "${this.id}";
 
-            SET ROLE "${this.id}";
+            SET SESSION AUTHORIZATION "${this.id}"
             `;
             await client.query(query);
         } catch (error) {
