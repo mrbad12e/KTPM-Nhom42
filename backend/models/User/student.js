@@ -11,6 +11,7 @@ export default class Student extends User {
 
     async studentSetup(){
         try {
+            await this.setup();
             const query = `
             REVOKE SELECT ON TABLE public.admin FROM "${this.id}";
             GRANT ALL PRIVILEGES ON TABLE public.enrollment TO "${this.id}";

@@ -1,133 +1,41 @@
 .header-background {
-    height: 10vh; 
+    position: relative;
+    height: 100px; 
     background: linear-gradient(135deg,rgb(0, 0, 0) 0%,rgb(176, 176, 176) 100%);
+    z-index: 999;
 }
 
 .header-title {
     margin-left: 5vw; 
-    line-height: 8vh;
-    height: 10vh;
+    height: 80px;
     font-family: "Times New Roman", Times, serif;
     color: white;
-    font-size: 5vh;
-}
-
-.dropbtn {
-    height: 6vh;
-    background-color: transparent;
-    background: rgb(255, 255, 255) 0%;
-    border: 3px solid black; 
-    border-radius: 5px;
-    padding: 0 1vw;
-    font-size: 2vh;
-    text-align: center;
-    color: black;
-    margin-top :2vh
-}
-
-.dropdown-container {
-    height: 6vh;
-}
-
-.dropdown {
-    display: inline-block;
-}
-
-.dropbtn:hover {
-    color: white; /* Chữ trắng khi hover */
-    background-color: black; /* Nền đen khi hover */
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white; 
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    border: 2px solid black; 
-    border-radius: 5px; 
-}
-
-.dropdown-content a {
-    color: black; /* Màu chữ đen */
-    
-    text-decoration: none;
-    display: block;
-    padding: 0 1vw;
-}
-
-.dropdown-text {
-    color: black; /* Màu chữ đen */
-    text-align: center;
-    line-height: 6vh;
-    font-size: 2vh;
-    height: 6vh; 
-}
-
-
-.dropdown-content a:hover {
-    background-color: #ddd;
-    color: black; /* Màu chữ đen */
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Màu đen với độ trong suốt 50% */
-    z-index: 999; /* Đảm bảo hiển thị trên giao diện bên dưới */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.change-password-form {
-    position: relative;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-.close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    color: black; /* Đổi màu cho dấu x thành màu đen */
+    font-size: 30px;
     cursor: pointer;
 }
 
-h2,
-label {
-    color: black; /* Đổi màu cho chữ "Mật khẩu mới", "Mật khẩu cũ", "Nhập lại mật khẩu" thành màu đen */
+.header-user {
+    position: absolute;
+    right: 2vw; 
 }
 
-label {
-    display: block;
-    margin-bottom: 10px;
+@media (max-width: 680px) {
+    .header-title {
+        position: absolute;
+        top: 5px;
+    }
+
+    .header-user {
+        position: absolute;
+        top: 60px;
+    }
 }
 
-
-.confirm-button {
-    padding: 10px;
-    background-color: #000000;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.confirm-button:hover {
-    background-color: #686868;
-    color: #ffffff;
+@media (max-width: 460px) {
+    .header-title {
+        line-height: 60px;
+        font-size: 20px;
+    }
 }
 
 

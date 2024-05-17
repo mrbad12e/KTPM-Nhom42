@@ -22,7 +22,8 @@ export default class UserControllers {
             }
             res.status(200).json({
                 success: true,
-                message: 'Login successfully' 
+                message: 'Login successfully',
+                id: id,
             });
         } catch (error) {
             res.status(500).json({ message: error.message });

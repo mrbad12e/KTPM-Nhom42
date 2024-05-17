@@ -3,8 +3,8 @@ import Subject from "../../models/School/subject.js";
 export default class SubjectControllers {
     static async createSubject(req, res, next) {
         try {
-            const newSubject = await Subject.createSubject(req, res, next);
-            res.status(200).json({ newSubject });
+            await Subject.createSubject(req, res, next);
+            res.status(200).json({ message: 'Subject created successfully' });
         } catch (error) {
             res.status(500).json({ error: error });
         }

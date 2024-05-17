@@ -1,15 +1,16 @@
 import React from 'react';
-import { Col, Button, Nav } from 'react-bootstrap';
-import { NavLink, useLocation } from 'react-router-dom';
-import styles from './Sidebar.module.css';
+import { Col,Button } from 'react-bootstrap';
+import { NavLink, useNavigate } from 'react-router-dom'; 
+import './Sidebar.css';
 import axios from 'axios';
 
-const Sidebar = () => {
-    const path = useLocation().pathname;
+
+export const Sidebar = () => {
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         try {
-            axios.get('/student/logout');
+            axios.get('/admin/logout');
             console.log('Logged out successfully');
             localStorage.clear();
             navigate('/');
@@ -19,29 +20,30 @@ const Sidebar = () => {
     };
 
     return (
-        <Nav variant="pills" defaultActiveKey={path} className={"flex-column"}>
-            <Nav.Link as={NavLink} to="/profile">
-                Thông tin sinh viên
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/timetable">
-                Thời khóa biểu
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/registration">
-                Đăng kí học tập
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/">
-                Kết quả học tập
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/">
-                Công nợ học phí
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/">
-                <Button variant="primary" onClick={handleLogout} className={styles["logout-button"]}>
-                    Đăng xuất
-                </Button>
-            </Nav.Link>
-        </Nav>
+        <Col md={3} className="left-content">
+            <ul className="sitemap">
+                <li>
+                    <NavLink to="/">Trang chủ</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/profile">Thông tin sinh viên</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/timetable">Thời khóa biểu</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/registration">Đăng kí học tập</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/">Kết quả học tập</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/">Công nợ học phí</NavLink>
+                </li>
+                <li>
+                    <Button variant="primary" onClick={handleLogout} className="logout-button">Đăng xuất</Button>
+                </li>
+            </ul>
+        </Col>
     );
 };
-
-export default Sidebar;

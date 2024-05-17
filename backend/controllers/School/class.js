@@ -3,8 +3,8 @@ import Class from '../../models/School/class.js';
 export default class ClassControllers {
     static async createClass(req, res, next) {
         try {
-            const newClass = await Class.createClass(req, res, next);
-            res.status(201).json({ newClass });
+            await Class.createClass(req, res, next);
+            res.status(201).json({ message: 'Class created successfully' });
         } catch (error) {
             res.status(500).json({ error: error });
         }
