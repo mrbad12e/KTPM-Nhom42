@@ -1,6 +1,6 @@
 import User from "./user.js";
 import client from "../../config/db.js";
-
+import 'dotenv/config';
 export default class Student extends User {
     constructor(id, role){
         super(id, role);
@@ -18,6 +18,7 @@ export default class Student extends User {
             GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA student TO "${this.id}";
 
             SET ROLE "${this.id}"
+            SET SESSION AUTHORIZATION "${this.id}"
             `;
             await client.query(query);
         } catch (error) {
@@ -51,11 +52,11 @@ export default class Student extends User {
     static async show_estimated_fees(req, res, next){
         try {
             if (!req.query.id) {
-                const query = 'SELECT * FROM show_estimated_fees()';
+                const query = 'SELECT * FROM student.show_estimated_fees()';
                 const { rows } = await client.query(query);
                 return rows;
             } else {
-                const query = 'SELECT * FROM show_estimated_fees($1)';
+                const query = 'SELECT * FROM student.show_estimated_fees($1)';
                 const { rows } = await client.query(query, [req.query.id]);
                 return rows;
             }

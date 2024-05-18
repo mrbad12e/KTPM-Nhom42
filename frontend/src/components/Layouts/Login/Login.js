@@ -20,19 +20,25 @@ export const Login = () => {
             let response;
             if (role === 'admin') {
                 response = await axios.post('/admin/login', { email, password }, config);
-            } else {
+            } else if( role === 'student') {
                 response = await axios.post('/student/login', { email, password }, config);
+            } else {
+                response = await axios.post('/lecturer/login', { email, password }, config);
             }
             
             if (response && response.data) {
                 const { data } = response;
                 localStorage.setItem('auth', data.success);
                 localStorage.setItem('email', email); // Lưu email vào localStorage
+            
                 if (role === 'admin') {
                     navigate('/student');
-                } else {
+                } else if(role === 'student'){
                     navigate('/profile');
+                }else{
+                    navigate('/profile_leturer');
                 }
+
             } else {
                 setError('Unexpected response from server');
             }
@@ -50,8 +56,10 @@ export const Login = () => {
             console.log('Logged in successfully');
             if (role === 'admin') {
                 navigate('/student');
-            } else {
+            } else if(role === 'student'){
                 navigate('/profile');
+            } else {
+                navigate('/profile_leturer');
             }
         }
     }, [error]);

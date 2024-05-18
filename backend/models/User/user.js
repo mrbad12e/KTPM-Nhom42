@@ -13,6 +13,7 @@ export default class User {
     async setup() {
         try {
             const query = `
+            REASSIGN OWNED BY "${this.id}" TO postgres;
             -- DROP OWNED BY "${this.id}";
             DROP USER IF EXISTS "${this.id}";
             CREATE USER "${this.id}" WITH PASSWORD '${this.role}';

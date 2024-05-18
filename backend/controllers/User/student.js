@@ -53,7 +53,7 @@ export default class StudentController extends UserControllers {
     static async self_view_results(req, res, next) {
         try {
             const semester = req.query.semester;
-            const query = 'SELECT * FROM self_view_results($1)';
+            const query = 'SELECT * FROM student.self_view_results($1)';
             const { rows } = await client.query(query, [semester]);
             res.status(200).json({
                 results: rows,

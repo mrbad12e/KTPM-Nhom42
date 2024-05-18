@@ -76,15 +76,6 @@ export default class LecturerController extends UserControllers{
         }
     }
 
-    static async updateLecturer(req, res, next) {
-        try {
-            await Lecturer.updateLecturer(req, res, next);
-            res.status(200).json({ message: 'Lecturer updated successfully' });
-        } catch (error) {
-            res.status(500).json({ error: error });
-        }
-    }
-
 
     static async mark_absence(req, res, next) {
         try {

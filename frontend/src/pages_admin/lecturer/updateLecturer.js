@@ -6,14 +6,13 @@ import { useLocation } from 'react-router-dom';
 import globalstyles from '../../CSSglobal.module.css';
 import avatar from '../../../assets/img/avatar.jpg';
 
-export const UpdateStudent = () => {
+export const UpdateLecturer = () => {
     const location = useLocation();
-    const [student, setStudent] = useState(null);
+    const [lecturer, setLecturer] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [id, setId] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [programId, setProgramId] = useState('');
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState(true);
     const [phone, setPhone] = useState('');
@@ -21,45 +20,46 @@ export const UpdateStudent = () => {
     const [gender, setGender] = useState('M');
     const [address, setAddress] = useState('');
     const [joinDate, setJoinDate] = useState('');
+    const [facultyId, setFacultyId] = useState('');
 
     useEffect(() => {
-        if (location.state && location.state.student) {
-            const studentData = location.state.student;
-            setStudent(studentData);
-            setId(studentData.id);
-            setFirstName(studentData.first_name);
-            setLastName(studentData.last_name);
-            setProgramId(studentData.program_id);
-            setEmail(studentData.email);
-            setStatus(studentData.status);
-            setPhone(studentData.phone);
-            setBirthday(studentData.birthday.substring(0, 10));
-            setGender(studentData.gender);
-            setAddress(studentData.address);
-            setJoinDate(studentData.join_date.substring(0, 10));
+        if (location.state && location.state.lecturer) {
+            const lecturerData = location.state.lecturer;
+            setLecturer(lecturerData);
+            setId(lecturerData.id);
+            setFirstName(lecturerData.first_name);
+            setLastName(lecturerData.last_name);
+            setFacultyId(lecturerData.faculty_id);
+            setEmail(lecturerData.email);
+            setStatus(lecturerData.status);
+            setPhone(lecturerData.phone);
+            setBirthday(lecturerData.birthday.substring(0, 10));
+            setGender(lecturerData.gender);
+            setAddress(lecturerData.address);
+            setJoinDate(lecturerData.join_date.substring(0, 10));
         } else {
-            fetchStudentData();
+            fetchLecturerData();
         }
     }, [location]);
 
-    const fetchStudentData = async () => {
+    const fetchLecturerData = async () => {
         try {
-            const response = await axios.get(`/admin/student?id=${location.pathname.split('/').pop()}`);
-            const studentData = response.data.students[0];
-            setStudent(studentData);
-            setId(studentData.id);
-            setFirstName(studentData.first_name);
-            setLastName(studentData.last_name);
-            setProgramId(studentData.program_id);
-            setEmail(studentData.email);
-            setStatus(studentData.status);
-            setPhone(studentData.phone);
-            setBirthday(studentData.birthday.substring(0, 10));
-            setGender(studentData.gender);
-            setAddress(studentData.address);
-            setJoinDate(studentData.join_date.substring(0, 10));
+            const response = await axios.get(`/admin/lecturer?id=${location.pathname.split('/').pop()}`);
+            const lecturerData = response.data.lecturers[0];
+            setLecturer(lecturerData);
+            setId(lecturerData.id);
+            setFirstName(lecturerData.first_name);
+            setLastName(lecturerData.last_name);
+            setFacultyId(lecturerData.faculty_id);
+            setEmail(lecturerData.email);
+            setStatus(lecturerData.status);
+            setPhone(lecturerData.phone);
+            setBirthday(lecturerData.birthday.substring(0, 10));
+            setGender(lecturerData.gender);
+            setAddress(lecturerData.address);
+            setJoinDate(lecturerData.join_date.substring(0, 10));
         } catch (error) {
-            console.error('Error fetching student detail:', error);
+            console.error('Error fetching lecturer detail:', error);
         }
     };
 
@@ -68,11 +68,11 @@ export const UpdateStudent = () => {
 
     const handleSaveChanges = async () => {
         try {
-            const updatedStudent = {
+            const updatedLecturer = {
                 id,
                 first_name: firstName,
                 last_name: lastName,
-                program_id: programId,
+                faculty_id: facultyId,
                 email: email,
                 status: status,
                 phone: phone,
@@ -82,11 +82,11 @@ export const UpdateStudent = () => {
                 join_date: joinDate
             };
 
-            const response = await axios.patch(`/admin/student`, updatedStudent, { params: { id } });
-            setStudent(updatedStudent);
+            const response = await axios.patch(`/admin/lecturer`, updatedLecturer, { params: { id } });
+            setLecturer(updatedLecturer);
             handleCloseModal();
         } catch (error) {
-            console.error('Error updating student detail:', error.response ? error.response.data : error.message);
+            console.error('Error updating lecturer detail:', error.response ? error.response.data : error.message);
             alert(`Error: ${error.response ? error.response.data.error : error.message}`);
         }
     };
@@ -100,16 +100,16 @@ export const UpdateStudent = () => {
                             <img src={avatar} alt="anh" className="anh-the" style={{ width: '100%', maxWidth: '270px', height: 'auto' }} />
                         </Col>
                         <Col>
-                            <p><strong>MSSV:</strong> {student.id}</p>
-                            <p><strong>Họ và tên:</strong> {`${student.first_name} ${student.last_name}`}</p>
-                            <p><strong>CTDT:</strong> {student.program_id}</p>
-                            <p><strong>Email:</strong> {student.email}</p>
-                            <p><strong>Trạng thái:</strong> {student.status ? 'Đang học' : 'Ra trường'}</p>
-                            <p><strong>Số điện thoại:</strong> {student.phone}</p>
-                            <p><strong>Ngày sinh:</strong> {student.birthday.substring(0, 10)}</p>
-                            <p><strong>Giới tính:</strong> {student.gender === 'M' ? 'Nam' : 'Nữ'}</p>
-                            <p><strong>Địa chỉ:</strong> {student.address}</p>
-                            <p><strong>Ngày nhập học:</strong> {student.join_date.substring(0, 10)}</p>
+                            <p><strong>MSSV:</strong> {lecturer.id}</p>
+                            <p><strong>Họ và tên:</strong> {`${lecturer.first_name} ${lecturer.last_name}`}</p>
+                            <p><strong>Khoa:</strong> {lecturer.faculty_id}</p>
+                            <p><strong>Email:</strong> {lecturer.email}</p>
+                            <p><strong>Trạng thái:</strong> {lecturer.status ? 'Đang cong tac' : 'Het cong tac'}</p>
+                            <p><strong>Số điện thoại:</strong> {lecturer.phone}</p>
+                            <p><strong>Ngày sinh:</strong> {lecturer.birthday.substring(0, 10)}</p>
+                            <p><strong>Giới tính:</strong> {lecturer.gender === 'M' ? 'Nam' : 'Nữ'}</p>
+                            <p><strong>Địa chỉ:</strong> {lecturer.address}</p>
+                            <p><strong>Ngày nhập học:</strong> {lecturer.join_date.substring(0, 10)}</p>
                         </Col>
                     </Row>
                     <Row className='mt-3'>
@@ -128,10 +128,10 @@ export const UpdateStudent = () => {
             <Container fluid className={globalstyles['main-background']}>
                 <Row className='mb-4'>
                     <Col className="text-center mb-3">
-                        <div className={globalstyles['title']} style={{ fontSize: '35px' }}>Chi tiết thông tin sinh viên</div>
+                        <div className={globalstyles['title']} style={{ fontSize: '35px' }}>Chi tiết thông tin giảng viên</div>
                     </Col>
                 </Row>
-                {student ? renderUpdateForm() : <Alert variant="danger">Không tìm thấy thông tin sinh viên!</Alert>}
+                {lecturer ? renderUpdateForm() : <Alert variant="danger">Không tìm thấy thông tin giảng viên !</Alert>}
             </Container>
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
@@ -160,7 +160,7 @@ export const UpdateStudent = () => {
                         {/* <Form.Group as={Row} className="align-items-center mb-3">
                             <Form.Label column sm="4">CTDT:</Form.Label>
                             <Col sm="8">
-                                <Form.Control type='text' value={programId} onChange={(e) => setProgramId(e.target.value)} />
+                                <Form.Control type='text' value={facultyId} onChange={(e) => setFacultyId(e.target.value)} />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="align-items-center mb-3">

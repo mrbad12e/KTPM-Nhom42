@@ -32,6 +32,9 @@ export default class UserControllers {
         try {
             res.clearCookie('token');
             res.status(200).json({ message: 'Logged out successfully' });
+
+            await client.query('SET ROLE postgres;');
+            await client.query('RESET SESSION AUTHORIZATION;');
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

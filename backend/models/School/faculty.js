@@ -5,7 +5,9 @@ export default class Faculty {
 
     static async getFaculty(req, res, next) {
         try {
-            
+            const query = 'SELECT * FROM show_faculty_info($1)';
+            const { rows } = await client.query(query, [req.query.id]);
+            return rows;
         } catch (error) {
             throw error;
         }

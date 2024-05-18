@@ -5,8 +5,9 @@ export default class FacultyControllers {
 
     static async getFaculty(req, res, next) {
         try {
-            const faculty = await Faculty.getFaculty(req, res, next);
-            res.status(200).json({ faculty });
+            res.status(200).json({ 
+                faculty: await Faculty.getFaculty(req, res, next),
+            });
         } catch (error) {
             res.status(500).json({ error: error });
         }
