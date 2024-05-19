@@ -70,7 +70,7 @@ export default class AdminController extends UserControllers {
 
     static async reset_gpa(req, res, next) {
         try {
-            const query = 'CALL reset_gpa()';
+            const query = 'CALL public.reset_gpa()';
             await client.query(query);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -80,11 +80,11 @@ export default class AdminController extends UserControllers {
     static async report_enrolled(req, res, next) {
         try {
             if (!req.body.semester) {
-                const query = 'SELECT * FROM report_enrolled();';
+                const query = 'SELECT * FROM public.report_enrolled();';
                 const result = await client.query(query);
                 res.status(200).json(result.rows);
             } else {
-                const query = 'SELECT * FROM report_enrolled($1);';
+                const query = 'SELECT * FROM public.report_enrolled($1);';
                 const values = [req.body.semester];
                 const result = await client.query(query, values);
                 res.status(200).json(result.rows);
@@ -96,7 +96,7 @@ export default class AdminController extends UserControllers {
 
     static async report_credit_debt(req, res, next) {
         try {
-            const query = 'CALL report_credit_debt()';
+            const query = 'CALL public.report_credit_debt()';
             await client.query(query);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -105,7 +105,7 @@ export default class AdminController extends UserControllers {
 
     static async report_scholarship(req, res, next) {
         try {
-            const query = 'CALL report_scholarship()';
+            const query = 'CALL public.report_scholarship()';
             await client.query(query);
         } catch (error) {
             res.status(500).json({ error: error.message });

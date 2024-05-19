@@ -30,7 +30,7 @@ export default class Student extends User {
 
     static async add_Student(req, res, next) {
         try {
-            const query = 'CALL add_student($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)';
+            const query = 'CALL public.add_student($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)';
             const values = [
                 req.body.id,
                 req.body.first_name,
@@ -77,11 +77,11 @@ export default class Student extends User {
     static async show_estimated_fees(req, res, next){
         try {
             if (!req.query.id) {
-                const query = 'SELECT * FROM show_estimated_fees()';
+                const query = 'SELECT * FROM student.show_estimated_fees()';
                 const { rows } = await client.query(query);
                 return rows;
             } else {
-                const query = 'SELECT * FROM show_estimated_fees($1)';
+                const query = 'SELECT * FROM student.show_estimated_fees($1)';
                 const { rows } = await client.query(query, [req.query.id]);
                 return rows;
             }
@@ -93,11 +93,11 @@ export default class Student extends User {
     static async report_student(req, res, next){
         try {
             if (!req.query.id) {
-                const query = 'SELECT * FROM report_student()';
+                const query = 'SELECT * FROM student.report_student()';
                 const { rows } = await client.query(query);
                 return rows;
             } else {
-                const query = 'SELECT * FROM report_student($1)';
+                const query = 'SELECT * FROM student.report_student($1)';
                 const { rows } = await client.query(query, [req.query.id]);
                 return rows;
             }

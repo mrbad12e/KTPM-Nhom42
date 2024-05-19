@@ -29,7 +29,7 @@ export default class Lecturer extends User {
 
     static async add_Lecturer(req, res, next) {
         try {
-            const query = 'CALL add_lecturer($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)';
+            const query = 'CALL public.add_lecturer($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)';
             const values = [
                 req.body.id,
                 req.body.first_name,

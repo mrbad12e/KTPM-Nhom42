@@ -3,7 +3,7 @@ import client from "../../config/db.js";
 export default class Class {
     static async createClass(req, res, next) {
         try {
-            const query = 'CALL add_class($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+            const query = 'CALL public.add_class($1, $2, $3, $4, $5, $6, $7, $8, $9)';
             const values = [
                 req.body.id,
                 req.body.type,
@@ -58,7 +58,7 @@ export default class Class {
 
     static async assignLecturer(req, res, next) {
         try {
-            const query = 'CALL assign_lecturer($1, $2)';
+            const query = 'CALL public.assign_lecturer($1, $2)';
             const values = [req.body.lecturer_id, req.body.class_id];
             await client.query(query, values);
         } catch (error) {
@@ -69,7 +69,7 @@ export default class Class {
     static async enrollClass(req, res, next) {
         try {
             const values = [req.body.student_id, req.body.class_id];
-            const query = 'CALL enroll_class($1, $2)';
+            const query = 'CALL student.enroll_class($1, $2)';
             await client.query(query, values);
         } catch (error) {
             throw error;
@@ -79,7 +79,7 @@ export default class Class {
     static async add_Timetable(req, res, next) {
         // Add timetable for a class
         try {
-            const query = 'CALL add_timetable($1, $2, $3, $4, $5)';
+            const query = 'CALL public.add_timetable($1, $2, $3, $4, $5)';
             const values = [
                 req.body.class_id,
                 req.body.weekday,
