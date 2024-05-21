@@ -1,5 +1,7 @@
 import User from "./user.js";
 import client from "../../config/db.js";
+import { hashPassword } from "../../middleware/hashPassword.js";
+import 'dotenv/config';
 
 export default class Student extends User {
     constructor(id, role){
@@ -9,6 +11,7 @@ export default class Student extends User {
 
     async studentSetup(){
         try {
+            await this.setup();
             const query = `
             REVOKE SELECT ON TABLE public.admin FROM "${this.id}";
             GRANT ALL PRIVILEGES ON TABLE public.enrollment TO "${this.id}";
@@ -17,11 +20,34 @@ export default class Student extends User {
             GRANT SELECT ON ALL TABLES IN SCHEMA student TO "${this.id}";
             GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA student TO "${this.id}";
 
-            SET ROLE "${this.id}"
+            SET SESSION AUTHORIZATION "${this.id}"
             `;
             await client.query(query);
         } catch (error) {
             throw error;
+        }
+    }
+
+    static async add_Student(req, res, next) {
+        try {
+            const query = 'CALL public.add_student($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)';
+            const values = [
+                req.body.id,
+                req.body.first_name,
+                req.body.last_name,
+                req.body.gender,
+                req.body.birthday,
+                req.body.status,
+                req.body.join_date,
+                req.body.address,
+                req.body.email,
+                req.body.phone,
+                req.body.program_id,
+            ];
+            await client.query(query, values);
+            await client.query('Update public.student set password = $1 where student_id = $2', [hashPassword('student'), req.body.id])
+        } catch (error) {
+            res.status(500).json({ error: error.message });
         }
     }
     
@@ -51,11 +77,11 @@ export default class Student extends User {
     static async show_estimated_fees(req, res, next){
         try {
             if (!req.query.id) {
-                const query = 'SELECT * FROM show_estimated_fees()';
+                const query = 'SELECT * FROM student.show_estimated_fees()';
                 const { rows } = await client.query(query);
                 return rows;
             } else {
-                const query = 'SELECT * FROM show_estimated_fees($1)';
+                const query = 'SELECT * FROM student.show_estimated_fees($1)';
                 const { rows } = await client.query(query, [req.query.id]);
                 return rows;
             }
@@ -67,11 +93,11 @@ export default class Student extends User {
     static async report_student(req, res, next){
         try {
             if (!req.query.id) {
-                const query = 'SELECT * FROM report_student()';
+                const query = 'SELECT * FROM student.report_student()';
                 const { rows } = await client.query(query);
                 return rows;
             } else {
-                const query = 'SELECT * FROM report_student($1)';
+                const query = 'SELECT * FROM student.report_student($1)';
                 const { rows } = await client.query(query, [req.query.id]);
                 return rows;
             }
@@ -98,55 +124,9 @@ export default class Student extends User {
         }
     }
 
-    static async deleteStudent(req, res, next){
-        try {
-        } catch (error) {
-            throw error;
-        }
-    }
+    // static async deleteStudent(req, res, next) {}
 
     //=======================
-    static async getTimetableFromDatabase(req, res, next) {
-        try {
-            const { email } = req.body; 
-            const query1 = `SELECT id FROM student WHERE email = $1`;
-            const studentResult = await client.query(query1, [email]);
-            const student_Id = studentResult.rows[0].id;
-    
-            const query2 = `SELECT class_id FROM enrollment WHERE student_id = $1`;    
-            const classResult = await client.query(query2, [student_Id]);
-            const class_ids = classResult.rows.map(row => row.class_id);
-    
-            const query3 = `SELECT * FROM timetable WHERE class_id = ANY($1) ORDER BY weekday`;    
-            const { rows: timetable } = await client.query(query3, [class_ids]);
-    
-            const query4 = `SELECT class.id, subject.name FROM class
-                            LEFT JOIN subject ON class.subject_id = subject.id
-                            WHERE class.id = ANY($1)`;
-            let subjectResult = await client.query(query4, [class_ids]);
-    
-            // Filter the subjectResult to contain only { id, name } objects
-            subjectResult = subjectResult.rows.map(row => ({ id: row.id, name: row.name }));
-    
-            // Join timetable with subjectResult
-            const combinedResult = timetable.map(item => {
-                const subjectInfo = subjectResult.find(subject => subject.id === item.class_id);
-                const startTime = item.start_time.slice(0, 2) + ':' + item.start_time.slice(2);
-                const endTime = item.end_time.slice(0, 2) + ':' + item.end_time.slice(2);
-                return { 
-                    class_id: item.class_id,
-                    weekday: item.weekday,
-                    startTime: startTime,
-                    endTime: endTime,
-                    location: item.location,
-                    subject_name: subjectInfo ? subjectInfo.name : null 
-                };
-            });
-            return combinedResult;
-        } catch (error) {
-            next(error); 
-        }
-    }
    
     static async getClassDetailFromDatabase(req, res, next) {
         try {

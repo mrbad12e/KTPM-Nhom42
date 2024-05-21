@@ -3,8 +3,8 @@ import Subject from "../../models/School/subject.js";
 export default class SubjectControllers {
     static async createSubject(req, res, next) {
         try {
-            const newSubject = await Subject.createSubject(req, res, next);
-            res.status(201).json({ newSubject });
+            await Subject.createSubject(req, res, next);
+            res.status(200).json({ message: 'Subject created successfully' });
         } catch (error) {
             res.status(500).json({ error: error });
         }
@@ -12,8 +12,10 @@ export default class SubjectControllers {
 
     static async getSubject(req, res, next) {
         try {
-            const subject = await Subject.getSubject(req, res, next);
-            res.status(200).json({ subject });
+            res.status(200).json({
+                subject: await Subject.getSubject(req, res, next),
+                message: 'Subject fetched successfully',
+            });
         } catch (error) {
             res.status(500).json({ error: error });
         }
@@ -28,12 +30,5 @@ export default class SubjectControllers {
         }
     }
 
-    static async deleteSubject(req, res, next) {
-        try {
-            const deletedSubject = await Subject.deleteSubject(req, res, next);
-            res.status(200).json({ deletedSubject });
-        } catch (error) {
-            res.status(500).json({ error: error });
-        }
-    }
+    // static async deleteSubject(req, res, next) {}
 }

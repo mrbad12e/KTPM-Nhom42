@@ -26,13 +26,4 @@ router.route('/login')
 router.route('/logout')
     .get(StudentController.logoutUser);
 
-router.route('/registration')
-    .post(StudentController.getSubject); 
-    
-router.route('/timetable')
-    .post(StudentController.getTimetable);
-
-router.route('/classDetail')
-    .post(StudentController.getClassDetail); 
-        
 export default router;

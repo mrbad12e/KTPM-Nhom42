@@ -72,11 +72,8 @@ export const Timetable = () => {
     useEffect(() => {
         const fetchTimetable = async () => {
             try {
-                const email = localStorage.getItem('email');
-                if (email) {
-                    const response = await axios.post('student/timetable', { email });
-                    setTimetable(response.data.TimetableInfo);
-                }
+                const response = await axios.get('student/timetable?semester=20212');
+                setTimetable(response.data.timetable);
             } catch (error) {
                 console.error('Error fetching timetable:', error.message);
             }

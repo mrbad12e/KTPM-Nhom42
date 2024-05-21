@@ -8,9 +8,10 @@ export default class Admin extends User {
     }
     async adminSetup() {
         try {
+            await this.setup();
             const query = `
             GRANT ALL PRIVILEGES ON DATABASE sms TO "${this.id}";
-            SET ROLE "${this.id}";
+            SET SESSION AUTHORIZATION "${this.id}"
             `;
             await client.query(query);
         } catch (error) {

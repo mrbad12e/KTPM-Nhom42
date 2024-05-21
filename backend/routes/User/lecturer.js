@@ -1,32 +1,31 @@
 import express from 'express';
-import AdminController from '../../controllers/User/admin.js';
+import LecturerController from '../../controllers/User/lecturer.js';
 import { isAuthUser } from '../../middleware/auth.js';
 const router = express.Router();
 
 router.route('/student')
-    .post(isAuthUser, AdminController.add_Student)
-    .get(isAuthUser, AdminController.readStudents)
-    // .delete(isAuthUser, AdminController.deleteStudent)
-    .patch(isAuthUser, AdminController.updateStudent);
-router.route('/lecturer')
-    .post(isAuthUser, AdminController.add_Lecturer)
-    .get(isAuthUser, AdminController.readLecturers)
-    // .delete(isAuthUser, AdminController.deleteLecturer)
-    .patch(isAuthUser, AdminController.updateLecturer);
+    .get(isAuthUser, LecturerController.readStudents);
 
-router.route('/report/enrolled').get(isAuthUser, AdminController.report_enrolled)
-router.route('/report/credit').get(isAuthUser, AdminController.report_credit_debt)
-router.route('/report/scholarship').get(isAuthUser, AdminController.report_scholarship)
+router.route('/')
+    .get(LecturerController.readLecturers)
+    .patch(isAuthUser, LecturerController.updateLecturer);
 
 router.route('/class')
-    .post(isAuthUser, AdminController.add_Class)
+    .get(isAuthUser, LecturerController.viewClassAssigned);
 
-router.route('/subject')
-    .post(isAuthUser, AdminController.add_Subject)
+// Diem danh
+router.route('/class/mark_absence').get(isAuthUser, LecturerController.mark_absence);
+router.route('/class/undo_absence').get(isAuthUser, LecturerController.undo_absence);
+router.route('/attendance')
+    .get(isAuthUser, LecturerController.report_attendance);
+
+router.route('/class/grade')
+    .get(isAuthUser, LecturerController.report_grade_distribution)
+    .patch(isAuthUser, LecturerController.update_grade);
 
 router.route('/login')
-    .post(AdminController.loginUser);
+    .post(LecturerController.loginUser);
 router.route('/logout')
-    .get(AdminController.logoutUser);
+    .get(LecturerController.logoutUser);
 
 export default router;
