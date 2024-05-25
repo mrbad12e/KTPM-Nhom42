@@ -7,26 +7,38 @@ export default class User {
     constructor(id, role) {
         this.id = id;
         this.role = role;
-        this.setup();
     }
     // Private method to create a new user in database with special role
     async setup() {
         try {
+            const query = `SELECT exists (SELECT 1 FROM pg_roles WHERE rolname = '${this.id}');`;
+            const { rows } = await client.query(query);
+            if (rows[0].exists) {
+                return;   
+            } else {
+                await this.createRole();
+            }          
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async createRole(){
+        try {
             const query = `
-            REASSIGN OWNED BY "${this.id}" TO postgres;
-            -- DROP OWNED BY "${this.id}";
-            DROP USER IF EXISTS "${this.id}";
-            CREATE USER "${this.id}" WITH PASSWORD '${this.role}';
+            CREATE ROLE "${this.id}" WITH LOGIN PASSWORD '${this.role}';
             GRANT USAGE ON SCHEMA public TO "${this.id}";
             GRANT SELECT ON ALL TABLES IN SCHEMA public TO "${this.id}";
 
             GRANT USAGE ON SCHEMA search TO "${this.id}";
             GRANT SELECT ON ALL TABLES IN SCHEMA search TO "${this.id}";
-            GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA search TO "${this.id}"`;
-            await client.query(query);            
+            GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA search TO "${this.id}"
+            `;
+            await client.query(query);
         } catch (error) {
             throw error;
         }
+        
     }
 
     static async getUserIdAndRole(req, res, next) {

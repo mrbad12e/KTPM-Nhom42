@@ -6,7 +6,7 @@ export default class LecturerController extends UserControllers{
     static async readStudents(req, res, next) {
         try {
             res.status(200).json({
-                students: await Student.readStudent(req, res, next),
+                students: await Class.readStudents(req, res, next),
                 message: 'Students fetched successfully',
             });
         } catch (error) {
@@ -16,8 +16,8 @@ export default class LecturerController extends UserControllers{
 
     static async viewClassAssigned(req, res, next) {
         try {
-            const semester = req.body.semester;
-            const query = 'CALL view_class_assigned($1)';
+            const semester = req.query.semester;
+            const query = 'SELECT * FROM lecturer.self_view_class_assigned($1)';
             const { rows } = await client.query(query, [semester]);
             res.status(200).json({
                 classes: rows,
@@ -31,10 +31,10 @@ export default class LecturerController extends UserControllers{
     static async report_grade_distribution(req, res, next) {
         try {
             const class_id = req.body.class_id;
-            const query = 'SELECT * FROM report_grade_distribution($1)';
+            const query = 'SELECT * FROM lecturer.report_grade_distribution($1)';
             const { rows } = await client.query(query, [class_id]);
             res.status(200).json({
-                rows,
+                rows: rows,
                 message: 'Grade distribution fetched successfully',
             });
         } catch (error) {
@@ -45,7 +45,7 @@ export default class LecturerController extends UserControllers{
     static async report_attendance(req, res, next) {
         try {
             const class_id = req.body.class_id;
-            const query = 'SELECT * FROM report_attendance($1)';
+            const query = 'SELECT * FROM lecturer.report_attendance($1)';
             const { rows } = await client.query(query, [class_id]);
             res.status(200).json({
                 rows,
@@ -76,10 +76,10 @@ export default class LecturerController extends UserControllers{
         }
     }
 
-
+    // Diem danh
     static async mark_absence(req, res, next) {
         try {
-            const query = 'CALL mark_absence($1, $2)';
+            const query = 'CALL lecturer.mark_absence($1, $2)';
             const values = [req.body.student_id, req.body.class_id];
             await client.query(query, values);
             res.status(200).json({ message: 'Absence marked successfully' });
@@ -90,10 +90,50 @@ export default class LecturerController extends UserControllers{
 
     static async undo_absence(req, res, next) {
         try {
-            const query = 'CALL undo_absence($1, $2)';
+            const query = 'CALL lecturer.undo_absence($1, $2)';
             const values = [req.body.student_id, req.body.class_id];
             await client.query(query, values);
             res.status(200).json({ message: 'Absence undone successfully' });
+        } catch (error) {
+            res.status(500).json({ error: error });
+        }
+    }
+
+    static async report_attendance(req, res, next) {
+        try {
+            const class_id = req.body.class_id;
+            const query = 'SELECT * FROM lecturer.report_attendance($1)';
+            const { rows } = await client.query(query, [class_id]);
+            res.status(200).json({
+                rows,
+                message: 'Attendance report fetched successfully',
+            });
+        } catch (error) {
+            res.status(500).json({ error: error });
+        }
+    }
+
+    // Tinh diem
+    static async report_grade_distribution(req, res, next) {
+        try {
+            const class_id = req.body.class_id;
+            const query = 'SELECT * FROM lecturer.report_grade_distribution($1)';
+            const { rows } = await client.query(query, [class_id]);
+            res.status(200).json({
+                rows,
+                message: 'Grade distribution fetched successfully',
+            });
+        } catch (error) {
+            res.status(500).json({ error: error });
+        }
+    }
+
+    static async update_grade(req, res, next) {
+        try {
+            const query = 'CALL lecturer.update_grade($1, $2, $3, $4)';
+            const values = [req.body.student_id, req.body.class_id, req.body.midterm_score, req.body.final_score];
+            await client.query(query, values);
+            res.status(200).json({ message: 'Grade updated successfully' });
         } catch (error) {
             res.status(500).json({ error: error });
         }
