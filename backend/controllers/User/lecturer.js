@@ -1,6 +1,7 @@
-import Student from '../../models/User/student.js';
 import Lecturer from '../../models/User/lecturer.js';
+import Class from '../../models/School/class.js';
 import UserControllers from './user.js';
+import client from '../../config/db.js';
 
 export default class LecturerController extends UserControllers{
     static async readStudents(req, res, next) {
@@ -28,19 +29,19 @@ export default class LecturerController extends UserControllers{
         }
     }
 
-    static async report_grade_distribution(req, res, next) {
-        try {
-            const class_id = req.body.class_id;
-            const query = 'SELECT * FROM lecturer.report_grade_distribution($1)';
-            const { rows } = await client.query(query, [class_id]);
-            res.status(200).json({
-                rows: rows,
-                message: 'Grade distribution fetched successfully',
-            });
-        } catch (error) {
-            res.status(500).json({ error: error });
-        }
-    }
+    // static async report_grade_distribution(req, res, next) {
+    //     try {
+    //         const class_id = req.body.class_id;
+    //         const query = 'SELECT * FROM lecturer.report_grade_distribution($1)';
+    //         const { rows } = await client.query(query, [class_id]);
+    //         res.status(200).json({
+    //             rows: rows,
+    //             message: 'Grade distribution fetched successfully',
+    //         });
+    //     } catch (error) {
+    //         res.status(500).json({ error: error });
+    //     }
+    // }
 
     static async report_attendance(req, res, next) {
         try {

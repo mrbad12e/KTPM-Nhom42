@@ -3,7 +3,7 @@ import client from "../../config/db.js";
 export default class Subject {
     static async createSubject(req, res, next) {
         try {
-            const query = 'CALL add_subject($1, $2, $3, $4, $5, $6, $7)';
+            const query = 'CALL public.add_subject($1, $2, $3, $4, $5, $6, $7)';
             const values = [
                 req.body.id,
                 req.body.name,
@@ -58,4 +58,6 @@ export default class Subject {
             throw error;
         }
     }
+
+    // static async deleteSubject(req, res, next) {}
 }

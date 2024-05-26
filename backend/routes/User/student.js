@@ -19,17 +19,17 @@ router.route('/results')
 router.route('/timetable')
     .get(isAuthUser, StudentController.self_view_timetable);
 
-router.route('/profile')
-    .post(StudentController.getUserInfo);       
+// router.route('/profile')
+//     .post(StudentController.getUserInfo);       
     
-router.route('/registration')
-    .post(StudentController.getSubject); 
+// router.route('/registration')
+//     .post(StudentController.getSubject); 
 
-router.route('/timetable')
-    .post(StudentController.getTimetable); 
+// router.route('/timetable')
+//     .post(StudentController.getTimetable); 
 
-router.route('/classDetail')
-    .post(StudentController.getClassDetail); 
+// router.route('/classDetail')
+//     .post(StudentController.getClassDetail); 
 
 // Bo qua doc thong tin giang vien vi thong tin giang vien public
 

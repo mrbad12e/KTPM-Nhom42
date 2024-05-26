@@ -63,8 +63,8 @@ const Sidebar_lecturer = () => {
             {showOverlay && <div className={styles['overlay']} onClick={handleHamburgerButtonClick}></div>}
             <div className={`${styles['left-content']} ${showMenu ? styles['show'] : ''}`}>
                 <ul className={styles['sitemap']} onClick={window.innerWidth <= 1000 ? handleHamburgerButtonClick : null}>
-                    <li><NavLink to="/faculty">Thông tin cá nhân</NavLink></li>
-                    <li><NavLink to="/subject">Quản lí lớp học</NavLink></li>
+                    <li><NavLink to="/profile_leturer">Thông tin cá nhân</NavLink></li>
+                    <li><NavLink to="/list_class">Quản lí lớp học</NavLink></li>
                     
                     <li><Button variant="primary" onClick={handleLogout} className={styles['logout-button']}>Đăng xuất</Button></li>
                 </ul>

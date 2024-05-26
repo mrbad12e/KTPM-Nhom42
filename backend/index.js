@@ -8,6 +8,9 @@ const app = express();
 app.use(cors({
     origin: process.env.FRONTEND_URL,
 }));
+
+app.use(cors());        // test
+
 app.use(cookieParser());
 app.use(express.json());
 app.use((req, res, next) => {

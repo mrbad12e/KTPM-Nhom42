@@ -13,15 +13,9 @@ router.route('/')
 router.route('/class')
     .get(isAuthUser, LecturerController.viewClassAssigned);
 
-router.route('/grade')
-    .get(isAuthUser, LecturerController.report_grade_distribution);
-
 // Diem danh
-router.route('/class/mark_absence')
-    .get(isAuthUser, LecturerController.mark_absence);
-router.route('/class/undo_absence')
-    .get(isAuthUser, LecturerController.undo_absence);
-
+router.route('/class/mark_absence').get(isAuthUser, LecturerController.mark_absence);
+router.route('/class/undo_absence').get(isAuthUser, LecturerController.undo_absence);
 router.route('/attendance')
     .get(isAuthUser, LecturerController.report_attendance);
 

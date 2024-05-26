@@ -1,5 +1,6 @@
 import User from './user.js';
 import client from '../../config/db.js';
+import { hashPassword } from '../../middleware/hashPassword.js';
 
 export default class Lecturer extends User {
     constructor(id, role) {

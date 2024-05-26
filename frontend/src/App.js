@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, HashRouter } from 'react-router-dom';
+import { Routes, Route, HashRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Header } from './components/Layouts/Header/Header';
 
@@ -16,12 +16,15 @@ import { UpdateLecturer } from './pages_admin/lecturer/updateLecturer';
 import { Faculty } from './pages_admin/faculty/faculty';
 import { Subject } from './pages_admin/subject/subject';
 import { ProfileLectuer } from './pages_lecturer/profile/profile';
+import { ListClass } from './pages_lecturer/management_class/list_class';
+import { ListStudent } from './pages_lecturer/management_class/list_student';
+import { ListProgram } from './pages_admin/faculty/program';
 
 
 export const App = () => {
     return (
         <HashRouter>
-            <Header />
+            <Header/>        
             <Routes>
                 //Student
                 <Route path="/" element={<Login />} />
@@ -36,9 +39,14 @@ export const App = () => {
                 <Route path="/lecturer" element={<Lecturer/>}/>
                 <Route path="/updateLecturer/:id" element={<UpdateLecturer/>}/>
                 <Route path="/faculty" element={<Faculty/>}/>
+                <Route path="/list_program/:id" element={<ListProgram/>}/>
                 <Route path="/subject" element={<Subject/>}/>
+
                 //Lecturer
                 <Route path="/profile_leturer" element={<ProfileLectuer/>}/>
+                <Route path="/list_class" element={<ListClass/>}/>
+                <Route path="/list_student/:id" element={<ListStudent/>}/>
+
                 
 
 

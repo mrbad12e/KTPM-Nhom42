@@ -29,4 +29,6 @@ export default class SubjectControllers {
             res.status(500).json({ error: error });
         }
     }
+
+    // static async deleteSubject(req, res, next) {}
 }
