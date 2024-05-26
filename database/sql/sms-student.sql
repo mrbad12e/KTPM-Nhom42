@@ -101,6 +101,7 @@ DROP FUNCTION IF EXISTS student.show_class_info;
 CREATE OR REPLACE FUNCTION student.show_class_info(i_class_id CHAR(6) DEFAULT NULL, i_semester CHAR(5) DEFAULT NULL)
     RETURNS TABLE(
         class_id CHAR(6),
+		lecturer_id CHAR(12),
         subject_id VARCHAR(7),
         subject_name VARCHAR(100),
         prerequisite_id VARCHAR(7),
@@ -119,7 +120,7 @@ AS $$
 BEGIN
     IF i_class_id IS NULL THEN
         RETURN QUERY (
-            SELECT c.id, c.subject_id, s.name, s.prerequisite_id, c.type, c.require_lab, s.study_credits, s.tuition_credits, c.current_cap, c.max_cap, t.weekday, t.start_time, t.end_time, t.location
+            SELECT c.id, c.lecturer_id, c.subject_id, s.name, s.prerequisite_id, c.type, c.require_lab, s.study_credits, s.tuition_credits, c.current_cap, c.max_cap, t.weekday, t.start_time, t.end_time, t.location
             FROM class c
                 JOIN subject s ON c.subject_id = s.id
                 JOIN timetable t ON c.id = t.class_id
@@ -128,7 +129,7 @@ BEGIN
     END IF;
 
     RETURN QUERY (
-        SELECT c.id, c.subject_id, s.name, s.prerequisite_id, c.type, c.require_lab, s.study_credits, s.tuition_credits, c.current_cap, c.max_cap, t.weekday, t.start_time, t.end_time, t.location
+        SELECT c.id, c.lecturer_id, c.subject_id, s.name, s.prerequisite_id, c.type, c.require_lab, s.study_credits, s.tuition_credits, c.current_cap, c.max_cap, t.weekday, t.start_time, t.end_time, t.location
         FROM class c
             JOIN subject s ON c.subject_id = s.id
             JOIN timetable t ON c.id = t.class_id
@@ -142,7 +143,7 @@ END $$;
 
 -- 2.2.3b. Check for slot availability, class prerequisites and lab requirements.
 -- Check for slot availability
-DROP FUNCTION IF EXISTS check_slot_availability CASCADE;
+DROP FUNCTION IF EXISTS check_cap CASCADE;
 CREATE OR REPLACE FUNCTION check_cap()
     RETURNS TRIGGER
     LANGUAGE plpgsql

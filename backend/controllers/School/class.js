@@ -59,4 +59,13 @@ export default class ClassControllers {
             res.status(500).json({ error: error });
         }
     }
+
+    static async add_Timetable(req, res, next) {
+        try {
+            await Class.add_Timetable(req, res, next);
+            res.status(200).json({ message: 'Timetable added successfully' });
+        } catch (error) {
+            res.status(500).json({ message: 'Time conflict' });
+        }
+    }
 }
