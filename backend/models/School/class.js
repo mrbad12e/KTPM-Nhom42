@@ -97,7 +97,7 @@ export default class Class {
     static async readStudents(req, res, next) {
         try {
             const query = 'SELECT * FROM public.enrollment WHERE class_id = $1';
-            const values = [req.body.class_id];
+            const values = [req.query.class_id];
             const { rows } = await client.query(query, values);
             return rows;
         } catch (error) {
