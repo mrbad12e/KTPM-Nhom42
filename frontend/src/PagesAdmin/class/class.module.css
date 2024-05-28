@@ -1,0 +1,12 @@
+.title {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  margin-bottom: 20px;
+}
+
+
+.select-semester {
+    font-size: 20px;
+    background-color: #ffffff
+  }
