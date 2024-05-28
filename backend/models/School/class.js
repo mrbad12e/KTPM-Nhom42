@@ -95,7 +95,7 @@ export default class Class {
     static async readStudents(req, res, next) {
         try {
             const query = `
-                SELECT e.*, st.last_name || ' ' || st.first_name as student_name FROM public.enrollment e
+                SELECT st.email, e.*, st.last_name || ' ' || st.first_name as student_name FROM public.enrollment e
                     Join public.student st ON e.student_id = st.id
                 WHERE class_id = $1`;
             const values = [req.query.class_id];

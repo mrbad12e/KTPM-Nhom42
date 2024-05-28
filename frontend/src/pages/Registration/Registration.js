@@ -95,7 +95,7 @@ export const Registration = () => {
                     <Col style={{maxWidth: '230px'}}>
                         <input type="text" className="form-control" name="subject_name" value={searchInput.subject_name} onChange={handleSearchInputChange} placeholder="Tên học phần" style={{width: '220px'}}/>
                     </Col>
-                    <Col><Button onClick={handleSearchButtonClick} className={globalstyles['button-search']} variant="dark">Tìm kiếm</Button></Col>
+                    <Col><Button onClick={handleSearchButtonClick} className={globalstyles['button-search']} variant="primary">Tìm kiếm</Button></Col>
                 </Row>
                 {(searched || subjectInfo.length > 0) && (
                     <div style={{ overflowX: 'auto' }}>
@@ -119,7 +119,7 @@ export const Registration = () => {
                                         <td style={{textAlign: 'center'}}>Thứ {row.weekday}: {row.start_time} - {row.end_time}</td>
                                         <td style={{textAlign: 'center'}}>{row.current_cap}/{row.max_cap}</td>
                                         <td style={{textAlign: 'center', border: 'none', backgroundColor: 'transparent' }}>
-                                        <Button variant="dark" onClick={() => handleAddCourse(row)}>
+                                        <Button variant="primary" onClick={() => handleAddCourse(row)}>
                                             <div style={{fontSize: '12px'}}>Chọn</div>
                                         </Button>
                                         </td>
@@ -150,7 +150,7 @@ export const Registration = () => {
                                 <td>{course.subject_name}</td>
                                 <td style={{textAlign: 'center'}}>Thứ {course.weekday}: {course.start_time} - {course.end_time}</td>
                                 <td style={{textAlign: 'center'}}>
-                                <Button variant="dark" onClick={() => handleDeleteCourse(course)}>
+                                <Button variant="danger" onClick={() => handleDeleteCourse(course)}>
                                     <div style={{fontSize: '12px'}}>Xoá</div>
                                 </Button>
                                 </td>
@@ -159,7 +159,7 @@ export const Registration = () => {
                     </tbody>
                 </Table>
                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '30px'}}>
-                    <Button onClick={handleRegister} variant="dark">Đăng ký</Button>
+                    <Button onClick={handleRegister} variant="primary">Đăng ký</Button>
                 </div>
             </Container>
         </div>
