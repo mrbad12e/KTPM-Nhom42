@@ -12,3 +12,17 @@
     border: 2px solid #000; 
     box-sizing: border-box;
 }
+
+.gridContainer {
+    margin:60px;
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 40px;
+}
+
+.confirmButton {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+  }

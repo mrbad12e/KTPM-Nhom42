@@ -45,9 +45,9 @@ export default class Student extends User {
                 req.body.program_id,
             ];
             await client.query(query, values);
-            await client.query('Update public.student set password = $1 where student_id = $2', [hashPassword('student'), req.body.id])
+            await client.query('Update public.student set password = $1 where id = $2', [hashPassword('student'), req.body.id])
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            throw error;
         }
     }
     

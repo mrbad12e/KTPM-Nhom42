@@ -63,7 +63,7 @@ export const Class = () => {
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>
-                <Link to="/addClass"><Button className={globalstyles.addButton} onClick={handleSearchButtonClick} variant="primary">Thêm mới</Button></Link>
+                <Link to="/addClass"><Button className={globalstyles.addButton} variant="primary">Thêm mới</Button></Link>
                 
                 <div style={{ display: 'flex', gap: '10px', marginLeft: '50px' }}>
                     <input className={globalstyles.input} type="text" value={inputClassID} onChange={handleInputClassID} placeholder="Nhập mã giảng viên" />

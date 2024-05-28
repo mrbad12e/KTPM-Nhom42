@@ -10,6 +10,7 @@ import { Student } from './PagesAdmin/student/student';
 import { AddStudent } from './PagesAdmin/student/addStudent';
 import { UpdateStudent } from './PagesAdmin/student/updateStudent';
 import { Lecturer } from './PagesAdmin/lecturer/lecturer';
+import { AddLecturer } from './PagesAdmin/lecturer/addLecturer';
 import { UpdateLecturer } from './PagesAdmin/lecturer/updateLecturer';
 import { Class } from './PagesAdmin/class/class';
 import { AddClass } from './PagesAdmin/class/addClass';
@@ -38,6 +39,7 @@ export const App = () => {
                 <Route path="/updateStudent/:id" element={<UpdateStudent/>}/>
 
                 <Route path="/lecturer" element={<Lecturer/>}/>
+                <Route path="/addLecturer" element={<AddLecturer/>}/>
                 <Route path="/updateLecturer/:id" element={<UpdateLecturer/>}/>
 
                 <Route path="/class" element={<Class/>}/>

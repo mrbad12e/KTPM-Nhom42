@@ -16,7 +16,6 @@ export default class AdminController extends UserControllers {
     static async add_Lecturer(req, res, next) {
         try {
             await Lecturer.add_Lecturer(req, res, next);
-            await client.query('Update public.lecturer set password = $1 where lecturer_id = $2', [hashPassword('lecturer'), req.body.id])
             res.status(200).json({ message: 'Lecturer added successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });

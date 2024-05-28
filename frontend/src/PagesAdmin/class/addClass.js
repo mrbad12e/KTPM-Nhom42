@@ -527,7 +527,7 @@ export const AddClass = () => {
                     </Container>
                 </div>
                 <div className={styles['confirmButton']}>
-                    <Button variant="primary" onClick={handleSave}>Lưu thông tin</Button>
+                    <Button variant="primary" onClick={handleSave} >Lưu thông tin</Button>
                     <Button variant="danger" onClick={handleCancel} style={{marginLeft: '10px'}}>Hủy bỏ</Button>
                 </div>
             </Container>

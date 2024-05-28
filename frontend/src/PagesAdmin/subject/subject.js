@@ -67,7 +67,6 @@ export const Subject = () => {
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-        fetchSearchSubject();
     };
 
     const handleShowEditModal = (subject) => {

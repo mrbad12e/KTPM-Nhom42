@@ -75,7 +75,7 @@ export const Lecturer = () => {
             <Sidebar_admin/>
             <Container fluid className={globalstyles['main-background']}>
                 <div className={globalstyles['left-title']}>Danh sách giảng viên</div>
-                <Button className={globalstyles.addButton} onClick={handleSearchButtonClick} variant="primary">Thêm mới</Button> 
+                <Link to="/addLecturer"><Button className={globalstyles.addButton} variant="primary">Thêm mới</Button></Link>
                 <div style={{ display: 'flex', gap: '10px', marginLeft: '50px' }}>
                     <input className={globalstyles.input} type="text" value={inputID} onChange={inputValueID} placeholder="Nhập mã giảng viên" />
                     <input className={globalstyles.input} type="text" value={inputFaculty} onChange={inputValueFaculty} placeholder="Nhập mã khoa" />

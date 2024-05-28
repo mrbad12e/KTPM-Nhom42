@@ -1,6 +1,6 @@
-import User from './user.js';
-import client from '../../config/db.js';
-import { hashPassword } from '../../middleware/hashPassword.js';
+import User from "./user.js";
+import client from "../../config/db.js";
+import { hashPassword } from "../../middleware/hashPassword.js";
 
 export default class Lecturer extends User {
     constructor(id, role) {
@@ -44,10 +44,9 @@ export default class Lecturer extends User {
                 req.body.faculty_id,
             ];
             await client.query(query, values);
-            await client.query('Update public.lecturer set password = $1 where lecturer_id = $2', [hashPassword('lecturer'), req.body.id])
-            res.status(200).json({ message: 'Lecturer added successfully' });
+            await client.query('Update public.lecturer set password = $1 where id = $2', [hashPassword('lecturer'), req.body.id])
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            throw error;
         }
     }
     

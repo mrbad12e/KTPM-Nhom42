@@ -72,7 +72,11 @@ const Sidebar_admin = () => {
                     <hr className={styles.separator} />
                     <li><NavLink to="/lecturer" className={location.pathname === '/lecturer' ? styles.active : ''}>Giảng viên</NavLink></li>
                     <hr className={styles.separator} />
-                    <li><NavLink to="/student" className={location.pathname === '/student' ? styles.active : ''}>Sinh viên</NavLink></li>
+                    <li>
+                    <NavLink to="/student" className={['/student', '/addStudent', '/updateStudent'].some(path => location.pathname.includes(path)) ? styles.active : ''}>
+                        Sinh viên
+                    </NavLink>
+                    </li>
                     <hr className={styles.separator} />
                     <li><Button variant="primary" onClick={handleLogout} className={styles['logout-button']}>Đăng xuất</Button></li>
                 </ul>
