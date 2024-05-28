@@ -3,6 +3,7 @@ import { Table, Container, Row, Col, Button } from 'react-bootstrap';
 import Sidebar_student from '../../components/Layouts/Sidebar/sidebarStudent';
 import globalstyles from '../../CSSglobal.module.css';
 import Pagination from '../../components/pagination/pagination'
+import axios from 'axios';
 
 export const Registration = () => {
     const [subjectInfo, setSubjectInfo] = useState([]); 
@@ -14,30 +15,37 @@ export const Registration = () => {
 
     const fetchSubjectInfo = async () => {
         try {
-            const response = await fetch('student/registration', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(searchInput)
-            });
+            const response = await axios.get('class?semester=20212');
+            const subjects = response.data.class; 
 
-            const data = await response.json();
-            setSubjectInfo(data.SubjectInfo);
-            setTotalPages(Math.ceil(data.SubjectInfo.length / 10));
+            const formattedSubjects = subjects.map(subject => {
+                return {
+                    ...subject,
+                    start_time: subject.start_time.replace(/(\d{2})(\d{2})/, "$1:$2"),
+                    end_time: subject.end_time.replace(/(\d{2})(\d{2})/, "$1:$2")
+                };
+            });
+            const filteredSubjects = formattedSubjects.filter(subject => {
+                return (
+                    subject.subject_id.toLowerCase().includes(searchInput.subject_id.toLowerCase()) &&
+                    subject.subject_name.toLowerCase().includes(searchInput.subject_name.toLowerCase())
+                );
+            });
+            setSubjectInfo(filteredSubjects);
+            setTotalPages(Math.ceil(filteredSubjects.length / 10)); 
             setSearched(true); 
         } catch (error) {
             console.error('Error fetching subject information:', error);
         }
     };
-
+    
     useEffect(() => {
         fetchSubjectInfo();
     }, []);
 
     const handleAddCourse = (course) => {
         if (course.current_cap < course.max_cap) {
-            const isExist = selectedCourses.some(selectedCourse => selectedCourse.id === course.id);
+            const isExist = selectedCourses.some(selectedCourse => selectedCourse.class_id === course.class_id);
             if (!isExist) {
                 setSelectedCourses(prevCourses => [...prevCourses, course]); 
             } else {
@@ -47,6 +55,8 @@ export const Registration = () => {
             console.log('Lớp học đã đầy, không thể thêm.');
         }
     };
+    
+    
     
     const handleDeleteCourse = (course) => {
         const updatedCourses = selectedCourses.filter(selectedCourse => selectedCourse.id !== course.id);
@@ -103,10 +113,10 @@ export const Registration = () => {
                             <tbody>
                                 {subjectInfo.slice((currentPage - 1) * 10, currentPage * 10).map((row, index) => (
                                     <tr key={index}>
-                                        <td style={{textAlign: 'center'}}>{row.id}</td>
+                                        <td style={{textAlign: 'center'}}>{row.class_id}</td>
                                         <td style={{textAlign: 'center'}}>{row.subject_id}</td>
-                                        <td>{row.name}</td>
-                                        <td style={{textAlign: 'center'}}>{row.start_time} - {row.end_time}</td>
+                                        <td>{row.subject_name}</td>
+                                        <td style={{textAlign: 'center'}}>Thứ {row.weekday}: {row.start_time} - {row.end_time}</td>
                                         <td style={{textAlign: 'center'}}>{row.current_cap}/{row.max_cap}</td>
                                         <td style={{textAlign: 'center', border: 'none', backgroundColor: 'transparent' }}>
                                         <Button variant="dark" onClick={() => handleAddCourse(row)}>
@@ -135,10 +145,10 @@ export const Registration = () => {
                     <tbody>
                         {selectedCourses.map((course, index) => (
                             <tr key={index}>
-                                <td style={{textAlign: 'center'}}>{course.id}</td>
+                                <td style={{textAlign: 'center'}}>{course.class_id}</td>
                                 <td style={{textAlign: 'center'}}>{course.subject_id}</td>
-                                <td>{course.name}</td>
-                                <td style={{textAlign: 'center'}}>{course.start_time} - {course.end_time}</td>
+                                <td>{course.subject_name}</td>
+                                <td style={{textAlign: 'center'}}>Thứ {course.weekday}: {course.start_time} - {course.end_time}</td>
                                 <td style={{textAlign: 'center'}}>
                                 <Button variant="dark" onClick={() => handleDeleteCourse(course)}>
                                     <div style={{fontSize: '12px'}}>Xoá</div>

@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Button } from 'react-bootstrap';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import MenuIcon from '../../../../assets/img/Menu.jpg';
 import styles from './Sidebar.module.css';
 
 const Sidebar_admin = () => {
     const navigate = useNavigate();
-    const [showMenu, setShowMenu] = useState(window.innerWidth > 1000); // Ban đầu hiển thị sidebar
-    const [showOverlay, setShowOverlay] = useState(false); // Trạng thái hiển thị lớp phủ
+    const location = useLocation();
+    const [showMenu, setShowMenu] = useState(window.innerWidth > 1000); 
+    const [showOverlay, setShowOverlay] = useState(false); 
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         try {
-            axios.get('/admin/logout');
+            await axios.get('/admin/logout');
             console.log('Logged out successfully');
             localStorage.clear();
             navigate('/');
@@ -22,12 +23,13 @@ const Sidebar_admin = () => {
     };
 
     const handleHamburgerButtonClick = () => {
-        setShowMenu(!showMenu && window.innerWidth <= 1000);
-        setShowOverlay(!showMenu && window.innerWidth <= 1000); // Hiển thị lớp phủ khi ẩn sidebar
+        const shouldShow = !showMenu && window.innerWidth <= 1000;
+        setShowMenu(shouldShow);
+        setShowOverlay(shouldShow); 
     };
 
     const handleOutsideClick = (event) => {
-        if (!event.target.closest('.left-content') && showMenu && window.innerWidth <= 1000) {
+        if (!event.target.closest(`.${styles['left-content']}`) && showMenu && window.innerWidth <= 1000) {
             setShowMenu(false);
             setShowOverlay(false);
         }
@@ -43,7 +45,7 @@ const Sidebar_admin = () => {
     useEffect(() => {
         const handleResize = () => {
             setShowMenu(window.innerWidth > 1000);
-            setShowOverlay(false); // Ẩn lớp phủ khi resize màn hình
+            setShowOverlay(false); 
         };
 
         window.addEventListener('resize', handleResize);
@@ -51,7 +53,6 @@ const Sidebar_admin = () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-
 
     return (
         <Col>
@@ -63,11 +64,16 @@ const Sidebar_admin = () => {
             {showOverlay && <div className={styles['overlay']} onClick={handleHamburgerButtonClick}></div>}
             <div className={`${styles['left-content']} ${showMenu ? styles['show'] : ''}`}>
                 <ul className={styles['sitemap']} onClick={window.innerWidth <= 1000 ? handleHamburgerButtonClick : null}>
-                    <li><NavLink to="/faculty">Khoa</NavLink></li>
-                    <li><NavLink to="/subject">Học phần</NavLink></li>
-                    <li><NavLink to="/class">Lớp</NavLink></li>
-                    <li><NavLink to="/lecturer">Giảng viên</NavLink></li>
-                    <li><NavLink to="/student">Sinh viên</NavLink></li>
+                    <li><NavLink to="/faculty" className={location.pathname === '/faculty' ? styles.active : ''}>Khoa</NavLink></li>
+                    <hr className={styles.separator} />
+                    <li><NavLink to="/subject" className={location.pathname === '/subject' ? styles.active : ''}>Học phần</NavLink></li>
+                    <hr className={styles.separator} />
+                    <li><NavLink to="/class" className={location.pathname === '/class' ? styles.active : ''}>Lớp</NavLink></li>
+                    <hr className={styles.separator} />
+                    <li><NavLink to="/lecturer" className={location.pathname === '/lecturer' ? styles.active : ''}>Giảng viên</NavLink></li>
+                    <hr className={styles.separator} />
+                    <li><NavLink to="/student" className={location.pathname === '/student' ? styles.active : ''}>Sinh viên</NavLink></li>
+                    <hr className={styles.separator} />
                     <li><Button variant="primary" onClick={handleLogout} className={styles['logout-button']}>Đăng xuất</Button></li>
                 </ul>
             </div>

@@ -1,17 +1,19 @@
 .header-background {
     position: relative;
     height: 100px; 
-    background: linear-gradient(135deg,rgb(0, 0, 0) 0%,rgb(176, 176, 176) 100%);
-    z-index: 999;
+    background: linear-gradient(5deg,rgb(30, 145, 246) 30%,rgb(182, 220, 243) 100%);
+    z-index: 3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .header-title {
     margin-left: 5vw; 
     height: 80px;
-    font-family: "Times New Roman", Times, serif;
-    color: white;
-    font-size: 30px;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: rgb(255, 0, 0);
+    font-size: 40px;
     cursor: pointer;
+    text-shadow: 1px 0 0 #adadad; 
 }
 
 .header-user {
@@ -19,9 +21,10 @@
     right: 2vw; 
 }
 
-@media (max-width: 680px) {
+@media (max-width: 660px) {
     .header-title {
         position: absolute;
+        font-size: 30px;
         top: 5px;
     }
 
@@ -30,12 +33,4 @@
         top: 60px;
     }
 }
-
-@media (max-width: 460px) {
-    .header-title {
-        line-height: 60px;
-        font-size: 20px;
-    }
-}
-
 

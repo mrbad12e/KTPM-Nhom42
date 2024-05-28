@@ -2,7 +2,6 @@ import Student from '../../models/User/student.js';
 import Lecturer from '../../models/User/lecturer.js';
 import UserControllers from './user.js';
 import client from '../../config/db.js';
-import Class from '../../models/School/class.js';
 
 export default class AdminController extends UserControllers {
     static async add_Student(req, res, next) {

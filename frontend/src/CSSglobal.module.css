@@ -1,11 +1,5 @@
 html, body {
-    margin: 0;
-    padding: 0;
     background-color: #d7d7d7;
-}
-
-body {
-    background-color: linear-gradient(135deg,rgb(0, 0, 0) 0%,rgb(176, 176, 176) 100%);
 }
 
 .main-background {
@@ -15,22 +9,19 @@ body {
     margin-top: 2vh; 
     margin-left: 20vw;
     width: 78vw;
-    padding-bottom: 30px;
+    min-height: 80vh;
+    padding: 20px 30px 30px 30px;
 }
 
 .title {
-    position: relative;
-    top: 20px;
     text-align: center;
     font-size: 25px;
-    font-weight: bold;
 }
 
 .left-title {
-    position: relative;
-    margin-top: 10px;
     margin-left: 10px;
     font-size: 25px;
+    margin-bottom: 20px;
 }
 
 .search-input{
@@ -38,15 +29,21 @@ body {
     margin-left: 35px;
 }
 
-.button-search{
-    position: absolute;
+.smallButton{
     height: 30px; 
     font-size: 14px;
     text-align: 'center'; 
     line-height: normal;
-    margin-left: 10px;
-    margin-top: 2px;
 }
+
+.input {
+    background-color:#ffffff;
+    padding: 0 20px 5px 15px;
+    width: 180px;
+    height: 33px;
+    border-radius: 5px;
+    border: 0.1px solid rgb(208, 208, 208);
+  }
 
 .table-1000 {
     max-width: 1000px;
@@ -60,7 +57,7 @@ body {
     margin-top: 15px;
 }
 
-.add-button {
+.addButton {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -83,9 +80,44 @@ body {
     border-radius: 5px;
 }
 
+.icon-container {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center; 
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: rgb(35, 170, 243);
+    margin-left: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+.icon-container:hover {
+    background-color: rgb(30, 150, 220); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
+}
+
+.icon-container:active {
+    background-color: rgb(25, 130, 200); 
+    transform: scale(0.95);
+}
+
+.icon-container:focus {
+    outline: none; 
+    box-shadow: 0 0 0 3px rgba(35, 170, 243, 0.5);
+}
+
+@media screen and (max-width: 1250px) {
+    .main-background  {
+        margin-left: 270px;
+        width: calc(98vw - 270px);
+    }
+}
+
 @media screen and (max-width: 1000px) {
     .main-background  {
-        margin-left: 4vw;
-        width: 92vw;
+        margin-left: 2vw;
+        width: 96vw;
     }
 }

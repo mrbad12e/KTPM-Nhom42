@@ -5,7 +5,7 @@ export default class Program {
 
     static async getProgram(req, res, next) {
         try {
-            const query = 'SELECT * FROM public.program';
+            let query = 'SELECT * FROM public.program';
             if (Object.keys(req.query).length > 0) {
                 query += ' WHERE ';
                 const conditions = [];

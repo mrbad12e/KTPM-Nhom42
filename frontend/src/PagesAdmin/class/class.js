@@ -28,17 +28,18 @@ export const Class = () => {
             <Sidebar_admin/>
             <Container fluid className={globalstyles['main-background']}>
                 <div className={globalstyles['left-title']}>Danh sách lớp</div>
-                <Link to="/addClass"><Button className={globalstyles['add-button']} variant="dark"> Thêm mới</Button></Link>
-                <div className={globalstyles['search-input']}>
-                    <input type="text" value={inputValue} onChange={handleChange} placeholder="Tìm tên lớp hoặc mã lớp"/>
-                    <Button className={globalstyles['button-search']} onClick={handleSearchButtonClick} variant="dark">Tìm kiếm</Button> 
-                </div>
+                <Link to="/addClass"><Button className={globalstyles.addButton} onClick={handleSearchButtonClick} variant="primary">Thêm mới</Button></Link>
+                {/* <div style={{ display: 'flex', gap: '10px', marginLeft: '50px' }}>
+                    <input className={globalstyles.input} type="text" value={inputID} onChange={inputValueID} placeholder="Nhập mã giảng viên" />
+                    <input className={globalstyles.input} type="text" value={inputFaculty} onChange={inputValueFaculty} placeholder="Nhập mã khoa" />
+                    <Button className={globalstyles.smallButton} variant="primary" onClick={handleSearchButtonClick}>Tìm kiếm</Button>
+                </div> */}
                 <Table className={globalstyles['table-1300']}>
                     <thead>
                         <tr style={{ textAlign: 'center', whiteSpace: '2px' }}>
                             <th>STT</th>
-                            <th>Tên môn học</th>
                             <th>Mã lớp</th>
+                            <th>Tên học phần</th>
                             <th>Mã học phần</th>
                             <th>Thao tác</th>
                         </tr>

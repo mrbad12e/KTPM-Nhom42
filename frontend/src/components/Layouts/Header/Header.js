@@ -29,7 +29,7 @@ export const Header = () => {
             <Navbar.Brand className={styles["header-title"]}>ĐẠI HỌC BÁCH KHOA HÀ NỘI</Navbar.Brand>
             {shouldShowGreeting && (
                 <Dropdown className={styles["header-user"]}>
-                    <Dropdown.Toggle variant="dark" style={{ border: 'none' }} id="dropdown-basic">
+                    <Dropdown.Toggle variant="primary" id="dropdown-basic">
                         Xin chào user
                     </Dropdown.Toggle>
                     <Dropdown.Menu>

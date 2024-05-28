@@ -1,0 +1,14 @@
+.flexRow {
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    flex-wrap: wrap; 
+    gap: 60px;
+}
+
+.imageStudent {
+    width: 340px;
+    border: 2px solid #000; 
+    box-sizing: border-box;
+}

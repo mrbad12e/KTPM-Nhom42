@@ -7,7 +7,7 @@ router.route('/')
     .get(isAuthUser, StudentController.readStudent)
     .patch(isAuthUser, StudentController.updateStudent);
 
-router.route('/estimated_fees')
+router.route('/estimated_fees') // Bo qua
     .get(isAuthUser, StudentController.show_estimated_fees);
 
 router.route('/enrolled')
@@ -18,6 +18,9 @@ router.route('/results')
 
 router.route('/timetable')
     .get(isAuthUser, StudentController.self_view_timetable);
+
+router.route('/report_student')                                               // test report_student
+    .get(isAuthUser, StudentController.report_student);
 
 // Bo qua doc thong tin giang vien vi thong tin giang vien public
 

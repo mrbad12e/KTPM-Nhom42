@@ -1,38 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Container, Row, Col, Button } from 'react-bootstrap';
+import { Table, Container } from 'react-bootstrap';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
-import ViewIcon from '../../../assets/img/View.png';
-import DeleteIcon from '../../../assets/img/Delete.png';
-import styles from './faculty.module.css';
 import globalstyles from '../../CSSglobal.module.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Pagination from '../../components/pagination/pagination';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 export const Faculty = () => {
-    const [inputValue, setInputValue] = useState('');
+    const [faculty, setFaculty] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const navigate = useNavigate();
 
-    const handleChange = (event) => {
-        setInputValue(event.target.value);
+    useEffect(() => {
+        fetchSearchFaculty();
+    }, [currentPage]);
+
+    const fetchSearchFaculty = async () => {
+        try {
+            let response = await axios.get(`/faculty/`);
+            const facultyData = response.data.faculty;
+            setFaculty(facultyData);
+            setTotalPages(Math.ceil(facultyData.length / 10));
+        } catch (error) {
+            console.error('Lỗi khi lấy dữ liệu khoa:', error);
+        }
     };
 
-    const handleSearchButtonClick = () => {
-        console.log('Đã nhấn nút Tìm kiếm với giá trị:', inputValue);
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
     };
 
+    const handleViewProgram =async(facultyId) => {
+        try{
+            await axios.get(`/program/?faculty_id=${facultyId}`);
+            navigate(`/program/${facultyId}`);
+        }catch (error) {
+            console.error('Error fetching list program:', error.message);
+        }
+    }
 
     return (
         <div>
-            <Sidebar_admin/>
+            <Sidebar_admin />
             <Container fluid className={globalstyles['main-background']}>
-                <div className={globalstyles['left-title']}>Danh sách lớp</div>
-                <Button className={globalstyles['add-button']} onClick={handleSearchButtonClick} variant="dark">Thêm mới</Button> 
-                <div className={globalstyles['search-input']}>
-                    <input type="text" value={inputValue} onChange={handleChange} placeholder="Tìm tên lớp hoặc mã lớp"/>
-                    <Button className={globalstyles['button-search']} variant="dark">Tìm kiếm</Button> 
-                </div>
+                <div className={globalstyles['left-title']}>Danh sách khoa</div>
                 <Table className={globalstyles['table-1300']}>
                     <thead>
-                        <tr style={{ textAlign: 'center', whiteSpace: '2px' }}>
-                            <th>STT</th>
+                        <tr style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>
                             <th>Mã khoa</th>
                             <th>Tên Khoa</th>
                             <th>Địa điểm</th>
@@ -40,25 +57,25 @@ export const Faculty = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style={{whiteSpace: '2px'}}>
-                            <td style={{ textAlign: 'center'}}>20212</td>
-                            <td>Lương Phúc Quang </td>
-                            <td>Truyền thông số và Kỹ thuật đa phương tiện</td>
-                            <td style={{ textAlign: 'center'}}>4.0</td>
-                            <td style={{ display: 'flex', justifyContent: 'center' }}>
-                                <div className={globalstyles['img-button-container']} >
-                                    <img src={ViewIcon} alt="View" className={globalstyles['img-button']} />
-                                </div>
-                                <div className={globalstyles['img-button-container']} style ={{marginLeft: '10px'}}>
-                                    <img src={DeleteIcon} alt="Delete" className={globalstyles['img-button']} />
-                                </div>
-                            </td>
-                        </tr>
+                        {faculty.slice((currentPage - 1) * 10, currentPage * 10).map(fac => (
+                            <tr key={fac.id}>
+                                <td style={{ textAlign: 'center' }}>{fac.id}</td>
+                                <td>{fac.name}</td>
+                                <td style={{ textAlign: 'center' }}>{fac.location}</td>
+                                <td style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <div className={globalstyles['icon-container']}  onClick={() => {handleViewProgram(fac.id)}}>
+                                        <FontAwesomeIcon color="white" icon={faEye} />
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
+                <div>
+                    <Pagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
+                </div>
             </Container>
         </div>
     );
 };
-
 

@@ -1,122 +1,119 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Row, Col, Container, Table } from 'react-bootstrap';
+import { Dropdown, Row, Col, Container, Table } from 'react-bootstrap';
 import axios from 'axios';
 import Sidebar_student from '../../components/Layouts/Sidebar/sidebarStudent'; 
 import globalstyles from '../../CSSglobal.module.css';
-import styles from './timetable.module.css';
+import styles from './Timetable.module.css';
 
 export const Timetable = () => {
-    const [timetable, setTimetable] = useState([]);
-    const [selectedClassInfo, setSelectedClassInfo] = useState(null);
-    const [selectedSubjectName, setSelectedSubjectName] = useState('');
-    const [selectedSemester, setSelectedSemester] = useState('20212');
-    const [tableWidth, setTableWidth] = useState(null);
 
+    // select Semester
+    const [selectedSemester, setSelectedSemester] = useState('20212');
+    const handleSelect = (eventKey) => {
+        setSelectedSemester(eventKey);
+    };
+    
+    // get TimeTable
+    const [timetable, setTimetable] = useState([]);
+
+    useEffect(() => {
+        const fetchTimetable = async () => {
+            try {
+                const response = await axios.get(`student/timetable?semester=${selectedSemester}`);
+                const sortedTimetable = response.data.timetable.sort((a, b) => {
+                    if (a.weekday !== b.weekday) {
+                        return a.weekday - b.weekday;
+                    }
+                    return a.start_time.localeCompare(b.start_time);
+                });
+                setTimetable(sortedTimetable);
+            } catch (error) {
+                console.error('Error fetching timetable:', error.message);
+            }
+        };
+        fetchTimetable();
+    }, [selectedSemester]);
+
+    const formatTime = (time) => {
+        if (time.length !== 4) return time;
+        return `${time.substring(0, 2)}:${time.substring(2)}`;
+    };   
+
+    // select Class
+    const [selectedClassInfo, setSelectedClassInfo] = useState(null);
+    const handleClick = async (classInfo) => {
+        try {    
+            const response = await axios.get(`class/students?class_id=${classInfo.class_id}`);      
+            const students = response.data.students;
+
+            console.log(students);
+            const response1 = await axios.get(`class?class_id=${classInfo.class_id}`);   
+            const classDetail = response1.data.class;
+
+            const response2 = await axios.get(`lecturer?id=${classDetail[0].lecturer_id}`);
+            const lecturerInfo = response2.data.lecturers;
+
+            setSelectedClassInfo({ students, classDetail, lecturerInfo });
+        } catch (error) {
+            console.error('Error fetching class detail:', error.message);
+        }
+    };
+
+    // responesive
+    const [tableWidth, setTableWidth] = useState(null);
     useEffect(() => {
         const handleResize = () => {
             setTableWidth(document.getElementById('table-container').offsetWidth);
         };
 
         window.addEventListener('resize', handleResize);
-        handleResize(); // Đảm bảo rằng biến state được cập nhật ban đầu
+        handleResize(); 
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-
-    // Function to handle click on class
-    const handleClick = async (classInfo) => {
-        try {
-            if (selectedClassInfo && selectedSubjectName === classInfo.subject_name) {
-                setSelectedClassInfo(null);
-                setSelectedSubjectName('');
-            } else {
-                const response = await axios.post('student/classDetail', {
-                    email: localStorage.getItem('email'),
-                    class_id: classInfo.class_id
-                });
-                setSelectedClassInfo(response.data.ClassDetailInfo);
-                setSelectedSubjectName(classInfo.subject_name); // Lưu tên môn học
-            }
-        } catch (error) {
-            console.error('Error fetching class detail:', error.message);
-        }
-    };
-
-    // Function to render student details
-    const renderStudentDetails = () => {
-        return (
-            <Table striped bordered hover className={styles['student']}>
-                <thead>
-                    <tr>
-                        <th style={{ textAlign: 'center' }}>STT</th>
-                        <th style={{ textAlign: 'center' }}>MSSV</th>
-                        <th style={{ textAlign: 'center' }}>Họ và tên</th>
-                        {tableWidth && tableWidth >= 660 && <th style={{ textAlign: 'center' }}>Email</th>}
-                    </tr>
-                </thead>
-                <tbody>
-                    {selectedClassInfo && selectedClassInfo.studentDetails && selectedClassInfo.studentDetails.map((student, index) => (
-                        <tr key={student.id}>
-                            <td style={{ textAlign: 'center' }}>{index + 1}</td>
-                            <td style={{ textAlign: 'center' }}>{student.id}</td>
-                            <td>{student.name}</td>
-                            {tableWidth && tableWidth >= 660 && <td>{student.email}</td>}
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
-        );
-    };
-
-    useEffect(() => {
-        const fetchTimetable = async () => {
-            try {
-                const response = await axios.get('student/timetable?semester=20212');
-                setTimetable(response.data.timetable);
-            } catch (error) {
-                console.error('Error fetching timetable:', error.message);
-            }
-        };
-        fetchTimetable();
-    }, []);
-
+   
     return (
         <div>
             <Sidebar_student />
             <Container fluid className={globalstyles['main-background']}>
-                <div className={globalstyles['title']}>THỜI KHÓA BIỂU KỲ</div>
-                <Form.Select className={styles['select-semester']} onChange={(e) => setSelectedSemester(e.target.value)} value={selectedSemester}>
-                    <option value="20212">20212</option>
-                    <option value="20211">20211</option>
-                </Form.Select>
-
+                <div className={styles['title']}>
+                    <div className={globalstyles['title']}>THỜI KHÓA BIỂU KỲ</div>
+                    <Dropdown onSelect={handleSelect}>
+                        <Dropdown.Toggle variant="light" id="dropdown-basic" className={styles['select-semester']}>
+                            {selectedSemester}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <Dropdown.Item eventKey="20212">20212</Dropdown.Item>
+                            <Dropdown.Item eventKey="20211">20211</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </div>
                 <div id="table-container">
                     {tableWidth && tableWidth < 660 ? (
-                        timetable.map(item => (
-                            <div style={{marginLeft: '50px'}} key={`${item.class_id}-${item.weekday}-${item.subject_name}-${item.time}-${item.location}`}>
-                                <hr/>                         
+                        timetable.map((item,index) => (
+                            <div className={styles.subject} key={index++}>
                                 <Row>
-                                    <Col style={{ flex: '0 0 30%', maxWidth: '30%', textAlign: 'center'}}>
-                                        <div onClick={() => handleClick(item)}>
-                                            <Row><div style={{fontSize: '19px'}}>Thứ {item.weekday}</div></Row>
-                                            <Row><div style={{ textAlign: 'center'}}>{item.startTime}</div></Row>   
-                                            <Row><div style={{fontSize: '8px'}}>|</div></Row> 
-                                            <Row><div>{item.endTime}</div></Row>        
+                                    <Col style={{ maxWidth: '30%', textAlign: 'center'}}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }} onClick={() => handleClick(item)}>
+                                            <Row><div style={{fontSize: '18px'}}>Thứ {item.weekday}</div></Row>
+                                            <Row style={{ marginTop: 'auto' }}><div>{formatTime(item.start_time)}</div></Row>   
+                                            <Row style={{ marginTop: 'auto' }}><div style={{fontSize: '8px'}}>|</div></Row> 
+                                            <Row style={{ marginTop: 'auto' }}><div>{formatTime(item.end_time)}</div></Row>        
                                         </div>
                                     </Col>
-                                    <Col style={{ flex: '0 0 50%', maxWidth: '50%' }}>
-                                        <div onClick={() => handleClick(item)}>
-                                            <Row><div style={{fontWeight: 'bold', marginBottom: '10px'}}> {item.subject_name}</div></Row>
-                                            <Row><div>Mã lớp: {item.class_id}</div></Row>
-                                            <Row><div>Địa điểm: {item.location}</div></Row>
+                                    <Col style={{ maxWidth: '70%' }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }} onClick={() => handleClick(item)}>
+                                            <Row style={{ fontWeight: 'bold', marginBottom: '10px' }}>{item.subject_name}</Row>
+                                            <Row style={{ marginTop: 'auto' }}>Mã lớp: {item.class_id}</Row>
+                                            <Row style={{ marginTop: 'auto' }}>Địa điểm: {item.location}</Row>
                                         </div>
                                     </Col>
                                 </Row> 
                             </div>
                         ))
                     ) : (
-                        <Table striped bordered hover className={globalstyles['table-1000']}>
+                        <Table striped hover className={globalstyles['table-1000']}>
                             <thead>
                                 <tr>
                                     <th style={{ textAlign: 'center' }}>Thứ</th>
@@ -127,12 +124,14 @@ export const Timetable = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {timetable.map(item => (
-                                    <tr key={`${item.class_id}-${item.weekday}-${item.subject_name}-${item.time}-${item.location}`}>
+                                {timetable.map((item,index) => (
+                                    <tr key={index++}>
                                         <td onClick={() => handleClick(item)} style={{ textAlign: 'center', cursor: 'pointer' }}>{item.weekday}</td>
                                         <td onClick={() => handleClick(item)} style={{ textAlign: 'center', cursor: 'pointer' }}>{item.class_id}</td>
                                         <td onClick={() => handleClick(item)} style={{ cursor: 'pointer' }}>{item.subject_name}</td>
-                                        <td onClick={() => handleClick(item)} style={{ textAlign: 'center', cursor: 'pointer' }}>{item.startTime} - {item.endTime}</td>
+                                        <td onClick={() => handleClick(item)} style={{ textAlign: 'center', cursor: 'pointer' }}>
+                                            <div style={{ textAlign: 'center'}}>{formatTime(item.start_time)} - {formatTime(item.end_time)}</div>
+                                        </td>
                                         <td onClick={() => handleClick(item)} style={{ textAlign: 'center', cursor: 'pointer' }}>{item.location}</td>
                                     </tr>
                                 ))}
@@ -145,18 +144,33 @@ export const Timetable = () => {
                     <div>
                         <div className={globalstyles['title']}>Thông tin chi tiết lớp học</div>
                         <Container style={{ marginLeft: '5vw', marginTop: '30px' }}>
-                            <p><strong>Môn học:</strong> {selectedSubjectName}</p>
-                            <p><strong>Loại lớp:</strong> {selectedClassInfo.classInfo.type}</p>
-                            {selectedClassInfo.lecturerInfo && selectedClassInfo.lecturerInfo.length > 0 && (
-                                <>
-                                    <p><strong>Giảng viên:</strong> {selectedClassInfo.lecturerInfo[0].name}</p>
-                                    <p><strong>Email:</strong> {selectedClassInfo.lecturerInfo[0].email}</p>
-                                    <p><strong>Số điện thoại:</strong> {selectedClassInfo.lecturerInfo[0].phone}</p>
-                                </>
-                            )}
-                            <p><strong>Sĩ số:</strong> {selectedClassInfo.studentCount}</p>
+                            <p><strong>Môn học:</strong> {selectedClassInfo.classDetail[0].subject_name}</p>
+                            <p><strong>Loại lớp:</strong> {selectedClassInfo.classDetail[0].type}</p>
+                            <p><strong>Giảng viên:</strong> {selectedClassInfo.lecturerInfo[0].first_name} {selectedClassInfo.lecturerInfo[0].last_name}</p>
+                            <p><strong>Email:</strong> {selectedClassInfo.lecturerInfo[0].email}</p>
+                            <p><strong>Số điện thoại:</strong> {selectedClassInfo.lecturerInfo[0].phone}</p>
+                            <p><strong>Sĩ số:</strong> {selectedClassInfo.students.length}</p>
                         </Container>
-                        {renderStudentDetails()}
+                        <Table striped bordered hover className={styles['student']}>
+                            <thead>
+                                <tr>
+                                    <th style={{ textAlign: 'center' }}>STT</th>
+                                    <th style={{ textAlign: 'center' }}>MSSV</th>
+                                    <th style={{ textAlign: 'center' }}>Họ và tên</th>
+                                    {tableWidth && tableWidth >= 660 && <th style={{ textAlign: 'center' }}>Email</th>}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {selectedClassInfo.students.map((student, index) => (
+                                    <tr key={student.student_id}>
+                                        <td style={{ textAlign: 'center' }}>{index + 1}</td>
+                                        <td style={{ textAlign: 'center' }}>{student.student_id}</td>
+                                        <td>{student.student_name}</td>
+                                        {tableWidth && tableWidth >= 660 && <td>{student.email}</td>}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
                     </div>
                 )}
             </Container>

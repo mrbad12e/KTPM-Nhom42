@@ -8,8 +8,9 @@ router.route('/')
     .post(isAuthUser, ClassControllers.createClass)
     .patch(isAuthUser, ClassControllers.updateClass)
     // Phai la admin/lecturer moi co the tao, sua, xoa class
+router.route('/add').post(isAuthUser, ClassControllers.add_Timetable);
 
-router.route('/lecturer').patch(isAuthUser, ClassControllers.assignLecturer);
+router.route('/assign').patch(isAuthUser, ClassControllers.assignLecturer);
 
 router.route('/students').get(isAuthUser, ClassControllers.readStudents);
 

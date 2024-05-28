@@ -16,7 +16,6 @@ export default class Class {
                 req.body.subject_id,
             ];
             await client.query(query, values);
-            res.status(200).json({ message: 'Class added successfully' });
         } catch (error) {
             throw error;
         }
@@ -27,8 +26,8 @@ export default class Class {
         try {
             const query = 'SELECT * FROM student.show_class_info($1, $2)';
             let values = [null, null];
-            if (req.body.class_id) values[0] = req.body.class_id;
-            if (req.body.semester) values[1] = req.body.semester;
+            if (req.query.class_id) values[0] = req.query.class_id;
+            if (req.query.semester) values[1] = req.query.semester;
             const { rows } = await client.query(query, values);
             return rows;
         } catch (error) {
@@ -59,7 +58,7 @@ export default class Class {
     static async assignLecturer(req, res, next) {
         try {
             const query = 'CALL public.assign_lecturer($1, $2)';
-            const values = [req.body.lecturer_id, req.body.class_id];
+            const values = [req.query.lecturer_id, req.query.class_id];
             await client.query(query, values);
         } catch (error) {
             throw error;
@@ -68,7 +67,7 @@ export default class Class {
 
     static async enrollClass(req, res, next) {
         try {
-            const values = [req.body.student_id, req.body.class_id];
+            const values = [req.query.student_id, req.query.class_id];
             const query = 'CALL student.enroll_class($1, $2)';
             await client.query(query, values);
         } catch (error) {
@@ -88,16 +87,18 @@ export default class Class {
                 req.body.location,
             ];
             await client.query(query, values);
-            res.status(200).json({ message: 'Timetable added successfully' });
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            throw error;
         }
     }
 
     static async readStudents(req, res, next) {
         try {
-            const query = 'SELECT * FROM public.enrollment WHERE class_id = $1';
-            const values = [req.body.class_id];
+            const query = `
+                SELECT e.*, st.last_name || ' ' || st.first_name as student_name FROM public.enrollment e
+                    Join public.student st ON e.student_id = st.id
+                WHERE class_id = $1`;
+            const values = [req.query.class_id];
             const { rows } = await client.query(query, values);
             return rows;
         } catch (error) {

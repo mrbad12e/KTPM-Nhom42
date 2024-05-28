@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Container, Row, Col, Button } from 'react-bootstrap';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
-import ViewIcon from '../../../assets/img/View.png';
-import DeleteIcon from '../../../assets/img/Delete.png';
 import styles from './lecturer.module.css';
 import globalstyles from '../../CSSglobal.module.css';
 import axios from 'axios';
 import Pagination from '../../components/pagination/pagination';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { Link,useNavigate } from 'react-router-dom';
 
 export const Lecturer = () => {
     const [lecturers, setLecturers] = useState([]);
@@ -14,6 +15,7 @@ export const Lecturer = () => {
     const [inputFaculty, setInputFaculty] = useState('');
     const [currentPage, setCurrentPage] = useState(1); 
     const [totalPages, setTotalPages] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchSearchLecturers();
@@ -57,16 +59,27 @@ export const Lecturer = () => {
         setCurrentPage(pageNumber);
     };
 
+    const handleDetailLecturer = async (lecturerId) => {
+        try {
+            const response = await axios.get(`/admin/lecturer?id=${lecturerId}`);
+            const lecturerDetail = response.data.lecturers[0];
+            console.log('Lecturer detail:', lecturerDetail);
+            navigate(`/updateLecturer/${lecturerId}`);
+        } catch (error) {
+            console.error('Error fetching lecturer detail:', error.message);
+        }
+    }
+
     return (
         <div>
             <Sidebar_admin/>
             <Container fluid className={globalstyles['main-background']}>
                 <div className={globalstyles['left-title']}>Danh sách giảng viên</div>
-                <Button className={globalstyles['add-button']} onClick={handleSearchButtonClick} variant="dark">Thêm mới</Button> 
-                <div className={globalstyles['search-input']}>
-                    <input type="text" value={inputID} onChange={inputValueID} placeholder="Nhập mã giảng viên" style={{marginRight: '10px'}}/>
-                    <input type="text" value={inputFaculty} onChange={inputValueFaculty} placeholder="Nhập mã khoa"/>
-                    <Button className={globalstyles['button-search']} variant="dark" onClick={handleSearchButtonClick}>Tìm kiếm</Button> 
+                <Button className={globalstyles.addButton} onClick={handleSearchButtonClick} variant="primary">Thêm mới</Button> 
+                <div style={{ display: 'flex', gap: '10px', marginLeft: '50px' }}>
+                    <input className={globalstyles.input} type="text" value={inputID} onChange={inputValueID} placeholder="Nhập mã giảng viên" />
+                    <input className={globalstyles.input} type="text" value={inputFaculty} onChange={inputValueFaculty} placeholder="Nhập mã khoa" />
+                    <Button className={globalstyles.smallButton} variant="primary" onClick={handleSearchButtonClick}>Tìm kiếm</Button>
                 </div>
                 <Table className={globalstyles['table-1300']}>
                     <thead>
@@ -88,8 +101,8 @@ export const Lecturer = () => {
                                 <td>{lecturer.email}</td>
                                 <td>{lecturer.phone}</td>
                                 <td style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <div className={globalstyles['img-button-container']} >
-                                        <img src={ViewIcon} alt="View" className={globalstyles['img-button']} />
+                                    <div className={globalstyles['icon-container']} >
+                                        <FontAwesomeIcon color="white" icon={faEye}  onClick={() => handleDetailLecturer(lecturer.id)} />
                                     </div>
                                 </td>
                             </tr>

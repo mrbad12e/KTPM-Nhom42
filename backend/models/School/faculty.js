@@ -5,7 +5,7 @@ export default class Faculty {
 
     static async getFaculty(req, res, next) {
         try {
-            const query = 'SELECT * FROM from public.faculty';
+            const query = 'SELECT * FROM public.faculty';
             const { rows } = await client.query(query);
             return rows;
         } catch (error) {

@@ -86,28 +86,15 @@ export default class StudentController extends UserControllers {
         }
     }  
 
-
-    //==========
-    static async getSubject(req, res, next) {
+    // test report_student
+    static async report_student(req, res, next) {      
         try {
-            const SubjectInfo = await Student.getSubjectFromDatabase(req, res, next);
             res.status(200).json({
-                SubjectInfo: SubjectInfo
+                report_student: await Student.report_student(req, res, next),
+                message: 'Students fetched successfully',
             });
         } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-    
-    static async getClassDetail(req, res, next) {
-        try {
-            const ClassDetailInfo = await Student.getClassDetailFromDatabase(req, res, next);
-            res.status(200).json({
-                ClassDetailInfo: ClassDetailInfo,
-            });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ error: error });
         }
     }
 }
