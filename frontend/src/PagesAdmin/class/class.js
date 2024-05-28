@@ -66,7 +66,7 @@ export const Class = () => {
         <div>
             <Sidebar_admin />
             <Container fluid className={globalstyles['main-background']}>
-            <div className={styles['title']}>
+                <div className={styles['title']}>
                     <div className={globalstyles.title}>Danh sách lớp kỳ</div>
                     <Dropdown onSelect={handleSelect}>
                         <Dropdown.Toggle variant="light" id="dropdown-basic" className={styles['select-semester']}>

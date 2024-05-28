@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Container, Row, Col, Button } from 'react-bootstrap';
+import { Table, Container, Row, Col, Button,Dropdown } from 'react-bootstrap';
 import Sidebar_student from '../../components/Layouts/Sidebar/sidebarStudent';
 import globalstyles from '../../CSSglobal.module.css';
 import Pagination from '../../components/pagination/pagination'
 import axios from 'axios';
+import styles from '../../PagesAdmin/class/class.module.css';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const Registration = () => {
     const [subjectInfo, setSubjectInfo] = useState([]); 
@@ -12,10 +14,15 @@ export const Registration = () => {
     const [currentPage, setCurrentPage] = useState(1); 
     const [searched, setSearched] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
+    const [selectedSemester, setSelectedSemester] = useState('20212');
+    const handleSelect = (eventKey) => {
+        setSelectedSemester(eventKey);
+        // fetchSearchClass();
+    };
 
     const fetchSubjectInfo = async () => {
         try {
-            const response = await axios.get('class?semester=20212');
+            const response = await axios.get(`/class/?semester=${selectedSemester}`);
             const subjects = response.data.class; 
 
             const formattedSubjects = subjects.map(subject => {
@@ -41,7 +48,7 @@ export const Registration = () => {
     
     useEffect(() => {
         fetchSubjectInfo();
-    }, []);
+    }, [selectedSemester]);
 
     const handleAddCourse = (course) => {
         if (course.current_cap < course.max_cap) {
@@ -59,12 +66,34 @@ export const Registration = () => {
     
     
     const handleDeleteCourse = (course) => {
-        const updatedCourses = selectedCourses.filter(selectedCourse => selectedCourse.id !== course.id);
+        const updatedCourses = selectedCourses.filter(selectedCourse => selectedCourse.class_id !== course.class_id);
         setSelectedCourses(updatedCourses); 
     };
 
-    const handleRegister = () => {
-        console.log("Registered courses:", selectedCourses);
+    const handleRegister = async () => {
+        try {
+            const student_id = localStorage.getItem('id');
+            if (!student_id) {
+                console.error("Không tìm thấy student_id trong localStorage.");
+                return;
+            }
+    
+            const registrationPromises = selectedCourses.map(course =>
+                axios.patch(`/class/enroll?student_id=${student_id}&&class_id=${course.class_id}`)
+            );
+    
+            const responses = await Promise.all(registrationPromises);
+            const successResponses = responses.filter(response => response.status === 200);
+    
+            if (successResponses.length === selectedCourses.length) {
+                console.log("Tất cả các môn học đã được đăng ký thành công.");
+                // Bạn có thể cập nhật trạng thái ứng dụng ở đây nếu cần
+            } else {
+                console.error("Một số môn học không thể đăng ký.");
+            }
+        } catch (error) {
+            console.error('Lỗi khi đăng ký môn học:', error);
+        }
     };
 
     const handleSearchInputChange = (e) => {
@@ -87,7 +116,19 @@ export const Registration = () => {
         <div >
             <Sidebar_student/>
             <Container fluid className={globalstyles['main-background']}>
-                <div className={globalstyles['title']}>Đăng ký học tập kỳ </div>
+                <div className={styles['title']}>
+                    <div className={globalstyles.title}>Đăng ký học tập kỳ</div>
+                    <Dropdown onSelect={handleSelect}>
+                        <Dropdown.Toggle variant="light" id="dropdown-basic" className={styles['select-semester']}>
+                            {selectedSemester}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <Dropdown.Item eventKey="20212">20212</Dropdown.Item>
+                            <Dropdown.Item eventKey="20221">20221</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </div>
+                {/* <div className={globalstyles['title']}>Đăng ký học tập kỳ </div> */}
                 <Row style={{ marginTop: '60px', padding: '0 15px'}}>
                     <Col style={{ display: 'flex', justifyContent: 'flex-end'}}>
                         <input type="text" className="form-control" name="subject_id" value={searchInput.subject_id} onChange={handleSearchInputChange} placeholder="Mã học phần" style={{width: '220px'}}/>
