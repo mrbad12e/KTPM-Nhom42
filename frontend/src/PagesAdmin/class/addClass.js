@@ -94,7 +94,7 @@ export const AddClass = () => {
     };
 
     const createDefaultTimeRow = () => ({
-        selectedDay: '',
+        selectedDay: '2',
         inputStartTime: null,
         inputEndTime: null,
         inputLocation: ''
@@ -209,8 +209,10 @@ export const AddClass = () => {
 
     //--------------Save Cancel----------------------------
     const handleCancel = () => {
-     
+       
     }
+    
+    
 
     // Add class
     const postDataToClassAPI = async () => {
@@ -263,7 +265,18 @@ export const AddClass = () => {
     
     
     // Add timetable
-          
+    const postDataToTimetableAPI = async () => {
+        TimeRows.forEach(row => {
+            if (row.inputStartTime && row.inputEndTime) {
+                const formattedStartTime = row.inputStartTime.format('HHmm');
+                const formattedEndTime = row.inputEndTime.format('HHmm');
+                console.log(`Start Time: ${formattedStartTime}, End Time: ${formattedEndTime}, Location: ${row.inputLocation}, Day: ${row.selectedDay}`);
+            } else {
+                console.error('inputStartTime or inputEndTime is null', row);
+            }
+        });
+
+    }
     // Add student
 
     const handleSave = async () => {

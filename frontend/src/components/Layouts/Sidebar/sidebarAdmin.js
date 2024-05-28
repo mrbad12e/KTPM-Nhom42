@@ -64,13 +64,13 @@ const Sidebar_admin = () => {
             {showOverlay && <div className={styles['overlay']} onClick={handleHamburgerButtonClick}></div>}
             <div className={`${styles['left-content']} ${showMenu ? styles['show'] : ''}`}>
                 <ul className={styles['sitemap']} onClick={window.innerWidth <= 1000 ? handleHamburgerButtonClick : null}>
-                    <li><NavLink to="/faculty" className={location.pathname === '/faculty' ? styles.active : ''}>Khoa</NavLink></li>
+                    <li><NavLink to="/faculty" className={['/faculty', '/program'].some(path => location.pathname.includes(path)) ? styles.active : ''}>Khoa</NavLink></li>
                     <hr className={styles.separator} />
                     <li><NavLink to="/subject" className={location.pathname === '/subject' ? styles.active : ''}>Học phần</NavLink></li>
                     <hr className={styles.separator} />
                     <li><NavLink to="/class" className={location.pathname === '/class' ? styles.active : ''}>Lớp</NavLink></li>
                     <hr className={styles.separator} />
-                    <li><NavLink to="/lecturer" className={location.pathname === '/lecturer' ? styles.active : ''}>Giảng viên</NavLink></li>
+                    <li><NavLink to="/lecturer" className={['/lecturer', '/addLecturer', '/updateLecturer'].some(path => location.pathname.includes(path)) ? styles.active : ''}>Giảng viên</NavLink></li>
                     <hr className={styles.separator} />
                     <li>
                     <NavLink to="/student" className={['/student', '/addStudent', '/updateStudent'].some(path => location.pathname.includes(path)) ? styles.active : ''}>

@@ -16,7 +16,6 @@ export const AddStudent = () => {
     const [DoB, setDoB] = useState('2003-01-01');
     const [address, setAddress] = useState('Cao Bang');
     const [joinDate, setJoinDate] = useState('2003-01-01');
-    const [status, setStatus] = useState('true');
     const [phone, setPhone] = useState('0816420686');
 
     const [showNotification, setShowNotification] = useState(false);
@@ -24,7 +23,7 @@ export const AddStudent = () => {
     const [notificationTitle, setNotificationTitle] = useState('');
 
     const handleSave = () => {
-        if (!mssv || !email || !program_id || !first_name || !last_name || !gender || !DoB || !address || !joinDate || !status || !phone) {
+        if (!mssv || !email || !program_id || !first_name || !last_name || !gender || !DoB || !address || !joinDate || !phone) {
             setNotificationTitle('Lỗi');
             setNotificationMessage('Vui lòng điền đầy đủ thông tin.');
             setShowNotification(true);
@@ -42,7 +41,7 @@ export const AddStudent = () => {
             birthday: DoB,
             address,
             join_date: joinDate,
-            status,
+            status: true,
             phone
         };
 
@@ -69,11 +68,11 @@ export const AddStudent = () => {
         <div>
             <Sidebar_admin/>
             <Container fluid className={globalstyles['main-background']}>
-                <div className={globalstyles['title']}>Thêm giảng viên</div>
+                <div className={globalstyles['title']}>Thêm sinh viên</div>
 
                 <div className={styles.gridContainer}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <div style={{ marginRight: '10px' }}>Mã giảng viên</div>
+                        <div style={{ marginRight: '10px' }}>MSSV</div>
                         <InputGroup>
                             <Form.Control  
                                 className={globalstyles.input}
@@ -208,21 +207,6 @@ export const AddStudent = () => {
                                 value={joinDate}
                                 onChange={(event) => setJoinDate(event.target.value)}
                             />
-                        </InputGroup>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center'}}>
-                        <div style={{ marginRight: '10px', whiteSpace: 'nowrap' }}>Trạng thái</div> 
-                        <InputGroup>
-                            <Form.Control
-                                as="select"
-                                aria-label="Trạng thái"
-                                value={status === 'true' ? 'Học' : 'Thôi học'}
-                                onChange={(event) => setStatus(event.target.value === 'Học' ? 'true' : 'false')}
-                                type="text"
-                            >
-                                <option>Học</option>
-                                <option>Bỏ học</option>
-                            </Form.Control>
                         </InputGroup>
                     </div>
                 </div>         
