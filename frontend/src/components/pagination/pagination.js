@@ -32,7 +32,7 @@ const Pagination = ({ currentPage, totalPages, handlePageChange }) => {
         // Hiển thị nút trang đầu tiên
         if (startPage > 1) {
             pages.push(
-                <Button key={1} variant={currentPage === 1 ? "danger" : "dark"} onClick={() => handlePageChange(1)}>{1}</Button>
+                <Button key={1} variant={currentPage === 1 ? "danger" : "primary"} onClick={() => handlePageChange(1)}>{1}</Button>
             );
             // Hiển thị dấu "..." nếu cần
             if (startPage > ellipsisThreshold) {
@@ -43,7 +43,7 @@ const Pagination = ({ currentPage, totalPages, handlePageChange }) => {
         // Hiển thị các nút trang từ startPage đến endPage
         for (let i = startPage; i <= endPage; i++) {
             pages.push(
-                <Button key={i} variant={currentPage === i ? "danger" : "dark"} onClick={() => handlePageChange(i)} style={{ margin: '0 5px' }}>{i}</Button>
+                <Button key={i} variant={currentPage === i ? "danger" : "primary"} onClick={() => handlePageChange(i)} style={{ margin: '0 5px' }}>{i}</Button>
             );
         }
 
@@ -54,7 +54,7 @@ const Pagination = ({ currentPage, totalPages, handlePageChange }) => {
                 pages.push(<span key="ellipsis2" style={{margin: '0 5px'}}><div style={{fontWeight: 'bold'}}>...</div></span>);
             }
             pages.push(
-                <Button key={totalPages} variant={currentPage === totalPages ? "danger" : "dark"} onClick={() => handlePageChange(totalPages)} style={{ margin: '0 5px' }}>{totalPages}</Button>
+                <Button key={totalPages} variant={currentPage === totalPages ? "danger" : "primary"} onClick={() => handlePageChange(totalPages)} style={{ margin: '0 5px' }}>{totalPages}</Button>
             );
         }
 

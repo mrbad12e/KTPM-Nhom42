@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Pagination from '../../components/pagination/pagination';
 
+
 export const ListStudent = () => {
     const location = useLocation();
     const [listStudent, setListStudent] = useState([]);
@@ -53,7 +54,7 @@ export const ListStudent = () => {
 
     return (
         <div>
-            <SidebarLecturer />
+            <SidebarLecturer/>
             <Container fluid className={globalstyles['main-background']}>
                 <div className={globalstyles['left-title']}>Danh sách lớp</div>
                 <div className={globalstyles['search-input']}>
@@ -78,6 +79,7 @@ export const ListStudent = () => {
                     <thead>
                         <tr style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>
                             <th>Mã sinh viên</th>
+                            <th>Tên sinh viên</th>
                             <th>Mã lớp</th>
                             <th>Điểm giữa kì</th>
                             <th>Điểm cuối kì</th>
@@ -89,8 +91,8 @@ export const ListStudent = () => {
                         {Array.isArray(listStudent) && listStudent.slice((currentPage - 1) * 10, currentPage * 10).map((student) => (
                             <tr key={student.student_id}>
                                 <td style={{ textAlign: 'center' }}>{student.student_id}</td>
+                                <td>{student.student_name}</td>
                                 <td style={{ textAlign: 'center' }}>{student.class_id}</td>
-                                {/* <td>{student.subject_name}</td> */}
                                 <td style={{ textAlign: 'center' }}>{student.midterm_score}</td>
                                 <td style={{ textAlign: 'center' }}>{student.final_score}</td>
                                 <td style={{ textAlign: 'center' }}>{student.absent_count}</td>

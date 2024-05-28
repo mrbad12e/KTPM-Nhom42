@@ -72,37 +72,39 @@ export const CourseGrade = () => {
         <div >
             <Sidebar_student/>
             <Container fluid className={globalstyles['main-background']}>
-            <div className={globalstyles['title']}>Kết quả học tập</div>
-            <div style={{ maxWidth: '1000px',  margin: '0 auto'}}>
-                <Table striped hover className={globalstyles['table-1000']}>
-                    <thead>
-                        <tr>
-                            <th style={{ textAlign: 'center' }}>Học kỳ</th>
-                            <th style={{ textAlign: 'center' }}>Mã học phần</th>
-                            <th style={{ textAlign: 'center' }}>Tên học phần</th>
-                            <th style={{ textAlign: 'center' }}>Tín chỉ</th>
-                            <th style={{ textAlign: 'center' }}>Điểm học phần</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {courseGrade.map((course,index) => (
-                            <tr key={index++}>
-                                <td style={{ textAlign: 'center' }}>{course.semester}</td>
-                                <td style={{ textAlign: 'center' }}>{course.subject_id}</td>
-                                <td>{course.subject_name}</td>
-                                <td style={{ textAlign: 'center' }}>{course.study_credits}</td>
-                                <td style={{ textAlign: 'center' }}>
-                                    {calculateSubjectGPA(course.midterm_score, course.final_score,course. mapping_score, course.final_weight, course.study_credits)}
-                                </td>
+                <div className={globalstyles['title']}>Kết quả học tập</div>
+                <div style={{ maxWidth: '1000px',  margin: '0 auto'}}>
+                    <Table striped hover className={globalstyles['table-1000']}>
+                        <thead>
+                            <tr>
+                                <th style={{ textAlign: 'center' }}>Học kỳ</th>
+                                <th style={{ textAlign: 'center' }}>Mã học phần</th>
+                                <th style={{ textAlign: 'center' }}>Tên học phần</th>
+                                <th style={{ textAlign: 'center' }}>Tín chỉ</th>
+                                <th style={{ textAlign: 'center' }}>Điểm học phần</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </Table>
-                <div className={styles.totalCredit}>
-                    <div >Số tín chỉ đã qua: {creditsPassed}</div>
-                    <div style={{marginRight: '39px'}}>Số tín chỉ nợ: {creditsFailed}</div>
+                        </thead>
+                        <tbody>
+                            {courseGrade.map((course,index) => (
+                                <tr key={index++}>
+                                    <td style={{ textAlign: 'center' }}>{course.semester}</td>
+                                    <td style={{ textAlign: 'center' }}>{course.subject_id}</td>
+                                    <td>{course.subject_name}</td>
+                                    <td style={{ textAlign: 'center' }}>{course.study_credits}</td>
+                                    <td style={{ textAlign: 'center' }}>
+                                        {calculateSubjectGPA(course.midterm_score, course.final_score,course. mapping_score, course.final_weight, course.study_credits)}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                    <div className={styles.totalCredit} style={{ textAlign: 'right' }}>
+                        <div>
+                            <div style={{ width: '150px', display: 'inline-block' }}>Số tín chỉ đã qua: {creditsPassed}</div>
+                            <div style={{ width: '150px', display: 'inline-block' }}>Số tín chỉ nợ: {creditsFailed}</div>
+                        </div>
+                    </div>
                 </div>
-            </div>
             </Container>
         </div>
     );

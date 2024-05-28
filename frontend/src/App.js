@@ -47,7 +47,7 @@ export const App = () => {
                 <Route path="/subject" element={<Subject/>}/>
                 {/* Lecturer */}
                 <Route path="/listClass" element={<ListClass/>}/>
-                <Route path="/listStudent" element={<ListStudent/>}/>
+                <Route path="/listStudent/:id" element={<ListStudent/>}/>
                 <Route path="/profile" element={<ProfileLecturer/>}/>
             </Routes>
         </HashRouter>

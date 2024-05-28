@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './login.module.css';
 import axios from 'axios'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'; // Import both eye and slash icons
 
 export const Login = () => {
     const navigate = useNavigate();
@@ -12,9 +12,14 @@ export const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [role, setRole] = useState('student'); 
+    const [passwordVisible, setPasswordVisible] = useState(false); // State to track password visibility
 
     const handleSelect = (eventKey) => {
         setRole(eventKey); 
+    };
+
+    const handleTogglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible); // Toggle password visibility state
     };
 
     const handleLogin = async (event) => {
@@ -77,9 +82,13 @@ export const Login = () => {
                     <Form.Label>Email:</Form.Label>
                     <Form.Control type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)}/>
                 </Form.Group>
-                <Form.Group controlId="formBasicPassword" style={{ marginTop: '15px' }} >
+                <Form.Group controlId="formBasicPassword" style={{ marginTop: '15px', position: 'relative' }} >
                     <Form.Label>Password:</Form.Label>
-                    <Form.Control type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                    <div className={styles.passwordInputGroup}>
+                        <Form.Control type={passwordVisible ? "text" : "password"} placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                        <FontAwesomeIcon icon={passwordVisible ? faEye : faEyeSlash} onClick={handleTogglePasswordVisibility} className={styles.passwordVisibilityIcon} style={{ position: 'absolute', right: '10px', top: '73%', transform: 'translateY(-50%)', cursor: 'pointer' }}
+ />
+                    </div>
                 </Form.Group>            
                 <Form.Group controlId="formBasicRole" style={{ marginTop: '15px' }} >
                     <div>Role:</div>

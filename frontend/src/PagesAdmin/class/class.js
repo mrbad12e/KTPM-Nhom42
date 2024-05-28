@@ -1,57 +1,72 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Container, Row, Col, Button, Dropdown } from 'react-bootstrap';
+import { Table, Container,Button,Dropdown } from 'react-bootstrap';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
-import ViewIcon from '../../../assets/img/View.png';
-import DeleteIcon from '../../../assets/img/Delete.png';
-import { Link, useNavigate } from 'react-router-dom';
+import globalstyles from '../../CSSglobal.module.css'
 import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import Pagination from '../../components/pagination/pagination';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './class.module.css';
-import globalstyles from '../../CSSglobal.module.css';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 export const Class = () => {
-    const [inputClassID, setInputClassID] = useState('');
-    const handleInputClassID = (event) => setInputClassID(event.target.value);
-
-    const [inputSubjectID, setInputSubjectID] = useState('');
-    const handleInputSubjectID = (event) => setInputSubjectID(event.target.value);
-    
+    const [classes, setClass] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [inputClassId, setInputClassId] = useState('');
+    const handleInputClassID = (event) => setInputClassId(event.target.value);
     const [selectedSemester, setSelectedSemester] = useState('20212');
     const handleSelect = (eventKey) => {
         setSelectedSemester(eventKey);
+        // fetchSearchClass();
     };
 
-    const [currentPage, setCurrentPage] = useState(1); 
-    const [totalPages, setTotalPages] = useState(0);
     const navigate = useNavigate();
 
-    const handleSearchButtonClick = () => {
-        console.log('Đã nhấn nút Tìm kiếm với giá trị:', inputValue);
-    };
+    useEffect(() => {
+        fetchSearchClass();
+        console.log("selectedSemester:", selectedSemester);
+    }, [selectedSemester]);
 
     const fetchSearchClass = async () => {
+        
         try {
             let response;
-            if (inputClassID && inputSubjectID) {
-                response = await axios.get(`/admin/student?id=${inputClassID}&&program_id=${inputSubjectID}`);
-            } else if (inputClassID) {
-                response = await axios.get(`/admin/student?id=${inputClassID}`);
-            } else if (inputSubjectID) {
-                response = await axios.get(`/admin/student?program_id=${inputSubjectID}`);
-            } else { response = await axios.get(`/admin/student`);}
-            const studentData = response.data.students;
-            setStudents(studentData);
-            const pageCount = Math.ceil(studentData.length / 10);
-            setTotalPages(pageCount);
+            // if (selectedSemester && inputClassId) {
+            //     response = await axios.get(`/class/?semester=${selectedSemester}&&class_id=${inputClassId}`);
+            // } else 
+            if (selectedSemester) {
+                response = await axios.get(`/class/?semester=${selectedSemester}`);
+              
+            } else if (inputClassId) {
+                response = await axios.get(`/class/?class_id=${inputClassId}`);
+            } else { 
+                const seme = 20212;
+                response = await axios.get(`/class/?semester=${seme}`);
+            }
+            const ClassData = response.data.class;
+            
+            setClass(ClassData);
+            setTotalPages(Math.ceil(ClassData.length / 10));
         } catch (error) {
-            console.error('Error fetching students:', error);
+            console.error('Lỗi khi lấy dữ liệu khoa:', error);
         }
     };
+    const handleSearchButtonClick = () => {
+        fetchSearchClass();
+    };
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    
 
     return (
         <div>
-            <Sidebar_admin/>
+            <Sidebar_admin />
             <Container fluid className={globalstyles['main-background']}>
-                <div className={styles['title']}>
+            <div className={styles['title']}>
                     <div className={globalstyles.title}>Danh sách lớp kỳ</div>
                     <Dropdown onSelect={handleSelect}>
                         <Dropdown.Toggle variant="light" id="dropdown-basic" className={styles['select-semester']}>
@@ -59,48 +74,46 @@ export const Class = () => {
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
                             <Dropdown.Item eventKey="20212">20212</Dropdown.Item>
-                            <Dropdown.Item eventKey="20211">20211</Dropdown.Item>
+                            <Dropdown.Item eventKey="20221">20221</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>
-                <Link to="/addClass"><Button className={globalstyles.addButton} onClick={handleSearchButtonClick} variant="primary">Thêm mới</Button></Link>
-                
                 <div style={{ display: 'flex', gap: '10px', marginLeft: '50px' }}>
-                    <input className={globalstyles.input} type="text" value={inputClassID} onChange={handleInputClassID} placeholder="Nhập mã giảng viên" />
-                    <input className={globalstyles.input} type="text" value={inputSubjectID} onChange={handleInputSubjectID} placeholder="Nhập mã khoa" />
+                    <input className={globalstyles.input} type="text" value={inputClassId} onChange={handleInputClassID} placeholder="Nhập mã lớp học" />
+                    {/* <input className={globalstyles.input} type="text" value={selectedSemester} onChange={handleInputSemseter} placeholder="Nhập kì học" /> */}
                     <Button className={globalstyles.smallButton} variant="primary" onClick={handleSearchButtonClick}>Tìm kiếm</Button>
                 </div>
-
                 <Table className={globalstyles['table-1300']}>
                     <thead>
-                        <tr style={{ textAlign: 'center', whiteSpace: '2px' }}>
-                            <th>STT</th>
+                        <tr style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>
+                            <th>Số thứ tự</th>
                             <th>Mã lớp</th>
-                            <th>Tên học phần</th>
                             <th>Mã học phần</th>
+                            <th>Tên học phần</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style={{whiteSpace: '2px'}}>
-                            <td style={{ textAlign: 'center'}}>20212</td>
-                            <td>Lương Phúc Quang </td>
-                            <td>Truyền thông số và Kỹ thuật đa phương tiện</td>
-                            <td style={{ textAlign: 'center'}}>4.0</td>
-                            <td style={{ display: 'flex', justifyContent: 'center' }}>
-                                <div className={globalstyles['img-button-container']} >
-                                    <img src={ViewIcon} alt="View" className={globalstyles['img-button']} />
-                                </div>
-                                <div className={globalstyles['img-button-container']} style ={{marginLeft: '10px'}}>
-                                    <img src={DeleteIcon} alt="Delete" className={globalstyles['img-button']} />
-                                </div>
-                            </td>
-                        </tr>
+                        {classes.slice((currentPage - 1) * 10, currentPage * 10).map((classes, index) => (
+                            <tr key={classes.class_id}>
+                                <td style={{ textAlign: 'center' }}>{index + 1 + (currentPage-1)*10}</td>
+                                <td style={{ textAlign: 'center' }}>{classes.class_id}</td>
+                                <td style={{ textAlign: 'center' }}>{classes.subject_id}</td>
+                                <td>{classes.subject_name}</td>
+                                <td style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <div className={globalstyles['icon-container']}  >
+                                        <FontAwesomeIcon color="white" icon={faEye} />
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
+                <div>
+                    <Pagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
+                </div>
             </Container>
         </div>
     );
 };
-
 
