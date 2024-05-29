@@ -75,7 +75,7 @@ export const Home = () => {
                             <p><strong>Mã chuyên ngành: </strong>{student.program_id}</p>
                             <p><strong>Họ và tên: </strong>{`${student.first_name} ${student.last_name}`}</p>
                             <p><strong>Số điện thoại: </strong>{student.phone}</p>
-                            <p><strong>Ngày sinh: </strong>{new Date(student.birthday).toLocaleDateString()}</p>
+                            <p><strong>Ngày sinh: </strong>{student.birthday.substring(0,10)}</p>
                             <p><strong>Giới tính: </strong>{student.gender === 'F' ? 'Nữ' : 'Nam'}</p>
                             <p><strong>Địa chỉ: </strong>{student.address}</p>
                         </div>
@@ -98,7 +98,7 @@ export const Home = () => {
                                 <Form.Control
                                     type="text"
                                     name="birthday"
-                                    value={updatedInfo.birthday}
+                                    value={updatedInfo.birthday.substring(0,10)}
                                     onChange={handleInputChange}
                                 />
                             </Col>
