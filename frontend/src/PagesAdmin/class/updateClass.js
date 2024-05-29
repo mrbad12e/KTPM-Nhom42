@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Container, Button, Dropdown, Modal } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin'; 
 import styles from './addClass.module.css';
@@ -10,47 +11,59 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import dayjs from 'dayjs';
 
-export const AddClass = () => {
+export const UpdateClass = () => {
+    const location = useLocation();
+    const classId = location.pathname.split('/').pop(); 
 
-    const [classInfo, setClassInfo] = useState({ id: '', subject_id: '', type: '', require_lab: '', semester:'', current_cap:'', max_cap: '', lecturer_id: '' });
+    const [classInfo, setClassInfo] = useState([]);
     const [classTime, setClassTime] = useState([]);
+    const fetchClassInfo = async () => {
+        try { 
+            const response = await axios.get(`/class?class_id=${classId}`);
+            const classData = response.data.class;
+    
+            if (classData && classData.length > 0) {
+                const classInfo = classData[0];
+                setClassInfo(classInfo);
+    
+                const filteredClassTime = classData
+                .filter(item => item.class_id === classId)
+                .map(item => ({
+                    end_time: parseTimeString(item.end_time),
+                    start_time: parseTimeString(item.start_time),
+                    location: item.location,
+                    weekday: item.weekday
+                }));
+
+                setClassTime(filteredClassTime);
+            } else {
+                console.warn('No class information found for the given class_id');
+            }
+        } catch (error) {
+            console.error('Error fetching class:', error);
+        }
+    };
+    
+    useEffect(() => {
+        fetchClassInfo();
+    }, []);  
+    
+
     //--------------------------Class-------------------
-    //class id
-    const [inputClassIDError, setInputClassIDError] = useState(false);
-    const handleInputClassID = (event) => {
-        setInputClassIDError(false);
-        const value = event.target.value;
-        setClassInfo(prevClassInfo => ({ ...prevClassInfo, id: value }));
-    };
-
-    // subject id 
-    const [inputSubjectIDError, setInputSubjectIDError] = useState(false);
-    const handleInputSubjectID = (event) => {
-        const value = event.target.value;
-        setClassInfo(prevClassInfo => ({ ...prevClassInfo, subject_id: value }));
-    };
-
     // type
     const [typeError, setTypeError] = useState(false);
-    const handleSelectType = (event) => {
-        setTypeError(false); 
-        setClassInfo(prevClassInfo => ({ ...prevClassInfo, type: event }));
+    const handleSelectType = (eventKey) => {
+        setTypeError(false);
+        setClassInfo(prevClassInfo => ({...prevClassInfo, type: eventKey }));
     };
-
+    
     // lab
     const [labError, setLabError] = useState(false);
-    const handleSelectLab = (event) => {
+    const handleSelectLab = (eventKey) => {
         setLabError(false); 
-        setClassInfo(prevClassInfo => ({ ...prevClassInfo, require_lab: event }));
-    };
-
-    // semester
-    const [inputSemesterError, setInputSemesterError] = useState(false);
-    const handleInputSemester = (event) => {
-        setInputSemesterError(false);
-        const onlyNums = event.target.value.replace(/[^0-9]/g, '');
-        setClassInfo(prevClassInfo => ({ ...prevClassInfo, semester: onlyNums }));
+        setClassInfo(prevClassInfo => ({...prevClassInfo, require_lab: eventKey }));
     };
 
      // Số sinh viên tối đa
@@ -59,7 +72,7 @@ export const AddClass = () => {
         setInputStudentCountError(false);
         const onlyNums = event.target.value.replace(/[^0-9]/g, '');
         const limitedNums = onlyNums.slice(0, 3);
-        setClassInfo(prevClassInfo => ({ ...prevClassInfo, max_cap: limitedNums }));
+        setClassInfo(prevClassInfo => ({...prevClassInfo, max_cap: limitedNums }));
      };
 
     //--------------------TimeTable--------------------------------
@@ -117,28 +130,19 @@ export const AddClass = () => {
     const [inputLecturerIDError, setInputLecturerIDError] = useState(false);
 
     const handleInputLecturerID = (event) => {
-        const value = event.target.value;
-        setClassInfo(prevClassInfo => ({ ...prevClassInfo, lecturer_id: value }));
+        setClassInfo(prevClassInfo => ({...prevClassInfo, lecturer_id: event }));
     };
 
     const fetchSearchLecturer = async () => {
         try {
             setInputLecturerIDError(false);
-            if (classInfo.lecturer_id) {
-                let response = await axios.get(`/admin/lecturer?id=${classInfo.lecturer_id}`);
-                if (response.data.lecturers.length > 0) {
-                    setLecturer(response.data.lecturers[0]);
-                } else {
-                    setLecturer(null);
-                }
-            } else {
-                setInputLecturerIDError(true); 
-            }
+            let response = await axios.get(`/admin/lecturer?id=${classInfo.lecturer_id}`);
+            if (response.data.lecturers.length > 0) setLecturer(response.data.lecturers[0])
+            else setLecturer(null); 
         } catch (error) {
             console.error('Error fetching lecturer:', error);
         }
     };
-    
 
     // Search Lecturer
     const handleSearchLecturerClick = () => fetchSearchLecturer();
@@ -151,6 +155,19 @@ export const AddClass = () => {
     const [students, setStudents] = useState([]);   
     const [inputMSSV, setInputMSSV] = useState(''); 
     const [student, setStudent] = useState(null);  
+
+    const fetchStudent = async () => {
+        try { 
+            const response = await axios.get(`class/students?class_id=${classId}`);
+            setStudents(response.data.students);
+        } catch (error) {
+            console.error('Error fetching class:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchStudent();
+    }, []);
 
     const handleInputMSSV = (event) => {
         const onlyNums = event.target.value.replace(/[^0-9]/g, '');
@@ -171,9 +188,7 @@ export const AddClass = () => {
     };
 
     // Search Student
-    const handleSearchStudentClick = () => {
-        fetchSearchStudent();
-    };
+    const handleSearchStudentClick = () => fetchSearchStudent();
     
     // View Student
     const handleViewStudent = (student) => {
@@ -202,134 +217,80 @@ export const AddClass = () => {
     
     // Delete Student
     const handleDeleteStudent = (studentToDelete) => {
-        const updatedStudents = students.filter(student => student.mssv !== studentToDelete.mssv);
+        const updatedStudents = students.filter(student => student.student_id !== studentToDelete.student_id);
         setStudents(updatedStudents);
     };
 
     //--------------Save Cancel----------------------------
     const handleCancel = () => {
-       console.log("classTime",classTime);
-    }
-    
-    
+        classTime.forEach((time) => {
+            console.log(`Start Time: ${time.start_time.format('HHmm')}, End Time: ${time.end_time.format('HHmm')}, Location: ${time.location}, Day: ${time.weekday}`);
+        });
+    };
 
     // Add class
-    const postDataToClassAPI = async () => {
-        const fieldsToCheck = [
-            { field: classInfo.id, setError: setInputClassIDError, errorLog: 'Missing inputClassID', validation: value => !value || value.length !== 6 || isNaN(value) },
-            { field: classInfo.type, setError: setTypeError, errorLog: 'Missing type' },
-            { field: classInfo.semester, setError: setInputSemesterError, errorLog: 'Missing inputSemester' },
-            { field: classInfo.require_lab, setError: setLabError, errorLog: 'Missing lab' },
-            { field: classInfo.max_cap, setError: setInputStudentCountError, errorLog: 'Missing inputStudentCount' },
-            { field: lecturer, setError: setInputLecturerIDError, errorLog: 'Missing lecturer.id' },
-            { field: classInfo.subject_id, setError: setInputSubjectIDError, errorLog: 'Missing inputSubjectID' }
-        ];
-        
-        let hasError = false;
-        
-        fieldsToCheck.forEach(({ field, setError, errorLog, validation }) => {
-            if (validation ? validation(field) : !field) {
-                console.log(errorLog);
-                setError(true);
-                hasError = true;
-            }
-        });
-        
-        if (hasError) {
-            return;
-        }
-    
+    const updateClass = async () => {
+        console.log("students",students.length);
         try {
-            const response = await axios.post('/class', {
-                id: classInfo.id,
+            const response = await axios.patch(`/class?id=${classInfo.class_id}`, {
                 type: classInfo.type,
-                semester: classInfo.semester,
                 require_lab: classInfo.require_lab,
                 current_cap: students.length,
                 max_cap: classInfo.max_cap,
-                lecturer_id: classInfo.lecturer_id,
-                subject_id: classInfo.subject_id
+                lecturer_id: classInfo.lecturer_id
             });
     
-            console.log('Class created successfully:', response.data);
+            console.log('Class updated successfully:', response.data);
         } catch (error) {
-            if (error.response && error.response.data && error.response.data.error) {
-                const errorData = error.response.data.error;
-                console.log(errorData);
-            } else {
-                console.log('Error message:', error.message);
-            }
+            console.log('Error message:', error.message);
         }
     };
     
-    
     // Add timetable
-    const postDataToTimetableAPI = async () => {
-        for (const row of TimeRows) {
-            if (row.inputStartTime && row.inputEndTime) {
-                const formattedStartTime = row.inputStartTime.format('HHmm');
-                const formattedEndTime = row.inputEndTime.format('HHmm');
-                console.log(`Start Time: ${formattedStartTime}, End Time: ${formattedEndTime}, Location: ${row.inputLocation}, Day: ${row.selectedDay}`);
-                try {
-                    const response = await axios.post('class/add', {
-                        "id": inputClassID,
-                        "weekday": row.selectedDay,
-                        "start_time": formattedStartTime,
-                        "end_time": formattedEndTime,
-                        "location": row.inputLocation
-                    });
-                } catch (error) {
-                    console.error('Error while posting data:', error);
-                }
-            } else {
-                console.error('inputStartTime or inputEndTime is null', row);
-            }
+    const updateTimetable = async () => {
+        try {
+            const promises = classTime.map(time => {
+                return axios.post('class/add', {
+                    class_id: classId,
+                    weekday: time.weekday,
+                    start_time: time.start_time.format('HHmm'),
+                    end_time: time.end_time.format('HHmm'),
+                    location: time.location
+                });
+            });
+    
+            // Await all promises to resolve
+            await Promise.all(promises);
+            console.log('Timetable updated successfully');
+        } catch (error) {
+            console.error('Error updating timetable:', error);
         }
     };
     
     // Add student
-
     const handleSave = async () => {
-        console.log("classInfo",classInfo);
-        // await postDataToClassAPI();
+        await updateClass();
+        await updateTimetable();
         // await postDataToTimetableAPI();
+        // console.log("classInfo:",classInfo);
     }
-    
-    
 
     return (
         <div>
             <Sidebar_admin/>
             <Container fluid className={globalstyles['main-background']}>
-                <div className={globalstyles['left-title']} >Thêm mới thông tin lớp</div>
+                <div className={globalstyles['left-title']} >Thông tin lớp học</div>
 
                 <div className={styles.flexRow}>
                     <Container className={styles['classInfo']}>
                     <div className={styles.titleContainer}>Thông tin cơ bản</div>
                         <div className={styles.flexRow}>
                             <div style={{ width: '85px'}}>Mã lớp</div>
-                            <div>
-                                <input
-                                    type="text"
-                                    value={classInfo.id}
-                                    onChange={handleInputClassID}
-                                    maxLength={6} 
-                                    placeholder="Nhập mã GV"
-                                    className={`${styles.input} ${inputClassIDError ? styles['error-input'] : ''}`}
-                                />
-                            </div>
+                            <div className={styles.input}>{classInfo.class_id}</div>
                         </div>
                         <div className={styles.flexRow}>
                             <div style={{ width: '85px'}}>Học Phần</div>
-                            <div>
-                                <input
-                                    type="text"
-                                    value={classInfo.subject_id}
-                                    onChange={handleInputSubjectID}
-                                    placeholder="Nhập mã HP"
-                                    className={`${styles.input} ${inputSubjectIDError ? styles['error-input'] : ''}`}
-                                />
-                            </div>
+                            <div className={styles.input}>{classInfo.subject_id}</div>
                         </div>
                         <div className={styles.flexRow}>
                             <div style={{ width: '85px'}}>Loại</div>
@@ -361,20 +322,12 @@ export const AddClass = () => {
                         </div>
                         <div className={styles.flexRow}>
                             <div style={{ width: '85px'}}>Học kỳ</div>
-                            <div>
-                                <input
-                                type="text"
-                                value={classInfo.semester}
-                                onChange={handleInputSemester}
-                                placeholder="Nhập học kỳ"
-                                className={`${styles.input} ${inputSemesterError ? styles['error-input'] : ''}`}
-                                />
-                            </div>
+                            <div className={styles.input}>{classInfo.semester}</div>
                         </div>
                     </Container>
                     <div style={{width:'100%'}}>
 
-                         {/* Thời khóa biểu */}
+                        {/* Thời khóa biểu */}
                         <Container className={styles.timetable}>
                             <div className={styles.titleContainer}>Thời gian</div>
                             <div className={globalstyles['icon-container']} style={{position: 'absolute', top: '20px', right: '20px'}} onClick={handleAddTimeButtonClick}>
@@ -459,11 +412,11 @@ export const AddClass = () => {
                             <div className={styles.flexRow} style={{gap: '0'}}>
                                 <input
                                     type="text"
-                                    value={classInfo.lecturer_id}
+                                    value={classInfo.lecturer_id || ''}
                                     onChange={handleInputLecturerID}
                                     placeholder="Nhập mã GV"
                                     className={`${styles.input} ${inputLecturerIDError ? styles['error-input'] : ''}`}
-                                    style={{ width: '160px' }}
+                                    style={{width: '160px'}}
                                 />
                                 <div className={globalstyles['icon-container']} onClick={handleSearchLecturerClick}>
                                     <FontAwesomeIcon color="white" icon={faSearch} />

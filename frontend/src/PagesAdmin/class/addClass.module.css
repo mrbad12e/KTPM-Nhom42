@@ -16,13 +16,17 @@
 }
 
 .input {
-  background-color:#ffffff;
-  padding: 0 20px 5px 15px;
+  background-color: #ffffff;
+  padding: 0 20px 0 15px;
   width: 160px;
   height: 33px;
   border-radius: 5px;
   border: 0.1px solid rgb(208, 208, 208);
+  display: flex; 
+  align-items: center; 
+
 }
+
 
 .error-input {
   border: 1px solid red;

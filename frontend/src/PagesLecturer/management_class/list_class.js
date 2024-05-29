@@ -58,7 +58,7 @@ export const ListClass = () => {
             const response = await axios.get(`/lecturer/student?class_id=${classId}`);
             const listStudent = response.data.students[0];
             console.log('Student detail:', listStudent);
-            navigate(`/list_student/${classId}`);
+            navigate(`/listStudent/${classId}`);
         }catch (error) {
             console.error('Error fetching student detail:', error.message);
         }

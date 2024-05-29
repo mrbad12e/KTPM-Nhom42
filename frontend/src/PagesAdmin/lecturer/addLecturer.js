@@ -72,7 +72,7 @@ export const AddLecturer = () => {
 
                 <div className={styles.gridContainer}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <div style={{ marginRight: '10px' }}>Mã giảng viên</div>
+                        <div style={{ marginRight: '10px', whiteSpace: 'nowrap' }}>Mã giảng viên</div>
                         <InputGroup>
                             <Form.Control  
                                 className={globalstyles.input}

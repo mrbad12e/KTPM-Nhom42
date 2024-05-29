@@ -11,6 +11,7 @@ export const Timetable = () => {
     const [selectedSemester, setSelectedSemester] = useState('20212');
     const handleSelect = (eventKey) => {
         setSelectedSemester(eventKey);
+        setSelectedClassInfo(null);
     };
     
     // get TimeTable
@@ -85,7 +86,7 @@ export const Timetable = () => {
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
                             <Dropdown.Item eventKey="20212">20212</Dropdown.Item>
-                            <Dropdown.Item eventKey="20211">20211</Dropdown.Item>
+                            <Dropdown.Item eventKey="20221">20221</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>

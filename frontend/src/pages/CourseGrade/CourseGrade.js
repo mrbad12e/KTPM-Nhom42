@@ -17,22 +17,28 @@ export const CourseGrade = () => {
             try {
                 const resultResponse = await axios.get(`student/results`);
                 const courseGrades = resultResponse.data.results;
-                const subjectIds = [...new Set(courseGrades.map(course => course.subject_id))];
+    
+                const updatedCourseGrades = courseGrades.filter(course => 
+                    course.semester !== "20221"
+                );
+
+                const subjectIds = [...new Set(updatedCourseGrades.map(course => course.subject_id))];
                 const subjectPromises = subjectIds.map(async subjectId => {
                     const response = await axios.get(`subject?id=${subjectId}`);
                     return response.data.subject[0];
                 });
+    
                 const subjects = await Promise.all(subjectPromises);
-                const updatedCourseGrades = courseGrades.map(course => {
+                updatedCourseGrades.forEach(course => {
                     const subject = subjects.find(sub => sub.id === course.subject_id);
                     if (subject) {
                         course.study_credits = subject.study_credits;
                         course.final_weight = subject.final_weight;
                     }
-                    return course;
                 });
+    
                 setCourseGrade(updatedCourseGrades);
-                
+    
             } catch (error) {
                 console.error('Error fetching data:', error.message);
             }
@@ -107,5 +113,3 @@ export const CourseGrade = () => {
         </div>
     );
 };
-
-export default CourseGrade;

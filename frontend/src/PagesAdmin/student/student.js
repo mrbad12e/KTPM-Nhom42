@@ -50,18 +50,6 @@ export const Student = () => {
         setCurrentPage(pageNumber);
     };
 
-    const handleDetailStudent = async (studentId) => {
-        try {
-            const response = await axios.get(`/admin/student?id=${studentId}`);
-            const studentDetail = response.data.students[0];
-            console.log('Student detail:', studentDetail);
-            navigate(`/updateStudent/${studentId}`);
-            // Đoạn code để xử lý thông tin chi tiết sinh viên, ví dụ: hiển thị modal, ...
-        } catch (error) {
-            console.error('Error fetching student detail:', error.message);
-        }
-    }
-
     return (
         <div>
             <Sidebar_admin/>
@@ -94,7 +82,7 @@ export const Student = () => {
                                 <td>{student.email}</td>
                                 <td style={{ display: 'flex', justifyContent: 'center' }}>
                                     <div className={globalstyles['icon-container']}>
-                                        <FontAwesomeIcon color="white" icon={faEye} onClick={() => handleDetailStudent(student.id)}/>
+                                        <FontAwesomeIcon color="white" icon={faEye} onClick={() => navigate(`/updateStudent/${student.id}`)}/>
                                     </div>
                                 </td>
                             </tr>

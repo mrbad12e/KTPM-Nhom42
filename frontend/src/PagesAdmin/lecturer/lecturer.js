@@ -59,17 +59,6 @@ export const Lecturer = () => {
         setCurrentPage(pageNumber);
     };
 
-    const handleDetailLecturer = async (lecturerId) => {
-        try {
-            const response = await axios.get(`/admin/lecturer?id=${lecturerId}`);
-            const lecturerDetail = response.data.lecturers[0];
-            console.log('Lecturer detail:', lecturerDetail);
-            navigate(`/updateLecturer/${lecturerId}`);
-        } catch (error) {
-            console.error('Error fetching lecturer detail:', error.message);
-        }
-    }
-
     return (
         <div>
             <Sidebar_admin/>
@@ -102,7 +91,7 @@ export const Lecturer = () => {
                                 <td>{lecturer.phone}</td>
                                 <td style={{ display: 'flex', justifyContent: 'center' }}>
                                     <div className={globalstyles['icon-container']} >
-                                        <FontAwesomeIcon color="white" icon={faEye}  onClick={() => handleDetailLecturer(lecturer.id)} />
+                                        <FontAwesomeIcon color="white" icon={faEye}  onClick={() => navigate(`/updateLecturer/${lecturer.id}`)} />
                                     </div>
                                 </td>
                             </tr>

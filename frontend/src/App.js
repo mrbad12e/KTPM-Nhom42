@@ -14,6 +14,7 @@ import { AddLecturer } from './PagesAdmin/lecturer/addLecturer';
 import { UpdateLecturer } from './PagesAdmin/lecturer/updateLecturer';
 import { Class } from './PagesAdmin/class/class';
 import { AddClass } from './PagesAdmin/class/addClass';
+import { UpdateClass } from './PagesAdmin/class/updateClass';
 import { Faculty } from './PagesAdmin/faculty/faculty';
 import { ListProgram } from './PagesAdmin/faculty/program';
 import { Subject } from './PagesAdmin/subject/subject';
@@ -44,6 +45,9 @@ export const App = () => {
 
                 <Route path="/class" element={<Class/>}/>
                 <Route path="/addClass" element={<AddClass/>}/>
+                <Route path="/updateClass/:id" element={<UpdateClass/>}/>
+
+
                 <Route path="/faculty" element={<Faculty/>}/>
                 <Route path="/program/:id" element={<ListProgram/>}/>
                 <Route path="/subject" element={<Subject/>}/>

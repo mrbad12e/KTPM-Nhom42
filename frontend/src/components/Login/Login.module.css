@@ -21,7 +21,6 @@
 }
 
 .btnLogin{
-    background: linear-gradient(135deg,rgb(56, 56, 56) 0%,rgb(0, 0, 0) 100%);
     width: 100%;
     margin: 30px 0px 10px;
     height: 35px;
@@ -36,6 +35,5 @@
     border: 0.1px solid rgb(212, 212, 212); 
     text-align: left;  
 }
-
 
   

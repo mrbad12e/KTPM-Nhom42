@@ -64,7 +64,7 @@ const Sidebar_student = () => {
             {showOverlay && <div className={styles['overlay']} onClick={handleHamburgerButtonClick}></div>}
             <div className={`${styles['left-content']} ${showMenu ? styles['show'] : ''}`}>
                 <ul className={styles['sitemap']} onClick={window.innerWidth <= 1000 ? handleHamburgerButtonClick : null}>
-                    <li><NavLink to="/home" className={location.pathname === '/home' ? styles.active : ''}>Trang chủ</NavLink></li>
+                    <li><NavLink to="/home" className={location.pathname === '/home' ? styles.active : ''}>Thông tin cá nhân</NavLink></li>
                     <hr className={styles.separator} />
                     <li><NavLink to="/timetable" className={location.pathname === '/timetable' ? styles.active : ''}>Thời khóa biểu</NavLink></li>
                     <hr className={styles.separator} />

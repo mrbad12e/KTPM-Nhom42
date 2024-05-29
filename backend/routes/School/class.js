@@ -14,7 +14,6 @@ router.route('/assign').patch(isAuthUser, ClassControllers.assignLecturer);
 
 router.route('/students').get(isAuthUser, ClassControllers.readStudents);
 
-
 router.route('/enroll')
     .patch(isAuthUser, ClassControllers.enrollClass);
     // Phai la student moi co the enroll class

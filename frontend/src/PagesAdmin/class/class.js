@@ -16,9 +16,8 @@ export const Class = () => {
     const [inputClassId, setInputClassId] = useState('');
     const handleInputClassID = (event) => setInputClassId(event.target.value);
     const [selectedSemester, setSelectedSemester] = useState('20212');
-    const handleSelect = (eventKey) => {
-        setSelectedSemester(eventKey);
-    };
+    const handleSelect = (eventKey) => setSelectedSemester(eventKey);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchSearchClass();
@@ -75,7 +74,6 @@ export const Class = () => {
                 </div>
                 <div style={{ display: 'flex', gap: '10px', marginLeft: '50px' }}>
                     <input className={globalstyles.input} type="text" value={inputClassId} onChange={handleInputClassID} placeholder="Nhập mã lớp học" />
-                    {/* <input className={globalstyles.input} type="text" value={selectedSemester} onChange={handleInputSemseter} placeholder="Nhập kì học" /> */}
                     <Button className={globalstyles.smallButton} variant="primary" onClick={handleSearchButtonClick}>Tìm kiếm</Button>
                 </div>
                 <Table className={globalstyles['table-1300']}>
@@ -97,7 +95,7 @@ export const Class = () => {
                                 <td>{classes.subject_name}</td>
                                 <td style={{ display: 'flex', justifyContent: 'center' }}>
                                     <div className={globalstyles['icon-container']}  >
-                                        <FontAwesomeIcon color="white" icon={faEye} />
+                                        <FontAwesomeIcon color="white" icon={faEye} onClick={() => navigate(`/updateClass/${classes.class_id}`)}/>
                                     </div>
                                 </td>
                             </tr>
