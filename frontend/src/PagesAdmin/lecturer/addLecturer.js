@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Button, Form, InputGroup, Alert } from 'react-bootstrap';
+import { Container, Button, Form, Alert, Dropdown } from 'react-bootstrap';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
 import globalstyles from '../../CSSglobal.module.css';
 import styles from './lecturer.module.css';
@@ -7,61 +7,43 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 export const AddLecturer = () => {
-    const [mssv, setMssv] = useState('12345678');
-    const [email, setEmail] = useState('quang@gmail.com');
-    const [Falcuty_id, setFalcuty_id] = useState('533402');
-    const [first_name, setFirst_name] = useState('Luong');
-    const [last_name, setLast_name] = useState('Quang');
-    const [gender, setGender] = useState('M');
-    const [DoB, setDoB] = useState('2003-01-01');
-    const [address, setAddress] = useState('Cao Bang');
-    const [joinDate, setJoinDate] = useState('2003-01-01');
-    const [phone, setPhone] = useState('0816420686');
+    const [lecturer, setLecturer] = useState({ id: '', email: '', faculty_id: '', first_name: '', last_name: '', gender: 'M', birthday: '', address: '', join_date:'',status: 'true', phone: '' });
 
     const [showNotification, setShowNotification] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState('');
     const [notificationTitle, setNotificationTitle] = useState('');
+    const handleCloseNotification = () => setShowNotification(false);
+
+    const checkForEmptyFields = (obj) => {
+        for (let key in obj) if (!obj[key]) return true;
+        return false;
+    };
 
     const handleSave = () => {
-        if (!mssv || !email || !Falcuty_id || !first_name || !last_name || !gender || !DoB || !address || !joinDate || !phone) {
-            setNotificationTitle('Lỗi');
+        console.log(lecturer);
+       if (checkForEmptyFields(lecturer)) {
+            setNotificationTitle('Error !');
             setNotificationMessage('Vui lòng điền đầy đủ thông tin.');
             setShowNotification(true);
-            setTimeout(() => setShowNotification(false), 3000);
             return;
         }
 
-        const studentData = {
-            id: mssv,
-            email,
-            Falcuty_id,
-            first_name,
-            last_name,
-            gender,
-            birthday: DoB,
-            address,
-            join_date: joinDate,
-            status: true,
-            phone
-        };
-
-        axios.post('/admin/lecturer', studentData)
-            .then(response => {
-                setNotificationTitle('Thành công');
-                setNotificationMessage('Thêm mới sinh viên thành công');
-                setShowNotification(true);
-                setTimeout(() => setShowNotification(false), 3000); 
-            })
-            .catch(error => {
-                setNotificationTitle('Lỗi');
-                setNotificationMessage('Trùng mã số sinh viên');
-                setShowNotification(true);
-                setTimeout(() => setShowNotification(false), 3000); 
-            });
-    };
-
-    const handleCloseNotification = () => {
-        setShowNotification(false);
+    axios.post('admin/lecturer', lecturer)
+        .then(response => {
+            setNotificationTitle('Success');
+            setNotificationMessage('Thêm mới giảng viên thành công');
+            setShowNotification(true);
+        })
+        .catch(error => {
+            setNotificationTitle('Error !');
+            setShowNotification(true);
+            console.error(error.response.data);
+            if(error.response.data.error === 'insert or update on table \"lecturer\" violates foreign key constraint \"fk_lecturer_faculty\"') {
+                setNotificationMessage('Mã khoa không tồn tại');
+            } else {
+                setNotificationMessage('Trùng mã giảng viên');
+            }
+        });
     };
 
     return (
@@ -70,162 +52,114 @@ export const AddLecturer = () => {
             <Container fluid className={globalstyles['main-background']}>
                 <div className={globalstyles['title']}>Thêm giảng viên</div>
 
+                {showNotification && (
+                     <Alert variant={notificationTitle === 'Success' ? 'success' : 'danger'} onClose={handleCloseNotification} dismissible>
+                     <Alert.Heading>{notificationTitle}</Alert.Heading>
+                     <p>{notificationMessage}</p>
+                 </Alert>
+                )}
+                
                 <div className={styles.gridContainer}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <div style={{ marginRight: '10px', whiteSpace: 'nowrap' }}>Mã giảng viên</div>
-                        <InputGroup>
-                            <Form.Control  
-                                className={globalstyles.input}
-                                placeholder="8 số"
-                                aria-label="ID"
-                                aria-describedby="basic-addon1"
-                                value={mssv}
-                                onChange={(event) => {
-                                    const onlyNums = event.target.value.replace(/[^0-9]/g, '');
-                                    const limitedNums = onlyNums.slice(0, 8);
-                                    setMssv(limitedNums);
-                                }}
-                                type="text"
-                                maxLength={8}
-                                pattern="[0-9]*"
-                            />
-                        </InputGroup>
+                        <div style={{ marginRight: '10px', width: '100px' }}>Mã GV</div>
+                        <Form.Control  
+                            placeholder="Lecturer ID"
+                            value={lecturer.id}
+                            onChange={(event) => setLecturer({ ...lecturer, id: event.target.value })}
+                            type="text"
+                        />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <div style={{ marginRight: '10px', whiteSpace: 'nowrap' }}>Mã khoa</div>
-                        <InputGroup style={{ width: '150px' }}>
-                            <Form.Control
-                                placeholder="Falcuty_id"
-                                aria-label="Falcuty_id"
-                                aria-describedby="Falcuty_id"
-                                value={Falcuty_id}
-                                onChange={(event) => setFalcuty_id(event.target.value)}
-                                type="text"
-                            />
-                        </InputGroup>
+                        <div style={{ marginRight: '10px', width: '100px' }}>Mã khoa</div>
+                        <Form.Control
+                            style={{ minWidth: '110px' }}
+                            placeholder="Faculty ID"
+                            value={lecturer.faculty_id}
+                            onChange={(event) => setLecturer({ ...lecturer, faculty_id: event.target.value })}
+                            type="text"
+                        />
                     </div>
                     <div></div>
                     <div style={{ display: 'flex', alignItems: 'center'}}>
-                        <div style={{ marginRight: '10px' }}>Họ</div>
-                        <InputGroup >
-                            <Form.Control
-                                placeholder="Ho"
-                                aria-label="Ho"
-                                aria-describedby="basic-addon1"
-                                value={first_name}
-                                onChange={(event) => setFirst_name(event.target.value)}
-                                type="text"
-                            />
-                        </InputGroup>
+                        <div style={{ marginRight: '10px', width: '100px' }}>Họ</div>
+                        <Form.Control
+                            placeholder="Last name"
+                            value={lecturer.last_name}
+                            onChange={(event) => setLecturer({ ...lecturer, last_name: event.target.value })}
+                            type="text"
+                        />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center'}}>
-                        <div style={{ marginRight: '10px' }}>Tên</div>
-                        <InputGroup >
-                            <Form.Control
-                                placeholder="Ten"
-                                aria-label="Ten"
-                                aria-describedby="basic-addon1"
-                                value={last_name}
-                                onChange={(event) => setLast_name(event.target.value)}
-                                type="text"
-                            />
-                        </InputGroup>
+                        <div style={{ marginRight: '10px', width: '100px' }}>Tên</div>
+                        <Form.Control
+                            placeholder="First name"
+                            value={lecturer.first_name}
+                            onChange={(event) => setLecturer({ ...lecturer, first_name: event.target.value })}
+                            type="text"
+                        />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center'}}>
-                        <div style={{ marginRight: '10px', whiteSpace: 'nowrap' }}>Giới tính</div>
-                        <InputGroup >
-                            <Form.Control
-                                as="select"
-                                aria-label="Giới tính"
-                                value={gender === 'M' ? 'Nam' : 'Nữ'}
-                                onChange={(event) => setGender(event.target.value === 'Nam' ? 'M' : 'F')}
-                            >
-                                <option>Nam</option>
-                                <option>Nữ</option>
-                            </Form.Control>
-                        </InputGroup>
+                        <div style={{ marginRight: '10px', width: '100px' }}>Giới tính</div>
+                        <Dropdown onSelect={(eventKey) => setLecturer({ ...lecturer, gender: eventKey })} style={{ width: '100%' }}>
+                            <Dropdown.Toggle variant="light" id="dropdown-basic" className={styles.selectGender}>
+                                {lecturer.gender === 'M' ? 'Nam' : 'Nữ'}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu style={{ width: '100%' }}>
+                                <Dropdown.Item eventKey="M">Nam</Dropdown.Item>
+                                <Dropdown.Item eventKey="F">Nữ</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </div>  
                     <div style={{ display: 'flex', alignItems: 'center'}}>
                         <div style={{ marginRight: '10px', whiteSpace: 'nowrap' }}>Ngày sinh</div>
-                        <InputGroup>
-                            <Form.Control
-                                placeholder="DD/MM/YY"
-                                aria-describedby="basic-addon1"
-                                type="date"
-                                value={DoB}
-                                onChange={(event) => setDoB(event.target.value)}
-                            />
-                        </InputGroup>
+                        <Form.Control
+                            placeholder="DD/MM/YY"
+                            type="date"
+                            value={lecturer.birthday}
+                            onChange={(event) => setLecturer({ ...lecturer, birthday: event.target.value })}
+                        />
                     </div>  
                     <div style={{ display: 'flex', alignItems: 'center'}}>
-                        <div style={{ marginRight: '10px' }}>Email</div>
-                        <InputGroup >
-                            <Form.Control
-                                placeholder="Email"
-                                aria-label="Email"
-                                aria-describedby="basic-addon1"
-                                value={email}
-                                onChange={(event) => setEmail(event.target.value)}
-                                type="text"
-                            />
-                        </InputGroup>
+                        <div style={{ marginRight: '10px', width: '100px' }}>Email</div>
+                        <Form.Control
+                            placeholder="Email"
+                            value={lecturer.email}
+                            onChange={(event) => setLecturer({ ...lecturer, email: event.target.value })}
+                            type="text"
+                        />
                     </div>   
                     <div style={{ display: 'flex', alignItems: 'center'}}>
-                        <div style={{ marginRight: '10px', whiteSpace: 'nowrap' }}>SĐT</div> 
-                        <InputGroup >
-                            <Form.Control
-                                placeholder="So dien thoai"
-                                aria-label="So dien thoai"
-                                aria-describedby="basic-addon1"
-                                value={phone}
-                                onChange={(event) => setPhone(event.target.value)}
-                                type="text"
-                            />
-                        </InputGroup>
+                        <div style={{ marginRight: '10px', width: '100px' }}>SĐT</div> 
+                        <Form.Control
+                            placeholder="Phone number"
+                            value={lecturer.phone}
+                            onChange={(event) => setLecturer({ ...lecturer, phone: event.target.value })}
+                            type="text"
+                        />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center'}}>
-                        <div style={{ marginRight: '10px', whiteSpace: 'nowrap' }}>Địa chỉ</div> 
-                        <InputGroup>
-                            <Form.Control
-                                placeholder="Dia chi"
-                                aria-label="Dia chi"
-                                aria-describedby="basic-addon1"
-                                value={address}
-                                onChange={(event) => setAddress(event.target.value)}
-                                type="text"
-                            />
-                        </InputGroup>
+                        <div style={{ marginRight: '10px', whiteSpace: 'nowrap', width: '100px' }}>Địa chỉ</div> 
+                        <Form.Control
+                            placeholder="Address"
+                            value={lecturer.address}
+                            onChange={(event) => setLecturer({ ...lecturer, address: event.target.value })}
+                            type="text"
+                        />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center'}}>
                         <div style={{ marginRight: '10px', whiteSpace: 'nowrap' }}>Ngày làm chính thức</div> 
-                        <InputGroup>
-                            <Form.Control
-                                placeholder="Ngày làm chính thức"
-                                aria-label="Ngày làm chính thức"
-                                aria-describedby="basic-addon1"
-                                type="date"
-                                value={joinDate}
-                                onChange={(event) => setJoinDate(event.target.value)}
-                            />
-                        </InputGroup>
+                        <Form.Control
+                            placeholder="Admission Date"
+                            type="date"
+                            value={lecturer.join_date}
+                            onChange={(event) => setLecturer({ ...lecturer, join_date: event.target.value })}
+                        />
                     </div>
                 </div>         
                 <div className={styles['confirmButton']}>
                     <Button variant="primary" onClick={handleSave}>Thêm mới</Button>
-                    <Link to="/student"><Button variant="danger" style={{marginLeft: '10px'}}>Hủy bỏ</Button></Link>
+                    <Link to="/lecturer"><Button variant="danger" style={{marginLeft: '10px'}}>Hủy bỏ</Button></Link>
                 </div>
-        
-                {showNotification && (
-                   <Row style={{ position: 'fixed', zIndex: '4', top: '10px', left: '50%'}}>
-
-                        <Col xs="auto">
-                            <Alert variant={notificationTitle === 'Thành công' ? 'success' : 'danger'} onClose={handleCloseNotification} dismissible>
-                                <Alert.Heading>{notificationTitle}</Alert.Heading>
-                                <p>{notificationMessage}</p>
-                            </Alert>
-                        </Col>
-                    </Row>
-                )}
             </Container>
         </div>
     );

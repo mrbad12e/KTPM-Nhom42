@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Button, Form, InputGroup, Alert, Dropdown } from 'react-bootstrap';
+import { Container, Button, Form, Alert, Dropdown } from 'react-bootstrap';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
 import globalstyles from '../../CSSglobal.module.css';
 import styles from './student.module.css';
@@ -22,7 +22,7 @@ export const AddStudent = () => {
     const handleSave = () => {
         console.log(student);
        if (checkForEmptyFields(student)) {
-            setNotificationTitle('Error');
+            setNotificationTitle('Error !');
             setNotificationMessage('Vui lòng điền đầy đủ thông tin.');
             setShowNotification(true);
             return;
@@ -35,7 +35,7 @@ export const AddStudent = () => {
             setShowNotification(true);
         })
         .catch(error => {
-            setNotificationTitle('Error');
+            setNotificationTitle('Error !');
             setShowNotification(true);
             console.error(error.response.data);
             if(error.response.data.error === 'insert or update on table "student" violates foreign key constraint "fk_student_program"') {
@@ -44,7 +44,6 @@ export const AddStudent = () => {
                 setNotificationMessage('Trùng mã số sinh viên');
             }
         });
-    
     };
 
     return (
@@ -106,7 +105,7 @@ export const AddStudent = () => {
                         />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center'}}>
-                        <div style={{ marginRight: '10px', whiteSpace: 'nowrap', width: '100px' }}>Giới tính</div>
+                        <div style={{ marginRight: '10px', width: '100px' }}>Giới tính</div>
                         <Dropdown onSelect={(eventKey) => setStudent({ ...student, gender: eventKey })} style={{ width: '100%' }}>
                             <Dropdown.Toggle variant="light" id="dropdown-basic" className={styles.selectGender}>
                                 {student.gender === 'M' ? 'Nam' : 'Nữ'}
@@ -118,7 +117,7 @@ export const AddStudent = () => {
                         </Dropdown>
                     </div>  
                     <div style={{ display: 'flex', alignItems: 'center'}}>
-                        <div style={{ marginRight: '10px', whiteSpace: 'nowrap', width: '100px' }}>Ngày sinh</div>
+                        <div style={{ marginRight: '10px', width: '100px' }}>Ngày sinh</div>
                         <Form.Control
                             placeholder="DD/MM/YY"
                             type="date"
@@ -145,7 +144,7 @@ export const AddStudent = () => {
                         />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center'}}>
-                        <div style={{ marginRight: '10px', whiteSpace: 'nowrap', width: '100px' }}>Địa chỉ</div> 
+                        <div style={{ marginRight: '10px', width: '100px' }}>Địa chỉ</div> 
                         <Form.Control
                             placeholder="Address"
                             value={student.address}

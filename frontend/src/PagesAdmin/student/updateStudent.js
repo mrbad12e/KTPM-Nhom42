@@ -162,12 +162,7 @@ export const UpdateStudent = () => {
                         <Form.Group as={Row} className="align-items-center mb-3">
                             <Form.Label column sm="4">CTDT:</Form.Label>
                             <Col sm="8">
-                                <Form.Control
-                                    placeholder="Program ID"
-                                    value={studentUpdate.program_id}
-                                    onChange={(event) => setStudentUpdate({ ...studentUpdate, program_id: event.target.value })}
-                                    type="text"
-                                />
+                                <Form.Control type="text" value={studentUpdate.program_id} readOnly />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="align-items-center mb-3">

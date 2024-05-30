@@ -20,21 +20,17 @@ export const Header = () => {
         }
     };
 
-    const handleChangePassword = () => {
-        
-    };
-
     return (
         <Navbar className={styles['header-background']}>
-            <Navbar.Brand className={styles["header-title"]}>ĐẠI HỌC BÁCH KHOA HÀ NỘI</Navbar.Brand>
+            <div className={styles["header-title"]}>ĐẠI HỌC BÁCH KHOA HÀ NỘI</div>
             {shouldShowGreeting && (
                 <Dropdown className={styles["header-user"]}>
-                    <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                    <Dropdown.Toggle variant="primary" id="dropdown-basic" className={styles.user}>
                         Xin chào user
                     </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                        <Dropdown.Item style={{ fontSize: '14px', padding: '5px 10px'}}>Đổi mật khẩu</Dropdown.Item>
-                        <Dropdown.Item style={{ fontSize: '14px', padding: '5px 10px'}} onClick={handleLogout}>Đăng xuất</Dropdown.Item>
+                    <Dropdown.Menu style={{ width: '140px'}}>
+                        {/* <Dropdown.Item>Đổi mật khẩu</Dropdown.Item> */}
+                        <Dropdown.Item onClick={handleLogout}>Đăng xuất</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             )}
