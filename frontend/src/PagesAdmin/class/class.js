@@ -10,7 +10,8 @@ import styles from './class.module.css';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 export const Class = () => {
-    const [classes, setClass] = useState([]);
+    const [allClasses, setAllClasses] = useState([]);
+    const [classes, setClasses] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [inputClassId, setInputClassId] = useState('');
@@ -21,39 +22,49 @@ export const Class = () => {
 
     useEffect(() => {
         fetchSearchClass();
-        console.log("selectedSemester:", selectedSemester);
+        setClasses(allClasses);
     }, [selectedSemester]);
 
-    const fetchSearchClass = async () => {
-        
+    const fetchSearchClass = async () => { 
         try {
-            let response;
-            if (selectedSemester) {
-                response = await axios.get(`/class/?semester=${selectedSemester}`);
-              
-            } else if (inputClassId) {
-                response = await axios.get(`/class/?class_id=${inputClassId}`);
-            } else { 
-                const seme = 20212;
-                response = await axios.get(`/class/?semester=${seme}`);
-            }
-            const ClassData = response.data.class;
-            
-            setClass(ClassData);
-            setTotalPages(Math.ceil(ClassData.length / 10));
+            let response = await axios.get(`/class/?semester=${selectedSemester}`);
+            const classData = response.data.class;
+    
+            // Create a map to group classes by class_id, subject_id, and subject_name
+            const groupedClasses = classData.reduce((acc, curr) => {
+                const key = `${curr.class_id}-${curr.subject_id}-${curr.subject_name}`;
+                if (!acc[key]) {
+                    acc[key] = {
+                        class_id: curr.class_id,
+                        subject_id: curr.subject_id,
+                        subject_name: curr.subject_name,
+                        details: []
+                    };
+                }
+                acc[key].details.push(curr);
+                return acc;
+            }, {});
+    
+            // Convert the map to an array
+            const groupedClassesArray = Object.values(groupedClasses);
+    
+            setAllClasses(groupedClassesArray);
+            setClasses(groupedClassesArray);
+            setTotalPages(Math.ceil(groupedClassesArray.length / 10));
         } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu khoa:', error);
+            console.error('Error fetching classes:', error);
         }
     };
+    
     const handleSearchButtonClick = () => {
-        fetchSearchClass();
+        const filtered = allClasses.filter((classItem) => classItem.class_id.startsWith(inputClassId));
+        setClasses(filtered);
+        setTotalPages(Math.ceil(filtered.length / 10));  
     };
-
+    
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
-
-    
 
     return (
         <div>

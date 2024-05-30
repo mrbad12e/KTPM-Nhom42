@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Container, Button, Dropdown, Modal } from 'react-bootstrap';
+import { Table, Container, Button, Dropdown, Modal, Alert } from 'react-bootstrap';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin'; 
-import styles from './addClass.module.css';
+import styles from './class.module.css';
 import globalstyles from '../../CSSglobal.module.css';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -12,21 +13,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export const AddClass = () => {
-
+    const navigate = useNavigate();
     const [classInfo, setClassInfo] = useState({ id: '', subject_id: '', type: '', require_lab: '', semester:'', current_cap:'', max_cap: '', lecturer_id: '' });
     const [classTime, setClassTime] = useState([]);
     //--------------------------Class-------------------
     //class id
-    const [inputClassIDError, setInputClassIDError] = useState(false);
+    const [inputClassIDError, setClassIdError] = useState(false);
     const handleInputClassID = (event) => {
-        setInputClassIDError(false);
+        setClassIdError(false);
         const value = event.target.value;
         setClassInfo(prevClassInfo => ({ ...prevClassInfo, id: value }));
     };
 
     // subject id 
-    const [inputSubjectIDError, setInputSubjectIDError] = useState(false);
+    const [inputSubjectIDError, setSubjectIdError] = useState(false);
     const handleInputSubjectID = (event) => {
+        setSubjectIdError(false);
         const value = event.target.value;
         setClassInfo(prevClassInfo => ({ ...prevClassInfo, subject_id: value }));
     };
@@ -39,24 +41,24 @@ export const AddClass = () => {
     };
 
     // lab
-    const [labError, setLabError] = useState(false);
+    const [labError, setRequireLabError] = useState(false);
     const handleSelectLab = (event) => {
-        setLabError(false); 
+        setRequireLabError(false); 
         setClassInfo(prevClassInfo => ({ ...prevClassInfo, require_lab: event }));
     };
 
     // semester
-    const [inputSemesterError, setInputSemesterError] = useState(false);
+    const [inputSemesterError, setSemesterError] = useState(false);
     const handleInputSemester = (event) => {
-        setInputSemesterError(false);
+        setSemesterError(false);
         const onlyNums = event.target.value.replace(/[^0-9]/g, '');
         setClassInfo(prevClassInfo => ({ ...prevClassInfo, semester: onlyNums }));
     };
 
      // Số sinh viên tối đa
-     const [inputStudentCountError, setInputStudentCountError] = useState(false);
-     const handleInputStudentCount = (event) => {
-        setInputStudentCountError(false);
+     const [maxCapError, setMaxCapError] = useState(false);
+     const handleInputMaxCap = (event) => {
+        setMaxCapError(false);
         const onlyNums = event.target.value.replace(/[^0-9]/g, '');
         const limitedNums = onlyNums.slice(0, 3);
         setClassInfo(prevClassInfo => ({ ...prevClassInfo, max_cap: limitedNums }));
@@ -114,7 +116,7 @@ export const AddClass = () => {
 
     //--------------------Lecturer------------------------
     const [lecturer, setLecturer] = useState(null);   
-    const [inputLecturerIDError, setInputLecturerIDError] = useState(false);
+    const [lecturerIdError, setLecturerIdError] = useState(false);
 
     const handleInputLecturerID = (event) => {
         const value = event.target.value;
@@ -123,7 +125,7 @@ export const AddClass = () => {
 
     const fetchSearchLecturer = async () => {
         try {
-            setInputLecturerIDError(false);
+            setLecturerIdError(false);
             if (classInfo.lecturer_id) {
                 let response = await axios.get(`/admin/lecturer?id=${classInfo.lecturer_id}`);
                 if (response.data.lecturers.length > 0) {
@@ -132,7 +134,7 @@ export const AddClass = () => {
                     setLecturer(null);
                 }
             } else {
-                setInputLecturerIDError(true); 
+                setLecturerIdError(true); 
             }
         } catch (error) {
             console.error('Error fetching lecturer:', error);
@@ -208,34 +210,35 @@ export const AddClass = () => {
 
     //--------------Save Cancel----------------------------
     const handleCancel = () => {
-       console.log("classTime",classTime);
-    }
-    
-    
+        classTime.forEach((time) => {
+            console.log(`Start Time: ${time.start_time.format('HHmm')}, End Time: ${time.end_time.format('HHmm')}, Location: ${time.location}, Day: ${time.weekday}`);
+        });
+    };
 
     // Add class
-    const postDataToClassAPI = async () => {
-        const fieldsToCheck = [
-            { field: classInfo.id, setError: setInputClassIDError, errorLog: 'Missing inputClassID', validation: value => !value || value.length !== 6 || isNaN(value) },
-            { field: classInfo.type, setError: setTypeError, errorLog: 'Missing type' },
-            { field: classInfo.semester, setError: setInputSemesterError, errorLog: 'Missing inputSemester' },
-            { field: classInfo.require_lab, setError: setLabError, errorLog: 'Missing lab' },
-            { field: classInfo.max_cap, setError: setInputStudentCountError, errorLog: 'Missing inputStudentCount' },
-            { field: lecturer, setError: setInputLecturerIDError, errorLog: 'Missing lecturer.id' },
-            { field: classInfo.subject_id, setError: setInputSubjectIDError, errorLog: 'Missing inputSubjectID' }
-        ];
-        
-        let hasError = false;
-        
-        fieldsToCheck.forEach(({ field, setError, errorLog, validation }) => {
-            if (validation ? validation(field) : !field) {
+    const addClass = async () => {
+        const fieldsToCheck = {
+            id: { setError: setClassIdError, errorLog: 'Missing inputClassID', validation: value => !value || value.length !== 6 || isNaN(value) },
+            subject_id: { setError: setSubjectIdError, errorLog: 'Missing inputSubjectID' },
+            type: { setError: setTypeError, errorLog: 'Missing type' },
+            semester: { setError: setSemesterError, errorLog: 'Missing inputSemester' },
+            require_lab: { setError: setRequireLabError, errorLog: 'Missing lab' },  
+            max_cap: { setError: setMaxCapError, errorLog: 'Missing inputStudentCount' },
+            lecturer_id: { setError: setLecturerIdError, errorLog: 'Missing lecturer.id' }
+        };
+    
+        const hasError = Object.entries(fieldsToCheck).some(([key, { setError, errorLog, validation }]) => {
+            const field = key === 'lecturer_id' ? lecturer?.id : classInfo[key];
+            const isInvalid = validation ? validation(field) : !field;
+            if (isInvalid) {
                 console.log(errorLog);
                 setError(true);
-                hasError = true;
             }
+            return isInvalid;
         });
-        
+    
         if (hasError) {
+            setAddClassError("Hãy điền đầy đủ thông tin!");
             return;
         }
     
@@ -250,58 +253,84 @@ export const AddClass = () => {
                 lecturer_id: classInfo.lecturer_id,
                 subject_id: classInfo.subject_id
             });
-    
+            
             console.log('Class created successfully:', response.data);
+            setShowModal(true);
+          
         } catch (error) {
-            if (error.response && error.response.data && error.response.data.error) {
-                const errorData = error.response.data.error;
-                console.log(errorData);
+            if (error.response?.data?.error) {
+                console.log(error.response.data.error);
             } else {
                 console.log('Error message:', error.message);
             }
         }
     };
     
-    
     // Add timetable
-    const postDataToTimetableAPI = async () => {
-        for (const row of TimeRows) {
-            if (row.inputStartTime && row.inputEndTime) {
-                const formattedStartTime = row.inputStartTime.format('HHmm');
-                const formattedEndTime = row.inputEndTime.format('HHmm');
-                console.log(`Start Time: ${formattedStartTime}, End Time: ${formattedEndTime}, Location: ${row.inputLocation}, Day: ${row.selectedDay}`);
-                try {
-                    const response = await axios.post('class/add', {
-                        "id": inputClassID,
-                        "weekday": row.selectedDay,
-                        "start_time": formattedStartTime,
-                        "end_time": formattedEndTime,
-                        "location": row.inputLocation
-                    });
-                } catch (error) {
-                    console.error('Error while posting data:', error);
-                }
-            } else {
-                console.error('inputStartTime or inputEndTime is null', row);
+    const updateTimetable = async () => {
+        for (const time of classTime) {
+            if (!time.weekday || !time.start_time || !time.end_time || !time.location) {
+                // setAddClassError("hãy điền đầy đủ thông tin thời khóa biểu");
+                return;
             }
+        }
+
+        try {
+            const promises = classTime.map(time => axios.post('class/add', {
+                class_id: classInfo.id,
+                weekday: time.weekday,
+                start_time: time.start_time.format('HHmm'),
+                end_time: time.end_time.format('HHmm'),
+                location: time.location
+            }));
+    
+            await Promise.all(promises);
+            console.log('Timetable updated successfully');
+        } catch (error) {
+            console.error('Error updating timetable:', error);
         }
     };
     
     // Add student
-
     const handleSave = async () => {
-        console.log("classInfo",classInfo);
-        // await postDataToClassAPI();
-        // await postDataToTimetableAPI();
-    }
+        // console.log("classInfo", classInfo);
+        await addClass();
+        await updateTimetable();
+       
+        setShowModal(true);
+    };
+
+    const [showModal, setShowModal] = useState(false);
+
+    // Đóng modal
+    const handleCloseModal = () => setShowModal(false);
+
+    const handleCreateNewClass = () => {
+        setShowModal(false);
+        setClassInfo({ id: '', type: '', semester: '', require_lab: '', max_cap: '', lecturer_id: '', subject_id: '' });
+        setStudents([]);
+        setLecturer(null);
+        setClassTime([]);
+    };
     
-    
+    const handleGoToClassInfo = () => {
+        setShowModal(false);
+        navigate(`/updateClass/${classInfo.id}`);
+    };
+
+    const [addClassError, setAddClassError] = useState(null);
 
     return (
         <div>
             <Sidebar_admin/>
             <Container fluid className={globalstyles['main-background']}>
                 <div className={globalstyles['left-title']} >Thêm mới thông tin lớp</div>
+
+                {addClassError && (
+                    <Alert variant="danger" className="mt-3">
+                        {addClassError}
+                    </Alert>
+                )}
 
                 <div className={styles.flexRow}>
                     <Container className={styles['classInfo']}>
@@ -314,7 +343,7 @@ export const AddClass = () => {
                                     value={classInfo.id}
                                     onChange={handleInputClassID}
                                     maxLength={6} 
-                                    placeholder="Nhập mã GV"
+                                    placeholder="Nhập mã lớp"
                                     className={`${styles.input} ${inputClassIDError ? styles['error-input'] : ''}`}
                                 />
                             </div>
@@ -438,7 +467,7 @@ export const AddClass = () => {
                                                         type="text" 
                                                         value={row.location} 
                                                         onChange={(event) => handleInputLocation(rowIndex, event)} 
-                                                        placeholder="402-D9"
+                                                        placeholder=""
                                                         className={styles['custom-select']} 
                                                     />
                                                 </td>
@@ -462,7 +491,7 @@ export const AddClass = () => {
                                     value={classInfo.lecturer_id}
                                     onChange={handleInputLecturerID}
                                     placeholder="Nhập mã GV"
-                                    className={`${styles.input} ${inputLecturerIDError ? styles['error-input'] : ''}`}
+                                    className={`${styles.input} ${lecturerIdError ? styles['error-input'] : ''}`}
                                     style={{ width: '160px' }}
                                 />
                                 <div className={globalstyles['icon-container']} onClick={handleSearchLecturerClick}>
@@ -487,10 +516,10 @@ export const AddClass = () => {
                                 <input
                                     type="text"
                                     value={classInfo.max_cap || ''}
-                                    onChange={handleInputStudentCount}
+                                    onChange={handleInputMaxCap}
                                     maxLength={3} 
                                     placeholder="Nhập sĩ số"
-                                    className={`${styles.input} ${inputStudentCountError ? styles['error-input'] : ''}`}
+                                    className={`${styles.input} ${maxCapError ? styles['error-input'] : ''}`}
                                 />
                             </div>
                             <div style={{marginLeft: 'auto'}}>Sĩ số hiện tại {students.length}</div>
@@ -554,9 +583,25 @@ export const AddClass = () => {
                     </Container>
                 </div>
                 <div className={styles['confirmButton']}>
-                    <Button variant="primary" onClick={handleSave} >Lưu thông tin</Button>
+                    <Button variant="primary" onClick={handleSave} >Tạo lớp</Button>
                     <Button variant="danger" onClick={handleCancel} style={{marginLeft: '10px'}}>Hủy bỏ</Button>
                 </div>
+
+                <Modal show={showModal} onHide={handleCloseModal} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Thành công</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Thêm mới lớp thành công!</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={handleCreateNewClass}>
+                            Tiếp tục tạo lớp mới
+                        </Button>
+                        <Button variant="danger" onClick={handleGoToClassInfo}>
+                            Đi đến trang thông tin lớp
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
             </Container>
         </div>
     );
