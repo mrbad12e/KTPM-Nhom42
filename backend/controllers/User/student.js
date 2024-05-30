@@ -85,16 +85,4 @@ export default class StudentController extends UserControllers {
             res.status(500).json({ error: error });
         }
     }  
-
-    // test report_student
-    static async report_student(req, res, next) {      
-        try {
-            res.status(200).json({
-                report_student: await Student.report_student(req, res, next),
-                message: 'Students fetched successfully',
-            });
-        } catch (error) {
-            res.status(500).json({ error: error });
-        }
-    }
 }

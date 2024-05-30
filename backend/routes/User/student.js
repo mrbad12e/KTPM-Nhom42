@@ -19,9 +19,6 @@ router.route('/results')
 router.route('/timetable')
     .get(isAuthUser, StudentController.self_view_timetable);
 
-router.route('/report_student')                                               // test report_student
-    .get(isAuthUser, StudentController.report_student);
-
 // Bo qua doc thong tin giang vien vi thong tin giang vien public
 
 router.route('/login')

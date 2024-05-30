@@ -25,7 +25,7 @@ export const Registration = () => {
 
     const fetchSubjectInfo = async () => {
         try {
-            const response = await axios.get(`/class/?semester=${selectedSemester}`);
+            const response = await axios.get(`/class?semester=${selectedSemester}`);
             const subjects = response.data.class;
 
             const formattedSubjects = subjects.map(subject => ({
@@ -47,9 +47,8 @@ export const Registration = () => {
 
     const fetchRegisteredCourses = async () => {
         try {
-            const response = await axios.get(`student/enrolled?semester=${selectedSemester}`);
+            const response = await axios.get(`/student/enrolled?semester=${selectedSemester}`);
             const enrolledCourses = response.data.classes.map(course => course.id);
-            console.log("enrolledCourses:",enrolledCourses);
             const registeredCoursesInfo = subjectInfo.filter(course => enrolledCourses.includes(course.class_id));
             registeredCoursesInfo.sort((a, b) => { 
                 if (a.weekday !== b.weekday) {
@@ -107,7 +106,6 @@ export const Registration = () => {
             if (successResponses.length === selectedCourses.length) {
                 setRegistrationSuccess(true);
                 setRegistrationError(null);
-                console.log("Tất cả các môn học đã được đăng ký thành công.");
     
                 // Xóa các môn học đã đăng ký thành công khỏi selectedCourses
                 const updatedSelectedCourses = selectedCourses.filter(course => !successResponses.find(response => response.config.url.includes(course.class_id)));

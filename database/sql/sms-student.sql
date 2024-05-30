@@ -122,7 +122,7 @@ AS $$
 BEGIN
     IF i_class_id IS NULL THEN
         RETURN QUERY (
-            SELECT c.id, c.lecturer_id, c.subject_id, s.name, s.prerequisite_id, c.type, c.require_lab, s.study_credits, s.tuition_credits, c.current_cap, c.max_cap, t.weekday, t.start_time, t.end_time, t.location, c.semester
+            SELECT c.id, c.lecturer_id, c.subject_id, s.name, s.prerequisite_id, c.type, c.require_lab, s.study_credits, s.tuition_credits, c.current_cap, c.max_cap, t.weekday, t.start_time, t.end_time, t.location
             FROM class c
                 JOIN subject s ON c.subject_id = s.id
                 JOIN timetable t ON c.id = t.class_id
@@ -131,7 +131,11 @@ BEGIN
     END IF;
 
     RETURN QUERY (
+<<<<<<< HEAD
         SELECT c.id, c.lecturer_id, c.subject_id, s.name, s.prerequisite_id, c.type, c.require_lab, s.study_credits, s.tuition_credits, c.current_cap, c.max_cap, t.weekday, t.start_time, t.end_time, t.location, c.semester
+=======
+        SELECT c.id, c.lecturer_id, c.subject_id, s.name, s.prerequisite_id, c.type, c.require_lab, s.study_credits, s.tuition_credits, c.current_cap, c.max_cap, t.weekday, t.start_time, t.end_time, t.location
+>>>>>>> c75a10afb2af8db897852e391047546e816a1000
         FROM class c
             JOIN subject s ON c.subject_id = s.id
             JOIN timetable t ON c.id = t.class_id

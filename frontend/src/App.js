@@ -1,4 +1,4 @@
-import { Routes, Route, HashRouter, Navigate } from 'react-router-dom';
+import { Routes, Route, HashRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Header } from './components/Layouts/Header/Header';
 import { Login } from './components/Login/Login';
