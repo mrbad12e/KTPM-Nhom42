@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Button, Form, Alert, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Button, Form, Alert, Modal, Dropdown } from 'react-bootstrap';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -10,55 +10,36 @@ import avatar from '../../../assets/img/avatar.jpg';
 export const UpdateStudent = () => {
     const location = useLocation();
     const [student, setStudent] = useState(null);
+    const [studentUpdate, setStudentUpdate] = useState({}); 
     const [showModal, setShowModal] = useState(false);
-    const [id, setId] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [programId, setProgramId] = useState('');
-    const [email, setEmail] = useState('');
-    const [status, setStatus] = useState(true);
-    const [phone, setPhone] = useState('');
-    const [birthday, setBirthday] = useState('');
-    const [gender, setGender] = useState('M');
-    const [address, setAddress] = useState('');
-    const [joinDate, setJoinDate] = useState('');
 
     useEffect(() => {
-        if (location.state && location.state.student) {
-            const studentData = location.state.student;
-            setStudent(studentData);
-            setId(studentData.id);
-            setFirstName(studentData.first_name);
-            setLastName(studentData.last_name);
-            setProgramId(studentData.program_id);
-            setEmail(studentData.email);
-            setStatus(studentData.status);
-            setPhone(studentData.phone);
-            setBirthday(studentData.birthday.substring(0, 10));
-            setGender(studentData.gender);
-            setAddress(studentData.address);
-            setJoinDate(studentData.join_date.substring(0, 10));
-        } else {
             fetchStudentData();
-        }
     }, [location]);
 
     const fetchStudentData = async () => {
         try {
             const response = await axios.get(`/admin/student?id=${location.pathname.split('/').pop()}`);
             const studentData = response.data.students[0];
-            setStudent(studentData);
-            setId(studentData.id);
-            setFirstName(studentData.first_name);
-            setLastName(studentData.last_name);
-            setProgramId(studentData.program_id);
-            setEmail(studentData.email);
-            setStatus(studentData.status);
-            setPhone(studentData.phone);
-            setBirthday(studentData.birthday.substring(0, 10));
-            setGender(studentData.gender);
-            setAddress(studentData.address);
-            setJoinDate(studentData.join_date.substring(0, 10));
+        
+            if (studentData) {
+                const student = {
+                    id: studentData.id,
+                    first_name: studentData.first_name,
+                    last_name: studentData.last_name,
+                    program_id: studentData.program_id,
+                    email: studentData.email,
+                    status: studentData.status,
+                    phone: studentData.phone,
+                    birthday: studentData.birthday,
+                    gender: studentData.gender,
+                    address: studentData.address,
+                    join_date: studentData.join_date
+                };
+                
+                setStudent(student);
+                setStudentUpdate(student);
+            }
         } catch (error) {
             console.error('Error fetching student detail:', error);
         }
@@ -69,22 +50,8 @@ export const UpdateStudent = () => {
 
     const handleSaveChanges = async () => {
         try {
-            const updatedStudent = {
-                id,
-                first_name: firstName,
-                last_name: lastName,
-                program_id: programId,
-                email: email,
-                status: status,
-                phone: phone,
-                birthday: birthday,
-                gender: gender,
-                address: address,
-                join_date: joinDate
-            };
-
-            const response = await axios.patch(`/admin/student`, updatedStudent, { params: { id } });
-            setStudent(updatedStudent);
+            await axios.patch(`/admin/student`, studentUpdate);
+            setStudent(studentUpdate);
             handleCloseModal();
         } catch (error) {
             console.error('Error updating student detail:', error.response ? error.response.data : error.message);
@@ -112,6 +79,14 @@ export const UpdateStudent = () => {
         );
     };
 
+    const convertDateToInputFormat = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     return (
         <div>
             <Sidebar_admin />
@@ -123,89 +98,128 @@ export const UpdateStudent = () => {
                 </div>     
             </Container>
             
-            <Modal show={showModal} onHide={handleCloseModal} centered>
-                <Modal.Header closeButton>
+            <Modal show={showModal} onHide={handleCloseModal} centered className="modal-lg">
+                <Modal.Header closeButton className="w-100">
                     <Modal.Title>Chỉnh sửa thông tin</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Row>
-                            <Col md={6}>
-                                <Form.Group as={Row} className="align-items-center mb-3">
-                                    <Form.Label column sm="4">MSSV:</Form.Label>
-                                    <Col sm="8">
-                                        <Form.Control type="text" value={id} readOnly />
-                                    </Col>
-                                </Form.Group>
-                                <Form.Group as={Row} className="align-items-center mb-3">
-                                    <Form.Label column sm="4">Họ:</Form.Label>
-                                    <Col sm="8">
-                                        <Form.Control type='text' value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                                    </Col>
-                                </Form.Group>
-                                <Form.Group as={Row} className="align-items-center mb-3">
-                                    <Form.Label column sm="4">Tên:</Form.Label>
-                                    <Col sm="8">
-                                        <Form.Control type='text' value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                                    </Col>
-                                </Form.Group>
-                                <Form.Group as={Row} className="align-items-center mb-3">
-                                    <Form.Label column sm="4">CTDT:</Form.Label>
-                                    <Col sm="8">
-                                        <Form.Control type='text' value={programId} onChange={(e) => setProgramId(e.target.value)} />
-                                    </Col>
-                                </Form.Group>
-                                <Form.Group as={Row} className="align-items-center mb-3">
-                                    <Form.Label column sm="4">Trạng thái:</Form.Label>
-                                    <Col sm="8">
-                                        <Form.Control as='select' value={status} onChange={(e) => setStatus(e.target.value === 'true')}>
-                                            <option value='true'>Đang học</option>
-                                            <option value='false'>Ra trường</option>
-                                        </Form.Control>
-                                    </Col>
-                                </Form.Group>
+                <Modal.Body className="d-flex flex-wrap w-100 p-3 justify-content-around">
+                    <Form className="w-50">
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">MSSV:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control type="text" value={studentUpdate.id} readOnly />
                             </Col>
-                            <Col md={6}>
-                                <Form.Group as={Row} className="align-items-center mb-3">
-                                    <Form.Label column sm="4">SĐT:</Form.Label>
-                                    <Col sm="8">
-                                        <Form.Control type='text' value={phone} onChange={(e) => setPhone(e.target.value)} />
-                                    </Col>
-                                </Form.Group>
-                                <Form.Group as={Row} className="align-items-center mb-3">
-                                    <Form.Label column sm="4">Ngày sinh:</Form.Label>
-                                    <Col sm="8">
-                                        <Form.Control type='date' value={birthday} onChange={(e) => setBirthday(e.target.value)} />
-                                    </Col>
-                                </Form.Group>
-                                <Form.Group as={Row} className="align-items-center mb-3">
-                                    <Form.Label column sm="4">Giới tính:</Form.Label>
-                                    <Col sm="8">
-                                        <Form.Control as='select' value={gender} onChange={(e) => setGender(e.target.value)}>
-                                            <option value='M'>Nam</option>
-                                            <option value='F'>Nữ</option>
-                                        </Form.Control>
-                                    </Col>
-                                </Form.Group>
-                                <Form.Group as={Row} className="align-items-center mb-3">
-                                    <Form.Label column sm="4">Địa chỉ:</Form.Label>
-                                    <Col >
-                                        <Form.Control type='text' value={address} onChange={(e) => setAddress(e.target.value)} />
-                                    </Col>
-                                </Form.Group>
-                                <Form.Group as={Row} className="align-items-center mb-3">
-                                    <Form.Label column sm="4">Ngày nhập học:</Form.Label>
-                                    <Col sm="8">
-                                        <Form.Control type='date' value={joinDate} onChange={(e) => setJoinDate(e.target.value)} />
-                                    </Col>
-                                </Form.Group>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Họ:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control 
+                                    placeholder="First name"
+                                    value={studentUpdate.first_name} 
+                                    onChange={(event) => setStudentUpdate({ ...studentUpdate, first_name: event.target.value })} 
+                                    type='text'
+                                />
                             </Col>
-                        </Row>
+                        </Form.Group>   
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Giới tính:</Form.Label>
+                            <Col sm="8">
+                                <Dropdown onSelect={(eventKey) => setStudentUpdate({ ...studentUpdate, gender: eventKey })} style={{ width: '100%' }}>
+                                    <Dropdown.Toggle variant="light" id="dropdown-basic" className={styles.selectGender}>
+                                    {studentUpdate.gender === 'M' ? 'Nam' : 'Nữ'}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu style={{ width: '100%' }}>
+                                        <Dropdown.Item eventKey="M">Nam</Dropdown.Item>
+                                        <Dropdown.Item eventKey="F">Nữ</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Địa chỉ:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control
+                                    placeholder="Address"
+                                    value={studentUpdate.address}
+                                    onChange={(event) => setStudentUpdate({ ...studentUpdate, address: event.target.value })}
+                                    type="text"
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Ngày nhập học:</Form.Label>
+                            <Col sm="8">
+                            <Form.Control
+                                placeholder="DD/MM/YY"
+                                type="date"
+                                value={convertDateToInputFormat(studentUpdate.join_date)}
+                                onChange={(event) => setStudentUpdate({ ...studentUpdate, join_date: event.target.value })}
+                            />
+                            </Col>
+                        </Form.Group>
+                    </Form>
+                    <Form className="w-49">
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">CTDT:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control
+                                    placeholder="Program ID"
+                                    value={studentUpdate.program_id}
+                                    onChange={(event) => setStudentUpdate({ ...studentUpdate, program_id: event.target.value })}
+                                    type="text"
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Tên:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control
+                                    placeholder="Last name"
+                                    value={studentUpdate.last_name}
+                                    onChange={(event) => setStudentUpdate({ ...studentUpdate, last_name: event.target.value })}
+                                    type="text"
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Ngày sinh:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control
+                                    placeholder="DD/MM/YY"
+                                    type="date"
+                                    value={convertDateToInputFormat(studentUpdate.birthday)}
+                                    onChange={(event) => setStudentUpdate({ ...studentUpdate, birthday: event.target.value })}
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Số điện thoại:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control
+                                    placeholder="Phone number"
+                                    value={studentUpdate.phone}
+                                    onChange={(event) => setStudentUpdate({ ...studentUpdate, phone: event.target.value })}
+                                    type="text"
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Trạng thái:</Form.Label>
+                            <Col sm="8">
+                                <Dropdown onSelect={(eventKey) => setStudentUpdate({ ...studentUpdate, status: eventKey })} style={{ width: '100%' }}>
+                                    <Dropdown.Toggle variant="light" id="dropdown-basic" className={styles.selectGender}>
+                                    {studentUpdate.status === 'true' ? 'Đang học' : 'Ra trường'}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu style={{ width: '100%' }}>
+                                        <Dropdown.Item eventKey="true">Ra trường</Dropdown.Item>
+                                        <Dropdown.Item eventKey="false">Đang học</Dropdown.Item>   
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Col>
+                        </Form.Group>
                     </Form>
                 </Modal.Body>
-
                 <Modal.Footer>
-                    
                     <Button variant="primary" onClick={handleSaveChanges}>Lưu thay đổi</Button>
                     <Button variant="danger" onClick={handleCloseModal}>Đóng</Button>
                 </Modal.Footer>

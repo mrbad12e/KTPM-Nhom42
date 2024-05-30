@@ -30,5 +30,12 @@
 
 .customModal {
     width: 1200px; 
-   
+}
+
+.selectGender {
+    background-color: white;
+    width: 100%;
+    color: black;
+    border: 0.1px solid rgb(225, 223, 223); 
+    text-align: left;  
 }
