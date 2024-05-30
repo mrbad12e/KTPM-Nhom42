@@ -104,9 +104,11 @@ export const CourseGrade = () => {
                         ))}
                     </tbody>
                 </Table>
-                <div className={styles.totalCredit}>
-                    <div >Số tín chỉ đã qua: {creditsPassed}</div>
-                    <div style={{marginRight: '39px'}}>Số tín chỉ nợ: {creditsFailed}</div>
+                <div className={styles.totalCredit} style={{ textAlign: 'right' }}>
+                    <div>
+                        <div style={{ width: '150px', display: 'inline-block' }}>Số tín chỉ đã qua: {creditsPassed}</div>
+                        <div style={{ width: '150px', display: 'inline-block' }}>Số tín chỉ nợ: {creditsFailed}</div>
+                    </div>
                 </div>
             </div>
             </Container>

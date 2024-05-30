@@ -129,26 +129,81 @@ export const UpdateStudent = () => {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group as={Row} className="align-items-center mb-3">
-                            <Form.Label column sm="4">MSSV:</Form.Label>
-                            <Col sm="8">
-                                <Form.Control type="text" value={id} readOnly />
+                        <Row>
+                            <Col md={6}>
+                                <Form.Group as={Row} className="align-items-center mb-3">
+                                    <Form.Label column sm="4">MSSV:</Form.Label>
+                                    <Col sm="8">
+                                        <Form.Control type="text" value={id} readOnly />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} className="align-items-center mb-3">
+                                    <Form.Label column sm="4">Họ:</Form.Label>
+                                    <Col sm="8">
+                                        <Form.Control type='text' value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} className="align-items-center mb-3">
+                                    <Form.Label column sm="4">Tên:</Form.Label>
+                                    <Col sm="8">
+                                        <Form.Control type='text' value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} className="align-items-center mb-3">
+                                    <Form.Label column sm="4">CTDT:</Form.Label>
+                                    <Col sm="8">
+                                        <Form.Control type='text' value={programId} onChange={(e) => setProgramId(e.target.value)} />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} className="align-items-center mb-3">
+                                    <Form.Label column sm="4">Trạng thái:</Form.Label>
+                                    <Col sm="8">
+                                        <Form.Control as='select' value={status} onChange={(e) => setStatus(e.target.value === 'true')}>
+                                            <option value='true'>Đang học</option>
+                                            <option value='false'>Ra trường</option>
+                                        </Form.Control>
+                                    </Col>
+                                </Form.Group>
                             </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} className="align-items-center mb-3">
-                            <Form.Label column sm="4">Họ:</Form.Label>
-                            <Col sm="8">
-                                <Form.Control type='text' value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                            <Col md={6}>
+                                <Form.Group as={Row} className="align-items-center mb-3">
+                                    <Form.Label column sm="4">SĐT:</Form.Label>
+                                    <Col sm="8">
+                                        <Form.Control type='text' value={phone} onChange={(e) => setPhone(e.target.value)} />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} className="align-items-center mb-3">
+                                    <Form.Label column sm="4">Ngày sinh:</Form.Label>
+                                    <Col sm="8">
+                                        <Form.Control type='date' value={birthday} onChange={(e) => setBirthday(e.target.value)} />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} className="align-items-center mb-3">
+                                    <Form.Label column sm="4">Giới tính:</Form.Label>
+                                    <Col sm="8">
+                                        <Form.Control as='select' value={gender} onChange={(e) => setGender(e.target.value)}>
+                                            <option value='M'>Nam</option>
+                                            <option value='F'>Nữ</option>
+                                        </Form.Control>
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} className="align-items-center mb-3">
+                                    <Form.Label column sm="4">Địa chỉ:</Form.Label>
+                                    <Col >
+                                        <Form.Control type='text' value={address} onChange={(e) => setAddress(e.target.value)} />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} className="align-items-center mb-3">
+                                    <Form.Label column sm="4">Ngày nhập học:</Form.Label>
+                                    <Col sm="8">
+                                        <Form.Control type='date' value={joinDate} onChange={(e) => setJoinDate(e.target.value)} />
+                                    </Col>
+                                </Form.Group>
                             </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} className="align-items-center mb-3">
-                            <Form.Label column sm="4">Tên:</Form.Label>
-                            <Col sm="8">
-                                <Form.Control type='text' value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                            </Col>
-                        </Form.Group>
+                        </Row>
                     </Form>
                 </Modal.Body>
+
                 <Modal.Footer>
                     
                     <Button variant="primary" onClick={handleSaveChanges}>Lưu thay đổi</Button>

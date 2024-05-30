@@ -33,8 +33,8 @@ export const UpdateClass = () => {
                 .map(item => ({
                     // end_time: parseTimeString(item.end_time),
                     // start_time: parseTimeString(item.start_time),
-                    end_time: item.end_time,
-                    start_time: item.start_time,
+                    start_time: convertTimeFormat(item.start_time),
+                    end_time: convertTimeFormat(item.end_time),
                     location: item.location,
                     weekday: item.weekday
                 }));
@@ -78,10 +78,12 @@ export const UpdateClass = () => {
      };
 
     //--------------------TimeTable--------------------------------
-    const parseTimeString = (timeString) => {
-        const hours = parseInt(timeString.substring(0, 2), 10);
-        const minutes = parseInt(timeString.substring(2, 4), 10);
-        return dayjs().hour(hours).minute(minutes).second(0);
+    const convertTimeFormat = (time) => {
+        const hour = parseInt(time.substring(0, 2), 10);
+        const minute = time.substring(2);
+        const period = hour >= 12 ? 'PM' : 'AM';
+        const formattedHour = hour % 12 || 12;
+        return `${String(formattedHour).padStart(2, '0')}:${minute} ${period}`;
     };
 
     const handleDayChange = (index, event) => {
@@ -483,8 +485,8 @@ export const UpdateClass = () => {
                                     {students.map((student, index) => (
                                         <tr key={index}>
                                             <td style={{ textAlign: 'center' }}>{index + 1}</td>
-                                            <td style={{ textAlign: 'center' }}>{student.student_name}</td>
-                                            <td style={{ textAlign: 'center' }}>{student.student_id}</td>
+                                            <td style={{ textAlign: 'center' }}>{student.name}</td>
+                                            <td style={{ textAlign: 'center' }}>{student.mssv}</td>
                                             <td style={{ textAlign: 'center' }}>
                                                 <div className={globalstyles['icon-container']} onClick={() => handleViewStudent(student)}>
                                                     <FontAwesomeIcon color="white" icon={faEye} />

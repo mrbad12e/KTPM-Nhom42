@@ -286,6 +286,7 @@ export const AddClass = () => {
     
             await Promise.all(promises);
             console.log('Timetable updated successfully');
+            setShowModal(true);
         } catch (error) {
             console.error('Error updating timetable:', error);
         }
@@ -297,7 +298,7 @@ export const AddClass = () => {
         await addClass();
         await updateTimetable();
        
-        setShowModal(true);
+       
     };
 
     const [showModal, setShowModal] = useState(false);

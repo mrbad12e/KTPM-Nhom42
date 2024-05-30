@@ -70,6 +70,13 @@ export const AddStudent = () => {
             <Container fluid className={globalstyles['main-background']}>
                 <div className={globalstyles['title']}>Thêm sinh viên</div>
 
+                {showNotification && (
+                     <Alert variant={notificationTitle === 'Thành công' ? 'success' : 'danger'} onClose={handleCloseNotification} dismissible>
+                     <Alert.Heading>{notificationTitle}</Alert.Heading>
+                     <p>{notificationMessage}</p>
+                 </Alert>
+                )}
+                
                 <div className={styles.gridContainer}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <div style={{ marginRight: '10px' }}>MSSV</div>
@@ -215,7 +222,7 @@ export const AddStudent = () => {
                     <Link to="/student"><Button variant="danger" style={{marginLeft: '10px'}}>Hủy bỏ</Button></Link>
                 </div>
         
-                {showNotification && (
+                {/* {showNotification && (
                    <Row style={{ position: 'fixed', zIndex: '4', top: '10px', left: '50%'}}>
 
                         <Col xs="auto">
@@ -225,7 +232,7 @@ export const AddStudent = () => {
                             </Alert>
                         </Col>
                     </Row>
-                )}
+                )} */}
             </Container>
         </div>
     );
