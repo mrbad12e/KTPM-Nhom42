@@ -41,6 +41,7 @@ END $$;
 DROP FUNCTION IF EXISTS student.self_view_results;
 CREATE OR REPLACE FUNCTION student.self_view_results(i_semester CHAR(5) DEFAULT NULL)
     RETURNS TABLE(
+        semester CHAR(5),
         class_id CHAR(6),
         subject_id VARCHAR(7),
         subject_name VARCHAR(100),
@@ -52,7 +53,7 @@ AS $$
 BEGIN
     IF i_semester IS NULL THEN
         RETURN QUERY (
-            SELECT e.class_id, c.subject_id, s.name, e.midterm_score, e.final_score, e.mapping_score
+            SELECT c.semester, e.class_id, c.subject_id, s.name, e.midterm_score, e.final_score, e.mapping_score
             FROM enrollment e
                 JOIN class c ON e.class_id = c.id
                 JOIN subject s ON c.subject_id = s.id
@@ -60,7 +61,7 @@ BEGIN
         );
     ELSE
         RETURN QUERY (
-            SELECT e.class_id, c.subject_id, s.name, e.midterm_score, e.final_score, e.mapping_score
+            SELECT c.semester, e.class_id, c.subject_id, s.name, e.midterm_score, e.final_score, e.mapping_score
             FROM enrollment e
                 JOIN class c ON e.class_id = c.id
                 JOIN subject s ON c.subject_id = s.id
@@ -114,13 +115,14 @@ CREATE OR REPLACE FUNCTION student.show_class_info(i_class_id CHAR(6) DEFAULT NU
         weekday CHAR(1),
         start_time CHAR(4),
         end_time CHAR(4),
-        location VARCHAR(20)
+        location VARCHAR(20),
+        semester CHAR(5)
     ) LANGUAGE plpgsql
 AS $$
 BEGIN
     IF i_class_id IS NULL THEN
         RETURN QUERY (
-            SELECT c.id, c.lecturer_id, c.subject_id, s.name, s.prerequisite_id, c.type, c.require_lab, s.study_credits, s.tuition_credits, c.current_cap, c.max_cap, t.weekday, t.start_time, t.end_time, t.location
+            SELECT c.id, c.lecturer_id, c.subject_id, s.name, s.prerequisite_id, c.type, c.require_lab, s.study_credits, s.tuition_credits, c.current_cap, c.max_cap, t.weekday, t.start_time, t.end_time, t.location, c.semester
             FROM class c
                 JOIN subject s ON c.subject_id = s.id
                 JOIN timetable t ON c.id = t.class_id
@@ -129,7 +131,7 @@ BEGIN
     END IF;
 
     RETURN QUERY (
-        SELECT c.id, c.lecturer_id, c.subject_id, s.name, s.prerequisite_id, c.type, c.require_lab, s.study_credits, s.tuition_credits, c.current_cap, c.max_cap, t.weekday, t.start_time, t.end_time, t.location
+        SELECT c.id, c.lecturer_id, c.subject_id, s.name, s.prerequisite_id, c.type, c.require_lab, s.study_credits, s.tuition_credits, c.current_cap, c.max_cap, t.weekday, t.start_time, t.end_time, t.location, c.semester
         FROM class c
             JOIN subject s ON c.subject_id = s.id
             JOIN timetable t ON c.id = t.class_id

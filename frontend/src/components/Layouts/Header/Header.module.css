@@ -1,36 +1,26 @@
 .header-background {
     position: relative;
-    height: 100px; 
+    height: auto; 
     background: linear-gradient(5deg,rgb(30, 145, 246) 30%,rgb(182, 220, 243) 100%);
     z-index: 3;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    justify-items: center;
 }
 
 .header-title {
-    margin-left: 5vw; 
-    height: 80px;
+    margin: auto;
+    height: 6vh;
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     color: rgb(255, 0, 0);
     font-size: 40px;
-    cursor: pointer;
-    text-shadow: 1px 0 0 #adadad; 
-}
-
-.header-user {
-    position: absolute;
-    right: 2vw; 
+    text-align: center;
 }
 
 @media (max-width: 660px) {
-    .header-title {
-        position: absolute;
-        font-size: 30px;
-        top: 5px;
+    .header-background {
+        height: 6vh;
     }
-
-    .header-user {
-        position: absolute;
-        top: 60px;
+    .header-title {
+        font-size: 6vw;
     }
 }
 

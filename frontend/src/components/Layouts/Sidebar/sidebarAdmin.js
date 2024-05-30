@@ -14,7 +14,6 @@ const Sidebar_admin = () => {
     const handleLogout = async () => {
         try {
             await axios.get('/admin/logout');
-            console.log('Logged out successfully');
             localStorage.clear();
             navigate('/');
         } catch (error) {

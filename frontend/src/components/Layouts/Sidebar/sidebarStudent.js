@@ -14,7 +14,6 @@ const Sidebar_student = () => {
     const handleLogout = async () => {
         try {
             await axios.get('/student/logout');
-            console.log('Logged out successfully');
             localStorage.clear();
             navigate('/');
         } catch (error) {

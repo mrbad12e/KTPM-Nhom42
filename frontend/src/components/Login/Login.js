@@ -11,11 +11,11 @@ export const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [role, setRole] = useState('student'); 
+    const [role, setRole] = useState(''); 
     const [passwordVisible, setPasswordVisible] = useState(false); 
 
-    const handleSelect = (eventKey) => {
-        setRole(eventKey); 
+    const handleSelect = (e) => {
+        setRole(e);
     };
 
     const handleTogglePasswordVisibility = () => {
@@ -34,11 +34,9 @@ export const Login = () => {
             } else {
                 response = await axios.post('/lecturer/login', { email, password }, config);
             }
-            
+            localStorage.setItem('role', role);
             if (response && response.data) {
                 const { data } = response;
-                localStorage.setItem('auth', data.success);
-                console.log("data:", data.id);
                 localStorage.setItem('id', data.id);
 
                 if (role === 'admin') {
@@ -58,11 +56,8 @@ export const Login = () => {
     };
 
     useEffect(() => {
-        if (error) {
-            console.log(error);
-        }
+        setRole(localStorage.getItem('role'));
         if (localStorage.getItem('auth')) {
-            console.log('Logged in successfully');
             if (role === 'admin') {
                 navigate('/student');
             } else if(role === 'student'){
@@ -72,7 +67,6 @@ export const Login = () => {
             }
         }
     }, [error]);
-
     return (
         <div className={styles.startBackground}>
             <Form onSubmit={(event) => {handleLogin(event)}} className={styles.loginContainer} >
@@ -92,9 +86,9 @@ export const Login = () => {
                     <div>Role:</div>
                     <Dropdown onSelect={handleSelect} >
                         <Dropdown.Toggle variant="light" id="dropdown-basic" className={styles.selectRole} >
-                            {role} 
+                            {role ? role : 'Select role'}
                         </Dropdown.Toggle>
-                        <Dropdown.Menu style={{ width: '100%' }}>
+                        <Dropdown.Menu style={{ width: '100%' }} onChange={handleSelect}>
                             <Dropdown.Item eventKey="admin">Admin</Dropdown.Item>
                             <Dropdown.Item eventKey="student">Student</Dropdown.Item>
                             <Dropdown.Item eventKey="lecturer">Lecturer</Dropdown.Item>

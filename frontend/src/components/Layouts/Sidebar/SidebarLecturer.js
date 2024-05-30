@@ -13,8 +13,7 @@ const SidebarLecturer = () => {
 
     const handleLogout = () => {
         try {
-            axios.get('/admin/logout');
-            console.log('Logged out successfully');
+            axios.get('/lecturer/logout');
             localStorage.clear();
             navigate('/');
         } catch (error) {

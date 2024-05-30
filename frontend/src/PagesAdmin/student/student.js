@@ -4,7 +4,6 @@ import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Pagination from '../../components/pagination/pagination';
-import styles from './student.module.css';
 import globalstyles from '../../CSSglobal.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
@@ -27,7 +26,7 @@ export const Student = () => {
         try {
             let response;
             if (inputMSSV && inputCTDT) {
-                response = await axios.get(`/admin/student?id=${inputMSSV}&&program_id=${inputCTDT}`);
+                response = await axios.get(`/admin/student?id=${inputMSSV}&program_id=${inputCTDT}`);
             } else if (inputMSSV) {
                 response = await axios.get(`/admin/student?id=${inputMSSV}`);
             } else if (inputCTDT) {

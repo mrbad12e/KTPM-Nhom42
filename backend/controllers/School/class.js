@@ -1,4 +1,5 @@
 import Class from '../../models/School/class.js';
+import client from '../../config/db.js';
 
 export default class ClassControllers {
     static async createClass(req, res, next) {
@@ -15,6 +16,26 @@ export default class ClassControllers {
             res.status(200).json({ class: await Class.getClass(req, res, next) });
         } catch (error) {
             res.status(500).json({ error: error });
+        }
+    }
+
+    static async readClass(req, res, next){
+        try {
+            let query = `SELECT * FROM public.class JOIN public.timetable ON public.class.id = public.timetable.class_id`;
+            if (Object.keys(req.query).length > 0) {
+                query += ' WHERE ';
+                const conditions = [];
+                for (const key in req.query) {
+                    // Prevent SQL injection by using parameterized queries
+                    conditions.push(`${key} = $${conditions.length + 1}`);
+                }
+                query += conditions.join(' AND ');
+            }
+            const queryParams = Object.values(req.query);
+            const { rows } = await client.query(query, queryParams);
+            res.status(200).json({ class: rows, message: 'Class fetched successfully' });
+        } catch (error) {
+            res.status(500).json({ error: error })
         }
     }
 

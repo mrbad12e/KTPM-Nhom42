@@ -20,7 +20,7 @@ export const Faculty = () => {
 
     const fetchSearchFaculty = async () => {
         try {
-            let response = await axios.get(`/faculty/`);
+            let response = await axios.get(`/faculty`);
             const facultyData = response.data.faculty;
             setFaculty(facultyData);
             setTotalPages(Math.ceil(facultyData.length / 10));
@@ -35,7 +35,7 @@ export const Faculty = () => {
 
     const handleViewProgram =async(facultyId) => {
         try{
-            await axios.get(`/program/?faculty_id=${facultyId}`);
+            await axios.get(`/program?faculty_id=${facultyId}`);
             navigate(`/program/${facultyId}`);
         }catch (error) {
             console.error('Error fetching list program:', error.message);

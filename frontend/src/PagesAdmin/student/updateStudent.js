@@ -80,7 +80,7 @@ export const UpdateStudent = () => {
                 birthday: birthday,
                 gender: gender,
                 address: address,
-                join_date: joinDate
+                join_date: joinDate,
             };
 
             const response = await axios.patch(`/admin/student`, updatedStudent, { params: { id } });
@@ -95,18 +95,38 @@ export const UpdateStudent = () => {
     const renderUpdateForm = () => {
         return (
             <div className={styles.flexRow}>
-                <img src={avatar} alt="anh" className={styles.imageStudent}/>
-                <div style={{lineHeight: '1.0'}}>
-                    <p><strong>MSSV:</strong> {student.id}</p>
-                    <p><strong>Họ và tên:</strong> {`${student.first_name} ${student.last_name}`}</p>
-                    <p><strong>CTDT:</strong> {student.program_id}</p>
-                    <p><strong>Email:</strong> {student.email}</p>
-                    <p><strong>Trạng thái:</strong> {student.status ? 'Đang học' : 'Ra trường'}</p>
-                    <p><strong>Số điện thoại:</strong> {student.phone}</p>
-                    <p><strong>Ngày sinh:</strong> {student.birthday.substring(0, 10)}</p>
-                    <p><strong>Giới tính:</strong> {student.gender === 'M' ? 'Nam' : 'Nữ'}</p>
-                    <p><strong>Địa chỉ:</strong> {student.address}</p>
-                    <div><strong>Ngày nhập học:</strong> {student.join_date.substring(0, 10)}</div>
+                <img src={avatar} alt="anh" className={styles.imageStudent} />
+                <div style={{ lineHeight: '1.0' }}>
+                    <p>
+                        <strong>MSSV:</strong> {student.id}
+                    </p>
+                    <p>
+                        <strong>Họ và tên:</strong> {`${student.first_name} ${student.last_name}`}
+                    </p>
+                    <p>
+                        <strong>CTDT:</strong> {student.program_id}
+                    </p>
+                    <p>
+                        <strong>Email:</strong> {student.email}
+                    </p>
+                    <p>
+                        <strong>Trạng thái:</strong> {student.status ? 'Đang học' : 'Ra trường'}
+                    </p>
+                    <p>
+                        <strong>Số điện thoại:</strong> {student.phone}
+                    </p>
+                    <p>
+                        <strong>Ngày sinh:</strong> {student.birthday.substring(0, 10)}
+                    </p>
+                    <p>
+                        <strong>Giới tính:</strong> {student.gender === 'M' ? 'Nam' : 'Nữ'}
+                    </p>
+                    <p>
+                        <strong>Địa chỉ:</strong> {student.address}
+                    </p>
+                    <div>
+                        <strong>Ngày nhập học:</strong> {student.join_date.substring(0, 10)}
+                    </div>
                 </div>
             </div>
         );
@@ -116,13 +136,13 @@ export const UpdateStudent = () => {
         <div>
             <Sidebar_admin />
             <Container fluid className={globalstyles['main-background']}>
-            <div className={globalstyles.title}>Chi tiết thông tin sinh viên</div>
+                <div className={globalstyles.title}>Chi tiết thông tin sinh viên</div>
                 {student ? renderUpdateForm() : <Alert variant="danger">Không tìm thấy thông tin sinh viên!</Alert>}
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px'}}>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
                     <Button onClick={handleShowModal}>Cập nhật</Button>
-                </div>     
+                </div>
             </Container>
-            
+
             <Modal show={showModal} onHide={handleCloseModal} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Chỉnh sửa thông tin</Modal.Title>
@@ -130,29 +150,46 @@ export const UpdateStudent = () => {
                 <Modal.Body>
                     <Form>
                         <Form.Group as={Row} className="align-items-center mb-3">
-                            <Form.Label column sm="4">MSSV:</Form.Label>
+                            <Form.Label column sm="4">
+                                MSSV:
+                            </Form.Label>
                             <Col sm="8">
                                 <Form.Control type="text" value={id} readOnly />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="align-items-center mb-3">
-                            <Form.Label column sm="4">Họ:</Form.Label>
+                            <Form.Label column sm="4">
+                                Họ:
+                            </Form.Label>
                             <Col sm="8">
-                                <Form.Control type='text' value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                                <Form.Control
+                                    type="text"
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="align-items-center mb-3">
-                            <Form.Label column sm="4">Tên:</Form.Label>
+                            <Form.Label column sm="4">
+                                Tên:
+                            </Form.Label>
                             <Col sm="8">
-                                <Form.Control type='text' value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                                <Form.Control
+                                    type="text"
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                />
                             </Col>
                         </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    
-                    <Button variant="primary" onClick={handleSaveChanges}>Lưu thay đổi</Button>
-                    <Button variant="danger" onClick={handleCloseModal}>Đóng</Button>
+                    <Button variant="primary" onClick={handleSaveChanges}>
+                        Lưu thay đổi
+                    </Button>
+                    <Button variant="danger" onClick={handleCloseModal}>
+                        Đóng
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </div>
