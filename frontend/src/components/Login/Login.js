@@ -38,9 +38,8 @@ export const Login = () => {
             if (response && response.data) {
                 const { data } = response;
                 localStorage.setItem('auth', data.success);
-                console.log("data:", data.id);
                 localStorage.setItem('id', data.id);
-
+                localStorage.setItem('role', role);
                 if (role === 'admin') {
                     navigate('/student');
                 } else if(role === 'student'){
@@ -58,20 +57,18 @@ export const Login = () => {
     };
 
     useEffect(() => {
-        if (error) {
-            console.log(error);
-        }
         if (localStorage.getItem('auth')) {
-            console.log('Logged in successfully');
-            if (role === 'admin') {
+            console.log('Already logged in');
+            const storedRole = localStorage.getItem('role');
+            if (storedRole === 'admin') {
                 navigate('/student');
-            } else if(role === 'student'){
+            } else if (storedRole === 'student') {
                 navigate('/home');
             } else {
                 navigate('/profile');
             }
         }
-    }, [error]);
+    }, [navigate]);
 
     return (
         <div className={styles.startBackground}>

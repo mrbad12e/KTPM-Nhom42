@@ -47,28 +47,29 @@ export const Registration = () => {
 
     const fetchRegisteredCourses = async () => {
         try {
-            const response = await axios.get(`/student/enrolled?semester=${selectedSemester}`);
-            const enrolledCourses = response.data.classes.map(course => course.id);
-            const registeredCoursesInfo = subjectInfo.filter(course => enrolledCourses.includes(course.class_id));
-            registeredCoursesInfo.sort((a, b) => { 
-                if (a.weekday !== b.weekday) {
-                    return a.weekday - b.weekday;
-                }
-                return a.start_time.localeCompare(b.start_time);
-            });
-            setRegisteredCourses(registeredCoursesInfo);
+            if (subjectInfo.length > 0) { 
+                const response = await axios.get(`/student/enrolled?semester=${selectedSemester}`);
+                const enrolledCourses = response.data.classes.map(course => course.id);
+                const registeredCoursesInfo = subjectInfo.filter(course => enrolledCourses.includes(course.class_id));
+                registeredCoursesInfo.sort((a, b) => { 
+                    if (a.weekday !== b.weekday) {
+                        return a.weekday - b.weekday;
+                    }
+                    return a.start_time.localeCompare(b.start_time);
+                });
+                setRegisteredCourses(registeredCoursesInfo);
+            }
         } catch (error) {
             console.error('Error fetching registered courses:', error);
         }
     };
-    
+
     useEffect(() => {
-        const fetchData = async () => {
-            await fetchSubjectInfo();
-        };
-    
-        fetchData();
+        if (id) { 
+            fetchSubjectInfo();
+        }
     }, [selectedSemester]);
+    
     
     useEffect(() => {
         if (subjectInfo.length > 0) {
@@ -164,7 +165,7 @@ export const Registration = () => {
                 </div>
                 {(searched || subjectInfo.length > 0) && (
                     <div style={{ overflowX: 'auto' }}>
-                       <Table striped bordered hover className={globalstyles['table-1300']}>
+                       <Table striped bordered className={globalstyles['table-1300']}>
                             <thead>
                                 <tr style={{textAlign: 'center'}}>
                                     <th style={{minWidth: '90px'}}>Mã lớp</th>
@@ -211,7 +212,7 @@ export const Registration = () => {
                     </Alert>
                 )}
 
-                <Table striped bordered hover className={globalstyles['table-1000']}>
+                <Table striped bordered className={globalstyles['table-1000']}>
                     <thead>
                         <tr style={{textAlign: 'center'}}>
                             <th style={{minWidth: '90px'}}>Mã lớp</th>
@@ -219,6 +220,7 @@ export const Registration = () => {
                             <th >Tên học phần</th>
                             <th style={{minWidth: '130px'}}>Thời gian</th>
                             <th>Trạng thái</th>
+                            <th style={{ width:'65px' }}></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -231,11 +233,11 @@ export const Registration = () => {
                             <td style={{ textAlign: 'center' }}>Thành công</td>
                             <td style={{ textAlign: 'center' }}>
                                 {/* Nút xóa chỉ hiện nếu có hàm handleDeleteCourse */}
-                                {handleDeleteCourse && (
+                                {/* {handleDeleteCourse && (
                                     <Button variant="danger" onClick={() => handleDeleteCourse(course)}>
                                         <div style={{ fontSize: '12px' }}>Xoá</div>
                                     </Button>
-                                )}
+                                )} */}
                             </td>
                         </tr>
                     ))}

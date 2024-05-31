@@ -69,7 +69,7 @@ export const Student = () => {
                             <th>Mã CTDT</th>
                             <th>CPA</th>
                             <th>Email</th>
-                            <th>Thao tác</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,7 +80,7 @@ export const Student = () => {
                                 <td style={{ textAlign: 'center'}}>{student.program_id}</td>
                                 <td style={{ textAlign: 'center'}}>{student.cpa_total_score_product}</td>
                                 <td>{student.email}</td>
-                                <td style={{ display: 'flex', justifyContent: 'center' }}>
+                                <td>
                                     <div className={globalstyles['icon-container']}>
                                         <FontAwesomeIcon color="white" icon={faEye} onClick={() => navigate(`/updateStudent/${student.id}`)}/>
                                     </div>

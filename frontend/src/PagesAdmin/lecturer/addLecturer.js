@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { Container, Button, Form, Alert, Dropdown } from 'react-bootstrap';
+import { Container, Button, Form, Dropdown } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
 import globalstyles from '../../CSSglobal.module.css';
 import styles from './lecturer.module.css';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import Alert from '@mui/material/Alert';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 export const AddLecturer = () => {
+    const navigate = useNavigate();
     const [lecturer, setLecturer] = useState({ id: '', email: '', faculty_id: '', first_name: '', last_name: '', gender: 'M', birthday: '', address: '', join_date:'',status: 'true', phone: '' });
-
     const [showNotification, setShowNotification] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState('');
     const [notificationTitle, setNotificationTitle] = useState('');
@@ -51,12 +54,13 @@ export const AddLecturer = () => {
             <Sidebar_admin/>
             <Container fluid className={globalstyles['main-background']}>
                 <div className={globalstyles['title']}>Thêm giảng viên</div>
-
+                <button className={globalstyles.LeftArrow} onClick={() => navigate('/lecturer')}>
+                    <FontAwesomeIcon color="black" icon={faChevronLeft}/>
+                </button>
                 {showNotification && (
-                     <Alert variant={notificationTitle === 'Success' ? 'success' : 'danger'} onClose={handleCloseNotification} dismissible>
-                     <Alert.Heading>{notificationTitle}</Alert.Heading>
-                     <p>{notificationMessage}</p>
-                 </Alert>
+                    <Alert severity={notificationTitle === 'Success' ? 'success' : 'warning'} onClose={handleCloseNotification} dismissible>
+                        <div>{notificationMessage}</div>
+                    </Alert>
                 )}
                 
                 <div className={styles.gridContainer}>
@@ -138,7 +142,7 @@ export const AddLecturer = () => {
                         />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center'}}>
-                        <div style={{ marginRight: '10px', whiteSpace: 'nowrap', width: '100px' }}>Địa chỉ</div> 
+                        <div style={{ marginRight: '10px', width: '100px' }}>Địa chỉ</div> 
                         <Form.Control
                             placeholder="Address"
                             value={lecturer.address}

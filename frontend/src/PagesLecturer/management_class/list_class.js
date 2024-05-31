@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Container, Button } from 'react-bootstrap';
 import SidebarLecturer from '../../components/Layouts/Sidebar/SidebarLecturer';
-import { Link,useNavigate } from 'react-router-dom';
-import ViewIcon from '../../../assets/img/View.png';
+import { useNavigate } from 'react-router-dom';
 import globalstyles from '../../CSSglobal.module.css';
 import axios from 'axios';
 import Pagination from '../../components/pagination/pagination';
@@ -82,7 +81,7 @@ export const ListClass = () => {
                             <th>Tên môn học</th>
                             <th>Học kỳ</th>
                             <th>Số lượng</th>
-                            <th>Thao tác</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -93,9 +92,9 @@ export const ListClass = () => {
                                 <td>{cls.subject_name}</td>
                                 <td style={{ textAlign: 'center' }}>{cls.semester}</td>
                                 <td style={{ textAlign: 'center' }}>{cls.max_cap}</td>
-                                <td style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <div className={globalstyles['img-button-container']} style={{ marginLeft: '5px' }}>
-                                        <img src={ViewIcon} alt="View" className={globalstyles['img-button']}  onClick={() => handleListStudent(cls.class_id)}/>
+                                <td>
+                                    <div className={globalstyles['icon-container']}  >
+                                        <FontAwesomeIcon color="white" icon={faEye} onClick={() => handleListStudent(cls.class_id)}/>
                                     </div>
                                 </td>
                             </tr>

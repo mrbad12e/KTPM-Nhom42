@@ -53,7 +53,7 @@ export const Faculty = () => {
                             <th>Mã khoa</th>
                             <th>Tên Khoa</th>
                             <th>Địa điểm</th>
-                            <th>Thao tác</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,7 +62,7 @@ export const Faculty = () => {
                                 <td style={{ textAlign: 'center' }}>{fac.id}</td>
                                 <td>{fac.name}</td>
                                 <td style={{ textAlign: 'center' }}>{fac.location}</td>
-                                <td style={{ display: 'flex', justifyContent: 'center' }}>
+                                <td>
                                     <div className={globalstyles['icon-container']}  onClick={() => {handleViewProgram(fac.id)}}>
                                         <FontAwesomeIcon color="white" icon={faEye} />
                                     </div>

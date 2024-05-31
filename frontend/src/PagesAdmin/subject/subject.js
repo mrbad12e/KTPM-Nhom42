@@ -1,49 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Container, Row, Col, Button, Modal, Form } from 'react-bootstrap';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
-import UpdateIcon from '../../../assets/img/Update.png';
 import globalstyles from '../../CSSglobal.module.css';
 import Pagination from '../../components/pagination/pagination';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import Alert from '@mui/material/Alert';
 
 export const Subject = () => {
-    const [subject, setSubject] = useState([]);
-    const [inputMahp, setInputMahp] = useState('');
-    const [inputTenhp, setInputTenhp] = useState('');
+    const [subjects, setSubjects] = useState([]);
+    const [inputSubjectID, setInputSubjectID] = useState('');
+    const [inputFacultyID, setInputFacultyID] = useState('');
     const [currentPage, setCurrentPage] = useState(1); 
     const [totalPages, setTotalPages] = useState(0);
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [showNewModal, setShowNewModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
     const [selectedSubject, setSelectedSubject] = useState(null);
-    const [newSubject, setNewSubject] = useState({
+    const [subjectData, setSubjectData] = useState({
         id: '',
         name: '',
         faculty_id: '',
         study_credits: '',
         tuition_credits: '',
         final_weight: '',
-        
+        prerequisite_id: ''
     });
+
     useEffect(() => {
-        fetchSearchSubject();
+        fetchSubjects();
     }, []);
 
-    const fetchSearchSubject = async () => {
+    const fetchSubjects = async () => {
         try {
             let response;
-            if (inputMahp && inputTenhp) {
-                response = await axios.get(`/subject/?id=${inputMahp}&&name=${inputTenhp}`);
-            } else if (inputMahp) {
-                response = await axios.get(`/subject/?id=${inputMahp}`);
-            } else if (inputTenhp) {
-                response = await axios.get(`/subject/?name=${inputTenhp}`);
+            if (inputSubjectID && inputFacultyID) {
+                response = await axios.get(`/subject/?id=${inputSubjectID}&&name=${inputFacultyID}`);
+            } else if (inputSubjectID) {
+                response = await axios.get(`/subject/?id=${inputSubjectID}`);
+            } else if (inputFacultyID) {
+                response = await axios.get(`/subject/?faculty_id=${inputFacultyID}`);
             } else {
                 response = await axios.get(`/subject/`);
             }
             const subjectData = response.data.subject;
-            setSubject(subjectData);
+            setSubjects(subjectData);
             const pageCount = Math.ceil(subjectData.length / 10);
             setTotalPages(pageCount);
             setCurrentPage(1);
@@ -51,87 +52,82 @@ export const Subject = () => {
             console.error('Error fetching subject:', error);
         }
     };
-    
-    const inputValueMahp = (event) => {
-        setInputMahp(event.target.value);
-    };
-
-    const inputValueTenhp = (event) => {
-        setInputTenhp(event.target.value);
-    };
 
     const handleSearchButtonClick = () => {
         setCurrentPage(1);
-        fetchSearchSubject();
+        fetchSubjects();
     };
 
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
+    const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-    const handleShowEditModal = (subject) => {
-        setSelectedSubject(subject);
-        setShowEditModal(true);
-    };
-
-    const handleCloseEditModal = () => setShowEditModal(false);
-
-    const handleShowNewModal = () => {
-        setShowNewModal(true);
-    };
-
-    const handleCloseNewModal = () => setShowNewModal(false);
-
-    const handleSaveChanges = async () => {
-        try {
-            await axios.patch(`/subject/?id=${selectedSubject.id}`, selectedSubject);
-            setSubject(prevSubjects => 
-                prevSubjects.map(sub => sub.id === selectedSubject.id ? selectedSubject : sub)
-            );
-            handleCloseEditModal();
-        } catch (error) {
-            console.error('Error updating subject:', error);
-        }
-    };
-    
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        
-        setSelectedSubject({ ...selectedSubject, [name]: value });
-    };
-
-    const handleAddNewSubject = async () => {
-        try {
-            await axios.post(`/subject/`, newSubject);
-            fetchSearchSubject();
-            setCurrentPage(1);
-            handleCloseNewModal();
-            setNewSubject({
+    const handleShowModal = (subject = null) => {
+        if (subject) {
+            setSelectedSubject(subject);
+            setSubjectData(subject);
+            setIsEditMode(true);
+        } else {
+            setSelectedSubject(null);
+            setSubjectData({
                 id: '',
                 name: '',
                 faculty_id: '',
                 study_credits: '',
                 tuition_credits: '',
                 final_weight: '',
+                prerequisite_id: ''
             });
+            setIsEditMode(false);
+        }
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => setShowModal(false);
+
+    const handleSaveChanges = async () => {
+        try {
+            await axios.patch(`/subject/?id=${selectedSubject.id}`, subjectData);
+            setSubjects(prevSubjects => 
+                prevSubjects.map(sub => sub.id === selectedSubject.id ? subjectData : sub)
+            );
+            handleCloseModal();
+        } catch (error) {
+            console.error('Error updating subject:', error.response.data.error.constraint);
+        }
+    };
+
+    const handleAddNewSubject = async () => {
+        try {
+            await axios.post(`/subject/`, subjectData);
+            fetchSubjects();
+            setCurrentPage(1);
+            handleCloseModal();
             setTimeout(() => {
                 window.alert('Môn học đã được thêm thành công.');
             }, 100);
         } catch (error) {
-            console.error('Error adding new subject:', error);
+            console.error('Error adding new subject:',  error.response.data.error);
         }
     };
-    
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setSubjectData({ ...subjectData, [name]: value });
+    };
+
     return (
         <div>
             <Sidebar_admin />
             <Container fluid className={globalstyles['main-background']}>
-                <div className={globalstyles['left-title']}>Danh sách lớp</div>
-                <Button className={globalstyles.addButton} onClick={handleShowNewModal} variant="primary">Thêm mới</Button>
+                <div className={globalstyles['left-title']}>Danh sách học phần</div>
+                <Button className={globalstyles.addButton} onClick={() => handleShowModal()} variant="primary">Thêm mới</Button>
+
+                {/* <Alert  severity="success">
+                    Here is a gentle confirmation that your action was successful.
+                </Alert> */}
+
                 <div style={{ display: 'flex', gap: '10px', marginLeft: '50px' }}>
-                    <input className={globalstyles.input} type="text" value={inputMahp} onChange={inputValueMahp} placeholder="Nhập mã học phần" />
-                    <input className={globalstyles.input} type="text" value={inputTenhp} onChange={inputValueTenhp} placeholder="Nhập tên học phần" />
+                    <input className={globalstyles.input} type="text" value={inputSubjectID} onChange={(event) => setInputSubjectID(event.target.value)} placeholder="Nhập mã học phần" />
+                    <input className={globalstyles.input} type="text" value={inputFacultyID} onChange={(event) => setInputFacultyID(event.target.value)} placeholder="Nhập tên học phần" />
                     <Button className={globalstyles.smallButton} variant="primary" onClick={handleSearchButtonClick}>Tìm kiếm</Button>
                 </div>
                 <Table className={globalstyles['table-1300']}>
@@ -144,11 +140,11 @@ export const Subject = () => {
                             <th>Tín chỉ học phí</th>
                             <th>Hệ số cuối kì</th>
                             <th>Điều kiện</th>
-                            <th>Thao tác</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {subject.slice((currentPage - 1) * 10, currentPage * 10).map(subject => (
+                        {subjects.slice((currentPage - 1) * 10, currentPage * 10).map(subject => (
                             <tr key={subject.id}>
                                 <td style={{ textAlign: 'center' }}>{subject.id}</td>
                                 <td>{subject.name}</td>
@@ -157,8 +153,8 @@ export const Subject = () => {
                                 <td style={{ textAlign: 'center' }}>{subject.tuition_credits}</td>
                                 <td style={{ textAlign: 'center' }}>{subject.final_weight}</td>
                                 <td style={{ textAlign: 'center' }}>{subject.prerequisite_id}</td>
-                                <td style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <div className={globalstyles['icon-container']}  onClick={() => handleShowEditModal(subject)}>
+                                <td>
+                                    <div className={globalstyles['icon-container']} onClick={() => handleShowModal(subject)}>
                                         <FontAwesomeIcon color="white" icon={faEdit} />
                                     </div>
                                 </td>
@@ -171,119 +167,106 @@ export const Subject = () => {
                 </div>
             </Container>
 
-            {/* Modal chỉnh sửa học phần */}
-            {selectedSubject && (
-                <Modal show={showEditModal} onHide={handleCloseEditModal} centered>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Chỉnh sửa thông tin học phần</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form>
-                            <Form.Group as={Row} className="align-items-center mb-3">
-                                <Form.Label column sm="4">Mã học phần:</Form.Label>
-                                <Col sm="8">
-                                    <Form.Control type="text" name="id" value={selectedSubject.id} readOnly />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="align-items-center mb-3">
-                                <Form.Label column sm="4">Tên học phần:</Form.Label>
-                                <Col sm="8">
-                                    <Form.Control type="text" name="name" value={selectedSubject.name} onChange={handleInputChange} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="align-items-center mb-3">
-                                <Form.Label column sm="4">Khoa:</Form.Label>
-                                <Col sm="8">
-                                    <Form.Control type="text" name="faculty_id" value={selectedSubject.faculty_id} onChange={handleInputChange} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="align-items-center mb-3">
-                                <Form.Label column sm="4">Tín chỉ học phần:</Form.Label>
-                                <Col sm="8">
-                                    <Form.Control type="text" name="study_credits" value={selectedSubject.study_credits} onChange={handleInputChange} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="align-items-center mb-3">
-                                <Form.Label column sm="4">Tín chỉ học phí:</Form.Label>
-                                <Col sm="8">
-                                    <Form.Control type="text" name="tuition_credits" value={selectedSubject.tuition_credits} onChange={handleInputChange} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="align-items-center mb-3">
-                                <Form.Label column sm="4">Hệ số cuối kì:</Form.Label>
-                                <Col sm="8">
-                                    <Form.Control type="text" name="final_weight" value={selectedSubject.final_weight} onChange={handleInputChange} />
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} className="align-items-center mb-3">
-                                <Form.Label column sm="4">Điều kiện:</Form.Label>
-                                <Col sm="8">
-                                    <Form.Control type="text" name="prerequisite_id" value={selectedSubject.prerequisite_id || ''} onChange={handleInputChange} />
-                                </Col>
-                            </Form.Group>
-                        </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="primary" onClick={handleSaveChanges}>Lưu thay đổi</Button>
-                        <Button variant="danger" onClick={handleCloseEditModal}>Đóng</Button>
-                    </Modal.Footer>
-                </Modal>
-            )}
-
-            {/* Modal thêm mới học phần */}
-            <Modal show={showNewModal} onHide={handleCloseNewModal} centered>
+            <Modal show={showModal} onHide={handleCloseModal} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Thêm mới học phần</Modal.Title>
+                    <Modal.Title>{isEditMode ? 'Chỉnh sửa thông tin học phần' : 'Thêm mới học phần'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Form.Group as={Row} className="align-items-center mb-3">
                             <Form.Label column sm="4">Mã học phần:</Form.Label>
                             <Col sm="8">
-                                <Form.Control type="text" name="id" value={newSubject.id} onChange={(e) => setNewSubject({ ...newSubject, id: e.target.value })} />
+                                <Form.Control 
+                                    type="text" 
+                                    name="id" 
+                                    value={subjectData.id} 
+                                    onChange={handleInputChange} 
+                                    readOnly={isEditMode} 
+                                    placeholder="Subject ID" 
+                                />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="align-items-center mb-3">
                             <Form.Label column sm="4">Tên học phần:</Form.Label>
                             <Col sm="8">
-                                <Form.Control type="text" name="name" value={newSubject.name} onChange={(e) => setNewSubject({ ...newSubject, name: e.target.value })} />
+                                <Form.Control 
+                                    type="text" 
+                                    name="name" 
+                                    value={subjectData.name} 
+                                    onChange={handleInputChange} 
+                                    placeholder="Subject name" 
+                                />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="align-items-center mb-3">
                             <Form.Label column sm="4">Khoa:</Form.Label>
                             <Col sm="8">
-                                <Form.Control type="text" name="faculty_id" value={newSubject.faculty_id} onChange={(e) => setNewSubject({ ...newSubject, faculty_id: e.target.value })} />
+                                <Form.Control 
+                                    type="text" 
+                                    name="faculty_id" 
+                                    value={subjectData.faculty_id} 
+                                    onChange={handleInputChange} 
+                                    placeholder="Faculty name" 
+                                />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="align-items-center mb-3">
                             <Form.Label column sm="4">Tín chỉ học phần:</Form.Label>
                             <Col sm="8">
-                                <Form.Control type="text" name="study_credits" value={newSubject.study_credits} onChange={(e) => setNewSubject({ ...newSubject, study_credits: e.target.value })} />
+                                <Form.Control 
+                                    type="text" 
+                                    name="study_credits" 
+                                    value={subjectData.study_credits} 
+                                    onChange={handleInputChange} 
+                                    placeholder="Study credits" 
+                                />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="align-items-center mb-3">
                             <Form.Label column sm="4">Tín chỉ học phí:</Form.Label>
                             <Col sm="8">
-                                <Form.Control type="text" name="tuition_credits" value={newSubject.tuition_credits} onChange={(e) => setNewSubject({ ...newSubject, tuition_credits: e.target.value })} />
+                                <Form.Control 
+                                    type="text" 
+                                    name="tuition_credits" 
+                                    value={subjectData.tuition_credits} 
+                                    onChange={handleInputChange} 
+                                    placeholder="Tuition credits" 
+                                />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="align-items-center mb-3">
                             <Form.Label column sm="4">Hệ số cuối kì:</Form.Label>
                             <Col sm="8">
-                                <Form.Control type="text" name="final_weight" value={newSubject.final_weight} onChange={(e) => setNewSubject({ ...newSubject, final_weight: e.target.value })} />
+                                <Form.Control 
+                                    type="text" 
+                                    name="final_weight" 
+                                    value={subjectData.final_weight} 
+                                    onChange={handleInputChange} 
+                                    placeholder="Final weight" 
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="align-items-center mb-3">
+                            <Form.Label column sm="4">Điều kiện:</Form.Label>
+                            <Col sm="8">
+                                <Form.Control 
+                                    type="text" 
+                                    name="prerequisite_id" 
+                                    value={subjectData.prerequisite_id || ''} 
+                                    onChange={handleInputChange} 
+                                    placeholder="Prerequisite ID" 
+                                />
                             </Col>
                         </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleAddNewSubject}>Thêm mới</Button>
-                    <Button variant="danger" onClick={handleCloseNewModal} >Đóng</Button>
+                    <Button variant="primary" onClick={isEditMode ? handleSaveChanges : handleAddNewSubject}>
+                        {isEditMode ? 'Lưu thay đổi' : 'Thêm mới'}
+                    </Button>
+                    <Button variant="danger" onClick={handleCloseModal}>Đóng</Button>
                 </Modal.Footer>
             </Modal>
-
-            
         </div>
     );
 };
-
-

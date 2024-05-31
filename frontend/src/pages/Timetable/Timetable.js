@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dropdown, Row, Col, Container, Table } from 'react-bootstrap';
+import { Dropdown, Row, Col, Container, Table, Button } from 'react-bootstrap';
 import axios from 'axios';
 import Sidebar_student from '../../components/Layouts/Sidebar/sidebarStudent'; 
 import globalstyles from '../../CSSglobal.module.css';
@@ -93,10 +93,10 @@ export const Timetable = () => {
                 <div id="table-container">
                     {tableWidth && tableWidth < 660 ? (
                         timetable.map((item,index) => (
-                            <div className={styles.subject} key={index++}>
-                                <Row>
+                            <button className={styles.subject} key={index++}>
+                                <Row onClick={() => handleClick(item)}>
                                     <Col style={{ maxWidth: '30%', textAlign: 'center'}}>
-                                        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }} onClick={() => handleClick(item)}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }} >
                                             <Row><div style={{fontSize: '18px'}}>Thứ {item.weekday}</div></Row>
                                             <Row style={{ marginTop: 'auto' }}><div>{formatTime(item.start_time)}</div></Row>   
                                             <Row style={{ marginTop: 'auto' }}><div style={{fontSize: '8px'}}>|</div></Row> 
@@ -105,23 +105,24 @@ export const Timetable = () => {
                                     </Col>
                                     <Col style={{ maxWidth: '70%' }}>
                                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }} onClick={() => handleClick(item)}>
-                                            <Row style={{ fontWeight: 'bold', marginBottom: '10px' }}>{item.subject_name}</Row>
-                                            <Row style={{ marginTop: 'auto' }}>Mã lớp: {item.class_id}</Row>
-                                            <Row style={{ marginTop: 'auto' }}>Địa điểm: {item.location}</Row>
+                                            <Row style={{ fontWeight: 'bold', marginBottom: '10px' }}>
+                                                <div className={styles.SubjectWrapper}> {item.subject_name}</div>
+                                            </Row>
+                                            <Row style={{ marginTop: 'auto', fontSize: '12px' }}>Mã lớp: {item.class_id} | Địa điểm: {item.location}</Row>
                                         </div>
                                     </Col>
                                 </Row> 
-                            </div>
+                            </button>
                         ))
                     ) : (
-                        <Table striped hover className={globalstyles['table-1000']}>
+                        <Table hover className={globalstyles['table-1000']}>
                             <thead>
                                 <tr>
                                     <th style={{ textAlign: 'center' }}>Thứ</th>
-                                    <th style={{ textAlign: 'center' }}>Mã lớp</th>
+                                    <th style={{ textAlign: 'center',minWidth: '90px' }}>Mã lớp</th>
                                     <th style={{ textAlign: 'center' }}>Môn học</th>
-                                    <th style={{ textAlign: 'center' }}>Thời gian</th>
-                                    <th style={{ textAlign: 'center' }}>Phòng học</th>
+                                    <th style={{ textAlign: 'center', minWidth: '120px' }}>Thời gian</th>
+                                    <th style={{ textAlign: 'center', minWidth: '100px'}}>Phòng học</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -152,7 +153,7 @@ export const Timetable = () => {
                             <p><strong>Số điện thoại:</strong> {selectedClassInfo.lecturerInfo[0].phone}</p>
                             <p><strong>Sĩ số:</strong> {selectedClassInfo.students.length}</p>
                         </Container>
-                        <Table striped bordered hover className={styles['student']}>
+                        <Table className={styles['student']}>
                             <thead>
                                 <tr>
                                     <th style={{ textAlign: 'center' }}>STT</th>

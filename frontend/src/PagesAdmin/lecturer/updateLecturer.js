@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Form, Alert, Modal, Dropdown } from 'react-bootstrap';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
 import globalstyles from '../../CSSglobal.module.css';
 import styles from './lecturer.module.css';
 import avatar from '../../../assets/img/avatar.jpg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 export const UpdateLecturer = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [lecturer, setLecturer] = useState(null);
     const [lecturerUpdate, setLecturerUpdate] = useState({}); 
     const [showModal, setShowModal] = useState(false);
@@ -62,7 +65,7 @@ export const UpdateLecturer = () => {
     const renderUpdateForm = () => {
         return (
             <div className={styles.flexRow}>
-                <img src={avatar} alt="anh" className={styles.imagelecturer}/>
+                <img src={avatar} alt="anh" className={styles.imageLecturer}/>
                 <div style={{lineHeight: '1.0'}}>
                     <p><strong>Mã GV:</strong> {lecturer.id}</p>
                     <p><strong>Họ và tên:</strong> {`${lecturer.first_name} ${lecturer.last_name}`}</p>
@@ -92,6 +95,9 @@ export const UpdateLecturer = () => {
             <Sidebar_admin />
             <Container fluid className={globalstyles['main-background']}>
             <div className={globalstyles.title}>Chi tiết thông tin giảng viên</div>
+            <button className={globalstyles.LeftArrow} onClick={() => navigate('/lecturer')}>
+                <FontAwesomeIcon color="black" icon={faChevronLeft}/>
+            </button>
                 {lecturer ? renderUpdateForm() : <Alert variant="danger">Không tìm thấy thông tin giảng viên!</Alert>}
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px'}}>
                     <Button onClick={handleShowModal}>Cập nhật</Button>
@@ -203,7 +209,7 @@ export const UpdateLecturer = () => {
                             <Col sm="8">
                                 <Dropdown onSelect={(eventKey) => setLecturerUpdate({ ...lecturerUpdate, status: eventKey })} style={{ width: '100%' }}>
                                     <Dropdown.Toggle variant="light" id="dropdown-basic" className={styles.selectGender}>
-                                    {lecturerUpdate.status === 'true' ? 'Đang công tác' : 'Hết công tác'}
+                                    {lecturerUpdate.status === 'true' ? 'Hết công tác' : 'Đang công tác'}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu style={{ width: '100%' }}>
                                         <Dropdown.Item eventKey="true">Đang công tác</Dropdown.Item>

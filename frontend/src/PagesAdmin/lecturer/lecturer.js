@@ -7,7 +7,7 @@ import axios from 'axios';
 import Pagination from '../../components/pagination/pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const Lecturer = () => {
     const [lecturers, setLecturers] = useState([]);
@@ -89,7 +89,7 @@ export const Lecturer = () => {
                                 <td style={{ textAlign: 'center'}}>{lecturer.faculty_id}</td>
                                 <td>{lecturer.email}</td>
                                 <td>{lecturer.phone}</td>
-                                <td style={{ display: 'flex', justifyContent: 'center' }}>
+                                <td>
                                     <div className={globalstyles['icon-container']} >
                                         <FontAwesomeIcon color="white" icon={faEye}  onClick={() => navigate(`/updateLecturer/${lecturer.id}`)} />
                                     </div>

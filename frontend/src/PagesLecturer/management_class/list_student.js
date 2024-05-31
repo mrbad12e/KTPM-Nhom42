@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Container, Button } from 'react-bootstrap';
 import SidebarLecturer from '../../components/Layouts/Sidebar/SidebarLecturer';
-import ViewIcon from '../../../assets/img/View.png';
 import globalstyles from '../../CSSglobal.module.css';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';

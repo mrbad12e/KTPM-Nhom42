@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Form, Alert, Modal, Dropdown } from 'react-bootstrap';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
 import globalstyles from '../../CSSglobal.module.css';
 import styles from './student.module.css';
 import avatar from '../../../assets/img/avatar.jpg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 export const UpdateStudent = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [student, setStudent] = useState(null);
     const [studentUpdate, setStudentUpdate] = useState({}); 
     const [showModal, setShowModal] = useState(false);
@@ -92,6 +95,9 @@ export const UpdateStudent = () => {
             <Sidebar_admin />
             <Container fluid className={globalstyles['main-background']}>
             <div className={globalstyles.title}>Chi tiết thông tin sinh viên</div>
+            <button className={globalstyles.LeftArrow} onClick={() => navigate('/student')}>
+                <FontAwesomeIcon color="black" icon={faChevronLeft}/>
+            </button>
                 {student ? renderUpdateForm() : <Alert variant="danger">Không tìm thấy thông tin sinh viên!</Alert>}
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px'}}>
                     <Button onClick={handleShowModal}>Cập nhật</Button>
@@ -203,11 +209,11 @@ export const UpdateStudent = () => {
                             <Col sm="8">
                                 <Dropdown onSelect={(eventKey) => setStudentUpdate({ ...studentUpdate, status: eventKey })} style={{ width: '100%' }}>
                                     <Dropdown.Toggle variant="light" id="dropdown-basic" className={styles.selectGender}>
-                                    {studentUpdate.status === 'true' ? 'Đang học' : 'Ra trường'}
+                                    {studentUpdate.status === 'true' ? 'Ra trường' : 'Đang học'}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu style={{ width: '100%' }}>
-                                        <Dropdown.Item eventKey="true">Ra trường</Dropdown.Item>
                                         <Dropdown.Item eventKey="false">Đang học</Dropdown.Item>   
+                                        <Dropdown.Item eventKey="true">Ra trường</Dropdown.Item> 
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </Col>

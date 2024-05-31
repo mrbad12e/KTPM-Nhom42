@@ -6,6 +6,18 @@ import styles from './CourseGrade.module.css';
 import globalstyles from '../../CSSglobal.module.css';
 
 export const CourseGrade = () => {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setScreenWidth(window.innerWidth);
+        };
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     // get CourseGrade
     const [courseGrade, setCourseGrade] = useState([]);
@@ -80,14 +92,14 @@ export const CourseGrade = () => {
             <Container fluid className={globalstyles['main-background']}>
             <div className={globalstyles['title']}>Kết quả học tập</div>
             <div style={{ maxWidth: '1000px',  margin: '0 auto'}}>
-                <Table striped hover className={globalstyles['table-1000']}>
+                <Table striped className={globalstyles['table-1000']}>
                     <thead>
                         <tr>
-                            <th style={{ textAlign: 'center' }}>Học kỳ</th>
-                            <th style={{ textAlign: 'center' }}>Mã học phần</th>
-                            <th style={{ textAlign: 'center' }}>Tên học phần</th>
-                            <th style={{ textAlign: 'center' }}>Tín chỉ</th>
-                            <th style={{ textAlign: 'center' }}>Điểm học phần</th>
+                            <th style={{ textAlign: 'center', whiteSpace: 'nowrap' }}> {screenWidth && screenWidth < 800 ? 'HK' : 'Học kỳ'}</th>
+                            <th style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>{screenWidth && screenWidth < 800 ? 'Mã HP' : 'Mã học phần'}</th>
+                            <th style={{ textAlign: 'center' }}>{screenWidth && screenWidth < 800 ? 'Tên HP' : 'Tên học phần'}</th>
+                            <th style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>{screenWidth && screenWidth < 800 ? 'TC' : 'Tín chỉ'}</th>
+                            <th style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>{screenWidth && screenWidth < 800 ? 'Điểm HP' : 'Điểm học phần'}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -95,7 +107,9 @@ export const CourseGrade = () => {
                             <tr key={index++}>
                                 <td style={{ textAlign: 'center' }}>{course.semester}</td>
                                 <td style={{ textAlign: 'center' }}>{course.subject_id}</td>
-                                <td>{course.subject_name}</td>
+                                <td>
+                                    <div className={styles.SubjectWrapper}>{course.subject_name}</div>
+                                </td>
                                 <td style={{ textAlign: 'center' }}>{course.study_credits}</td>
                                 <td style={{ textAlign: 'center' }}>
                                     {calculateSubjectGPA(course.midterm_score, course.final_score,course. mapping_score, course.final_weight, course.study_credits)}

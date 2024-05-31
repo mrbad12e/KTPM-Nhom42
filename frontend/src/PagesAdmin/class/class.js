@@ -94,7 +94,7 @@ export const Class = () => {
                             <th>Mã lớp</th>
                             <th>Mã học phần</th>
                             <th>Tên học phần</th>
-                            <th>Thao tác</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -104,7 +104,7 @@ export const Class = () => {
                                 <td style={{ textAlign: 'center' }}>{classes.class_id}</td>
                                 <td style={{ textAlign: 'center' }}>{classes.subject_id}</td>
                                 <td>{classes.subject_name}</td>
-                                <td style={{ display: 'flex', justifyContent: 'center' }}>
+                                <td>
                                     <div className={globalstyles['icon-container']}  >
                                         <FontAwesomeIcon color="white" icon={faEye} onClick={() => navigate(`/updateClass/${classes.class_id}`)}/>
                                     </div>

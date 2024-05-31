@@ -12,6 +12,12 @@ export const Home = () => {
     const [updatedInfo, setUpdatedInfo] = useState({ birthday: '', phone: '', address: '' });
     const id = localStorage.getItem('id');  
 
+    useEffect(() => {
+        if (id) { 
+            fetchStudent();
+        }
+    }, []);
+
     const fetchStudent = async () => {
         try {
             const response = await axios.get(`/student?id=${id}`);
@@ -24,19 +30,17 @@ export const Home = () => {
         }
     };
 
-    useEffect(() => {
-        fetchStudent();
-    }, []);
-
     const handleCloseModal = () => setShowModal(false);
 
     const handleShowModal = () => {
-        setUpdatedInfo({
-            birthday: student.birthday,
-            phone: student.phone,
-            address: student.address,
-        });
-        setShowModal(true);
+        if (student) {
+            setUpdatedInfo({
+                birthday: student.birthday,
+                phone: student.phone,
+                address: student.address,
+            });
+            setShowModal(true);
+        }
     };
 
     const handleInputChange = (e) => {
@@ -47,30 +51,12 @@ export const Home = () => {
     const handleSaveChanges = async () => {
         try {
             await axios.patch(`/student/?id=${student.id}`, updatedInfo);
-            fetchLecturerInfo();
+            fetchStudent(); 
             setShowModal(false);
         } catch (error) {
-            console.error('Failed to update lecturer info:', error);
+            console.error('Failed to update student info:', error);
         }
     };
-    // const handleSaveChanges = async () => {
-    //     try {
-    //         const response = await axios.patch(/student/?id=${student.id}, updatedInfo, {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         });
-    //         if (response.status === 200) {
-    //             setStudent((prevState) => ({ ...prevState, ...updatedInfo }));
-    //             handleCloseModal();
-    //             console.log('Student info updated:', response.data);
-    //         } else {
-    //             console.error('Failed to update student info:', response);
-    //         }
-    //     } catch (error) {
-    //         console.error('Failed to update student info:', error);
-    //     }
-    // };
 
     return (
         <div>
