@@ -44,7 +44,8 @@ export default class Lecturer extends User {
                 req.body.faculty_id,
             ];
             await client.query(query, values);
-            await client.query('Update public.lecturer set password = $1 where id = $2', [hashPassword('lecturer'), req.body.id])
+            const password = await hashPassword('lecturer');
+            await client.query('Update public.lecturer set password = $1 where id = $2', [password, req.body.id])
         } catch (error) {
             throw error;
         }
