@@ -98,7 +98,7 @@ export const Registration = () => {
     const handleRegister = async () => {
         try {
             const registrationPromises = selectedCourses.map(course =>
-                axios.patch(`/class/enroll?student_id=${id}&&class_id=${course.class_id}`)
+                axios.patch(`/class/enroll?student_id=${id}&class_id=${course.class_id}`)
             );
     
             const responses = await Promise.all(registrationPromises);
@@ -123,8 +123,6 @@ export const Registration = () => {
         }
         fetchRegisteredCourses();
     };
-    
-    
 
     const handleSearchInputChange = (e) => {
         const { name, value } = e.target;

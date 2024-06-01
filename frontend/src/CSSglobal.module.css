@@ -38,7 +38,7 @@ html, body {
 
 .input {
     background-color:#ffffff;
-    padding: 0 20px 5px 15px;
+    padding: 0 20px 0 15px;
     width: 180px;
     height: 33px;
     border-radius: 5px;
@@ -71,15 +71,6 @@ html, body {
     border-radius: 90%;
     background-color: #ffffff;
     padding:30px;
-}
-
-.img-button-container {
-    overflow: hidden;
-    position: relative;
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
 .img-button {

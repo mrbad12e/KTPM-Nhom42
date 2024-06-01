@@ -5,10 +5,6 @@ import axios from 'axios';
 import Sidebar_admin from '../../components/Layouts/Sidebar/sidebarAdmin'; 
 import styles from './class.module.css';
 import globalstyles from '../../CSSglobal.module.css';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
@@ -31,8 +27,6 @@ export const UpdateClass = () => {
                 const filteredClassTime = classData
                 .filter(item => item.class_id === classId)
                 .map(item => ({
-                    // end_time: parseTimeString(item.end_time),
-                    // start_time: parseTimeString(item.start_time),
                     start_time: convertTimeFormat(item.start_time),
                     end_time: convertTimeFormat(item.end_time),
                     location: item.location,
@@ -86,49 +80,6 @@ export const UpdateClass = () => {
         return `${String(formattedHour).padStart(2, '0')}:${minute} ${period}`;
     };
 
-    const handleDayChange = (index, event) => {
-        const newClassTime = [...classTime];
-        newClassTime[index].weekday = event.target.value;
-        setClassTime(newClassTime);
-    };
-
-    const handleInputStart = (index, time) => {
-        const newClassTime = [...classTime];
-        newClassTime[index].start_time = time;
-        setClassTime(newClassTime);
-    };
-
-    const handleInputEnd = (index, time) => {
-        const newClassTime = [...classTime];
-        newClassTime[index].end_time = time;
-        setClassTime(newClassTime);
-    };
-
-    const handleInputLocation = (index, event) => {
-        const newClassTime = [...classTime];
-        newClassTime[index].location = event.target.value;
-        setClassTime(newClassTime);
-    };
-
-    const createDefaultClassTime = () => ({
-        weekday: '2',
-        start_time: null,
-        end_time: null,
-        location: ''
-    });
-
-    const handleAddTimeButtonClick = () => {
-        setClassTime([...classTime, createDefaultClassTime()]); 
-    };
-
-    const handleDeleteTimeButtonClick = () => {
-        const updatedClassTime = [...classTime];
-        updatedClassTime.pop();
-        setClassTime(updatedClassTime);
-    };
-    
-    useEffect(() => handleAddTimeButtonClick(), []);
-
     //--------------------Lecturer------------------------
     const [lecturer, setLecturer] = useState(null);   
     const [inputLecturerIDError, setInputLecturerIDError] = useState(false);
@@ -157,8 +108,6 @@ export const UpdateClass = () => {
     };
     //--------------------Student-------------------------
     const [students, setStudents] = useState([]);   
-    const [inputMSSV, setInputMSSV] = useState(''); 
-    const [student, setStudent] = useState(null);  
 
     const fetchStudent = async () => {
         try { 
@@ -182,7 +131,11 @@ export const UpdateClass = () => {
         try {
             let response = await axios.get(`/admin/student?id=${inputMSSV}`);
             if (response.data.students.length > 0) {
-                setStudent(response.data.students[0]); 
+                const studentsWithStatus = response.data.students.map(student => ({
+                    ...student,
+                    status: true
+                }));
+                setStudent(studentsWithStatus[0]); 
             } else {
                 setStudent(null); 
             }
@@ -190,8 +143,12 @@ export const UpdateClass = () => {
             console.error('Error fetching student:', error);
         }
     };
+    
 
     // Search Student
+    const [inputMSSV, setInputMSSV] = useState(''); 
+    const [student, setStudent] = useState(null);  
+
     const handleSearchStudentClick = () => fetchSearchStudent();
     
     // View Student
@@ -205,10 +162,11 @@ export const UpdateClass = () => {
             const fullName = `${student.first_name} ${student.last_name}`.trim();
             const newStudent = {
                 stt: students.length + 1,
-                name: fullName,
-                mssv: student.id,
+                student_name: fullName,
+                student_id: student.id,
+                status: false
             };
-            const isExist = students.some(existingStudent => existingStudent.mssv === newStudent.mssv);
+            const isExist = students.some(existingStudent => existingStudent.student_id === newStudent.student_id);
             if (!isExist) {
                 setStudents([...students, newStudent]);
             } else {
@@ -226,15 +184,14 @@ export const UpdateClass = () => {
     };
 
     //--------------Save Cancel----------------------------
+    const [updateClassError, setUpdateClassError] = useState(null);
+    const [updateClassSuccess, setUpdateClassSuccess] = useState(false);
+
     const handleCancel = () => {
-        classTime.forEach((time) => {
-            console.log(`Start Time: ${time.start_time.format('HHmm')}, End Time: ${time.end_time.format('HHmm')}, Location: ${time.location}, Day: ${time.weekday}`);
-        });
     };
 
-    // Add class
+    // Update class
     const updateClass = async () => {
-
         try {
             const response = await axios.patch(`/class?id=${classInfo.class_id}`, {
                 type: classInfo.type,
@@ -253,38 +210,30 @@ export const UpdateClass = () => {
             setUpdateClassError("Cập nhật thông tin không thành công.");
         }
     };
+
+     // Update student
+     const updateStudent = async () => {
+        try {
+            const studentsToUpdate = students.filter(student => student.status === false);
+            const updatePromises = studentsToUpdate.map(student =>
+                axios.patch(`/class/enroll?student_id=${student.student_id}&class_id=${classId}`)
+            );
+            await Promise.all(updatePromises);
+            console.log('All students updated successfully');
+        } catch (error) {
+            console.log('Error updating students:', error.response.data);
+        }
+    };
     
-    // Add timetable
-    // const updateTimetable = async () => {
-    //     try {
-    //         const promises = classTime.map(time => {
-    //             return axios.post('class/add', {
-    //                 class_id: classId,
-    //                 weekday: time.weekday,
-    //                 start_time: time.start_time.format('HHmm'),
-    //                 end_time: time.end_time.format('HHmm'),
-    //                 location: time.location
-    //             });
-    //         });
     
-    //         // Await all promises to resolve
-    //         await Promise.all(promises);
-    //         console.log('Timetable updated successfully');
-    //     } catch (error) {
-    //         console.error('Error updating timetable:', error);
-    //     }
-    // };
-    
+
     // Add student
     const handleSave = async () => {
         await updateClass();
+        await updateStudent();
         // await updateTimetable();
         // console.log("classInfo:",classInfo);
     }
-
-    const [updateClassError, setUpdateClassError] = useState(null);
-    const [updateClassSuccess, setUpdateClassSuccess] = useState(false);
-
 
     return (
         <div>
@@ -364,65 +313,16 @@ export const UpdateClass = () => {
                                             <th style={{textAlign: 'center', minWidth: '130px'}}>Bắt đầu</th>
                                             <th style={{textAlign: 'center', minWidth: '130px'}}>Kết thúc</th>
                                             <th style={{textAlign: 'center', minWidth: '90px'}}>Địa điểm</th>
-                                            {/* <th style={{textAlign: 'center', minWidth: '60px'}}></th> */}
+                                           
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {classTime.map((row, rowIndex) => (
                                             <tr key={rowIndex} style={{ textAlign: 'center' }}>
-                                                <td> <div className={styles['custom-select']}>{row.weekday}</div>
-                                                    {/* <select value={row.weekday} className={styles['custom-select']} onChange={(event) => handleDayChange(rowIndex, event)}>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
-                                                        <option value="4">4</option>
-                                                        <option value="5">5</option>
-                                                        <option value="6">6</option>
-                                                        <option value="7">7</option>
-                                                        <option value="CN">CN</option>
-                                                    </select> */}
-                                                </td>
-                                                <td> <div className={styles['custom-select']}>{row.start_time}</div>     
-                                                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                        <TimePicker  
-                                                            value={row.start_time} 
-                                                            onChange={(time) => handleInputStart(rowIndex, time)}
-                                                            viewRenderers={{
-                                                                hours: renderTimeViewClock,
-                                                                minutes: renderTimeViewClock,
-                                                                seconds: renderTimeViewClock,
-                                                            }}
-                                                            className={styles.customTimePickerInput}
-                                                        />
-                                                    </LocalizationProvider> */}
-                                                </td>
-                                                <td><div className={styles['custom-select']}>{row.end_time}</div>
-                                                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                        <TimePicker   
-                                                            value={row.end_time} 
-                                                            onChange={(time) => handleInputEnd(rowIndex, time)}
-                                                            viewRenderers={{
-                                                                hours: renderTimeViewClock,
-                                                                minutes: renderTimeViewClock,
-                                                                seconds: renderTimeViewClock,
-                                                            }}
-                                                            className={styles.customTimePickerInput}
-                                                        />
-                                                    </LocalizationProvider> */}
-                                                </td>
-                                                <td> <div className={styles['custom-select']}>{row.location}</div>
-                                                    {/* <input 
-                                                        type="text" 
-                                                        value={row.location} 
-                                                        onChange={(event) => handleInputLocation(rowIndex, event)} 
-                                                        placeholder="402-D9"
-                                                        className={styles['custom-select']} 
-                                                    /> */}
-                                                </td>
-                                                {/* <td>
-                                                    <div className={globalstyles['icon-container']} onClick={() => handleDeleteTimeButtonClick(rowIndex)}>
-                                                        <FontAwesomeIcon color="white" icon={faTrash} />
-                                                    </div>
-                                                </td> */}
+                                                <td> <div className={styles['custom-select']}>{row.weekday}</div></td>
+                                                <td> <div className={styles['custom-select']}>{row.start_time}</div></td>
+                                                <td><div className={styles['custom-select']}>{row.end_time}</div></td>
+                                                <td> <div className={styles['custom-select']}>{row.location}</div></td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -485,8 +385,8 @@ export const UpdateClass = () => {
                                     {students.map((student, index) => (
                                         <tr key={index}>
                                             <td style={{ textAlign: 'center' }}>{index + 1}</td>
-                                            <td style={{ textAlign: 'center' }}>{student.name}</td>
-                                            <td style={{ textAlign: 'center' }}>{student.mssv}</td>
+                                            <td style={{ textAlign: 'center' }}>{student.student_name}</td>
+                                            <td style={{ textAlign: 'center' }}>{student.student_id}</td>
                                             <td style={{ textAlign: 'center' }}>
                                                 <div className={globalstyles['icon-container']} onClick={() => handleViewStudent(student)}>
                                                     <FontAwesomeIcon color="white" icon={faEye} />
@@ -502,7 +402,7 @@ export const UpdateClass = () => {
                         </div>
                     </Container>
                     {/* Tìm kiếm sinh viên */}
-                    <Container className={styles.searchStudent}>
+                    {/* <Container className={styles.searchStudent}>
                         <div className={styles.titleContainer}>Tìm kiếm sinh viên</div>
                         <div className={styles.flexRow}>
                             <input
@@ -527,7 +427,7 @@ export const UpdateClass = () => {
                                 <FontAwesomeIcon color="white" icon={faPlus} />
                             </div>
                         </div>
-                    </Container>
+                    </Container> */}
                 </div>
                 <div className={styles['confirmButton']}>
                     <Button variant="primary" onClick={handleSave} >Lưu thông tin</Button>

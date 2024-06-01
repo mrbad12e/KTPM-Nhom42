@@ -94,6 +94,9 @@
 .confirmButton {
   margin-top:20px;
   text-align: right; 
+  /* position: absolute; */
+  /* bottom: 30px;
+  right: 30px; */
 }
 
 .timetable {

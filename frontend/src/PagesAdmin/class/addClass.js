@@ -508,8 +508,8 @@ export const AddClass = () => {
                     </div>
                 </div>
                 {/* Sinh viên */}
-                <div className={styles.flexRow}>
-                    <Container className={styles.listStudent}>
+                {/* <div className={styles.flexRow}> */}
+                    {/* <Container className={styles.listStudent}>
                     <div className={styles.titleContainer}>Danh sách sinh viên</div>
                         <div className={styles.flexRow}>
                         <div>Sĩ số tối đa</div>
@@ -554,9 +554,9 @@ export const AddClass = () => {
                                 </tbody>
                             </Table> 
                         </div>
-                    </Container>
+                    </Container> */}
                     {/* Tìm kiếm sinh viên */}
-                    <Container className={styles.searchStudent}>
+                    {/* <Container className={styles.searchStudent}>
                         <div className={styles.titleContainer}>Tìm kiếm sinh viên</div>
                         <div className={styles.flexRow}>
                             <input
@@ -581,8 +581,8 @@ export const AddClass = () => {
                                 <FontAwesomeIcon color="white" icon={faPlus} />
                             </div>
                         </div>
-                    </Container>
-                </div>
+                    </Container> */}
+                {/* </div> */}
                 <div className={styles['confirmButton']}>
                     <Button variant="primary" onClick={handleSave} >Tạo lớp</Button>
                     <Button variant="danger" onClick={handleCancel} style={{marginLeft: '10px'}}>Hủy bỏ</Button>
