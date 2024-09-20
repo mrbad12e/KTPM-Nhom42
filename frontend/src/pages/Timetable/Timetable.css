@@ -1,0 +1,43 @@
+.table-container {
+    width: 100%; /* hoặc kích thước mong muốn */
+    margin-right: 25%; /* căn giữa theo chiều ngang */
+}
+
+h2 {
+    text-align: center; /* căn giữa theo chiều ngang */
+    margin-right: 20%; /* lùi bên trái 20% */
+}
+
+.selected-class-info {
+    max-width: 1000px; /* Thiết lập chiều rộng tối đa */
+    background-color: white; /* Màu nền */
+    padding: 20px; /* Khoảng cách padding */
+    border: 1px solid #ddd; /* Đường viền */
+    border-radius: 5px; /* Bo tròn viền */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+}
+
+.tableStudent-container {
+    width: 90%; /* hoặc kích thước mong muốn */
+    margin: 0 auto; /* căn giữa theo chiều ngang */
+}
+
+.tableStudent-container th {
+    text-align: center; /* căn giữa nội dung trong cột */
+}
+
+/* Thiết lập kích thước cột */
+.tableStudent-container th:first-child,
+.tableStudent-container td:first-child {
+    width: 10%; /* kích thước cột STT */
+    text-align: center; /* căn giữa nội dung trong cột */
+}
+
+.tableStudent-container th:nth-child(2),
+.tableStudent-container td:nth-child(2) {
+    width: 20%; /* kích thước cột MSSV */
+    text-align: center; /* căn giữa nội dung trong cột */
+}
+.custom-margin-left{
+    margin-left: 10px;
+}

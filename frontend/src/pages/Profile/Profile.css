@@ -1,0 +1,37 @@
+.right-content {
+    display: flex;
+    flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều dọc */
+    align-items: center; /* Căn giữa theo chiều ngang */
+    height: 100%; /* Đảm bảo nội dung được căn giữa trong toàn bộ chiều cao */
+}
+
+.right-content h2 {
+    margin-bottom: 20px; /* Tạo khoảng cách dưới tiêu đề */
+}
+
+.image_student{
+    margin-left: 30px;
+    height: auto;
+    width: 30%;
+
+    img{
+        height: auto;
+        width: 80%;
+        border: 1px solid rgb(223, 133, 133);
+    }
+    
+}
+
+.image_student {
+    position: absolute;
+    left: 350px; /* Di chuyển ảnh sang phải 20 pixel */
+    top: 250px;
+}
+
+.anh-the {
+    max-width: 280px; /* Đặt chiều rộng tối đa của ảnh là 150 pixel */
+    max-height: 280px; /* Đặt chiều cao tối đa của ảnh là 150 pixel */
+    width: auto; /* Chiều rộng tự động tính theo tỷ lệ */
+    height: auto; /* Chiều cao tự động tính theo tỷ lệ */
+}
